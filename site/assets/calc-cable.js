@@ -17,16 +17,6 @@
   const T_ISO = 85;     /* предельная температура жилы, °C */
   const T_BASE = 45;    /* температура, для которой составлена таблица, °C */
 
-  const num = (s) => {
-    if (s === null || s === undefined) return 0;
-    const v = parseFloat(String(s).replace(',', '.').replace(/\s+/g, ''));
-    return isFinite(v) ? v : 0;
-  };
-  const fmt = (x, d) => {
-    if (!isFinite(x)) return '—';
-    return x.toFixed(d === undefined ? 1 : d).replace('.', ',');
-  };
-  const gray = (s) => '<span style="color:#6b6b74">' + s + '</span>';
   /* сечение: целые без десятичного знака, 1,5 и 2,5 — с одним */
   const fs = (x) => (Math.abs(x - Math.round(x)) < 1e-9 ? String(Math.round(x)) : fmt(x, 1));
 

@@ -56,18 +56,6 @@
   ];
 
   /* ---------- утилиты ---------- */
-  const num = (s) => {
-    if (s === null || s === undefined) return 0;
-    const v = parseFloat(String(s).replace(',', '.').replace(/\s+/g, ''));
-    return isFinite(v) ? v : 0;
-  };
-  const fmt = (x, d) => {
-    if (!isFinite(x)) return '—';
-    return x.toFixed(d === undefined ? 1 : d).replace('.', ',');
-  };
-  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
   const clone = (r) => ({
     n: r.n, p: r.p, e: r.e, c: r.c,
     m: {
@@ -199,19 +187,16 @@
     h += '<div>Установленная мощность потребителей режима: <b>' + fmt(sInst, 0) +
       ' кВт</b>; сумма потребляемых мощностей: <b>' + fmt(sP, 1) + ' кВт</b></div>';
     h += '<div>Расчётная активная мощность с учётом потерь в сети: ' +
-      '<span style="color:#6b6b74">' + fmt(sP, 1) + ' · ' + fmt(kd, 2) +
-      '</span> = <b>' + fmt(Pr, 1) + ' кВт</b></div>';
+      gray(fmt(sP, 1) + ' · ' + fmt(kd, 2)) + ' = <b>' + fmt(Pr, 1) + ' кВт</b></div>';
     h += '<div>Расчётная реактивная мощность: <b>' + fmt(Qr, 1) + ' квар</b>; ' +
-      'полная мощность <span style="color:#6b6b74">√(' + fmt(Pr, 1) + '² + ' +
-      fmt(Qr, 1) + '²)</span> = <b>' + fmt(Sr, 1) + ' кВ·А</b></div>';
+      'полная мощность ' + gray('√(' + fmt(Pr, 1) + '² + ' + fmt(Qr, 1) + '²)') + ' = <b>' + fmt(Sr, 1) + ' кВ·А</b></div>';
     h += '<div>Средневзвешенный коэффициент мощности: ' +
-      '<span style="color:#6b6b74">' + fmt(Pr, 1) + ' / ' + fmt(Sr, 1) +
-      '</span> = <b>' + fmt(cosr, 3) + '</b>; ток шин при ' + fmt(U, 0) + ' В — <b>' +
+      gray(fmt(Pr, 1) + ' / ' + fmt(Sr, 1)) + ' = <b>' + fmt(cosr, 3) + '</b>; ток шин при ' + fmt(U, 0) + ' В — <b>' +
       fmt(Ir, 0) + ' А</b></div>';
     if (n > 0) {
       h += '<div>Требуется генераторов (' + src + ' по ' + fmt(Pun, 0) + ' кВт): <b>' +
-        n + '</b>; загрузка каждого <span style="color:#6b6b74">' + fmt(Pr, 1) +
-        ' / (' + n + ' · ' + fmt(Pun, 0) + ')</span> = <b>' + fmt(load, 1) + ' %</b></div>';
+        n + '</b>; загрузка каждого ' +
+        gray(fmt(Pr, 1) + ' / (' + n + ' · ' + fmt(Pun, 0) + ')') + ' = <b>' + fmt(load, 1) + ' %</b></div>';
       h += '<div><span class="badge ' + (okLoad ? 'ok' : 'bad') + '">' +
         (okLoad
           ? 'Загрузка в рекомендуемом диапазоне 70…90 %'
