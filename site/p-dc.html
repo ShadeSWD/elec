@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разборы: цепи постоянного тока</title>
+<meta name="description" content="Три разобранные задачи: расчёт разветвлённой цепи методом контурных токов, проверка методом двух узлов и баланс мощностей, мощность и КПД реального источника в согласованном и рабочем режимах.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<script src="assets/site.js" data-root="./" data-page="tasks"></script>
+<main class="wrap">
+  <h1>Разборы: цепи постоянного тока</h1>
+  <p class="lead">Три задачи на расчётное ядро курса. Первые две решают одну и ту
+  же схему двумя разными методами и сводят баланс мощностей — это стандартная
+  схема проверки инженерного расчёта. Третья показывает, почему режим
+  максимальной отдаваемой мощности не применяют в энергетике.</p>
+  <p><a class="theory-link" href="t-dc">Глава 1. Цепи постоянного тока</a></p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Расчётная схема: две ЭДС, пять резисторов, два независимых контура">
+      <g class="wire">
+        <path d="M110,60 L530,60 M110,240 L530,240"/>
+        <path d="M110,60 L110,79 M110,105 L110,124 M110,164 L110,183 M110,223 L110,240"/>
+        <path d="M320,60 L320,130 M320,170 L320,240"/>
+        <path d="M530,60 L530,79 M530,119 L530,138 M530,178 L530,197 M530,223 L530,240"/>
+        <circle cx="110" cy="92" r="13" fill="#fff"/>
+        <circle cx="530" cy="210" r="13" fill="#fff"/>
+      </g>
+      <path d="M110,103 L110,85" stroke="#155e75" stroke-width="1.4" fill="none"/>
+      <path d="M106,88 L110,80 L114,88 z" fill="#155e75"/>
+      <path d="M530,221 L530,203" stroke="#155e75" stroke-width="1.4" fill="none"/>
+      <path d="M526,206 L530,198 L534,206 z" fill="#155e75"/>
+      <rect class="dev" x="103" y="124" width="14" height="40"/>
+      <rect class="dev" x="103" y="183" width="14" height="40"/>
+      <rect class="dev" x="313" y="130" width="14" height="40"/>
+      <rect class="dev" x="523" y="79" width="14" height="40"/>
+      <rect class="dev" x="523" y="138" width="14" height="40"/>
+      <circle class="node" cx="320" cy="60" r="3.2"/>
+      <circle class="node" cx="320" cy="240" r="3.2"/>
+
+      <path class="cur" d="M97,122 L97,107" marker-end="url(#ar-pdc1)"/>
+      <text class="lbl i" x="91" y="118" text-anchor="end">I<tspan font-size="8" dy="3">1</tspan></text>
+      <path class="cur" d="M543,136 L543,121" marker-end="url(#ar-pdc1)"/>
+      <text class="lbl i" x="549" y="132" text-anchor="start">I<tspan font-size="8" dy="3">2</tspan></text>
+      <path class="cur" d="M333,80 L333,115" marker-end="url(#ar-pdc1)"/>
+      <text class="lbl i" x="339" y="102" text-anchor="start">I<tspan font-size="8" dy="3">3</tspan></text>
+      <path class="vol" d="M298,130 L298,170" marker-end="url(#ar-pdc2)"/>
+      <text class="lbl u" x="292" y="154" text-anchor="end">U<tspan font-size="8" dy="3">ab</tspan></text>
+
+      <path class="gray" fill="none" stroke-width="1.3"
+            d="M221.8,131.2 A20,20 0 1 1 208.2,131.2" marker-end="url(#ar-pdc3)"/>
+      <text class="lbl g" x="215" y="155" text-anchor="middle">I<tspan font-size="8" dy="3">I</tspan></text>
+      <path class="gray" fill="none" stroke-width="1.3"
+            d="M418.2,131.2 A20,20 0 1 0 431.8,131.2" marker-end="url(#ar-pdc3)"/>
+      <text class="lbl g" x="425" y="155" text-anchor="middle">I<tspan font-size="8" dy="3">II</tspan></text>
+
+      <text class="lbl b" x="312" y="52" text-anchor="end">a</text>
+      <text class="lbl b" x="312" y="256" text-anchor="end">b</text>
+      <text class="lbl" x="88" y="96" text-anchor="end">E₁ = 40 В</text>
+      <text class="lbl" x="88" y="148" text-anchor="end">R₁ = 1 Ом</text>
+      <text class="lbl" x="88" y="207" text-anchor="end">R₄ = 3 Ом</text>
+      <text class="lbl" x="338" y="154" text-anchor="start">R₃ = 4 Ом</text>
+      <text class="lbl" x="548" y="103" text-anchor="start">R₂ = 2 Ом</text>
+      <text class="lbl" x="548" y="162" text-anchor="start">R₅ = 1 Ом</text>
+      <text class="lbl" x="548" y="214" text-anchor="start">E₂ = 30 В</text>
+      <text class="lbl g" x="110" y="278" text-anchor="start">Три ветви, два узла, два независимых контура</text>
+      <defs>
+        <marker id="ar-pdc1" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+        <marker id="ar-pdc2" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+        <marker id="ar-pdc3" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 z" fill="#6b6b74"/></marker>
+      </defs>
+    </svg>
+    <div class="caption">Рис. 1. Схема к задачам 1 и 2. Токи \(I_1\) и \(I_2\)
+    направлены к узлу a, ток \(I_3\) — от узла a к узлу b; напряжение
+    \(U_{ab}\) на приёмнике \(R_3\) совпадает по направлению с током \(I_3\).
+    Контурный ток \(I_{\text{I}}\) обходит левый контур по часовой стрелке,
+    \(I_{\text{II}}\) правый — против часовой, так что по общей ветви оба идут
+    сверху вниз.</div>
+  </div>
+
+  <div class="task" id="task-1">
+    <h3>Задача 1. Расчёт цепи методом контурных токов</h3>
+    <div class="given"><b>Дано.</b> Схема рис. 1: \(E_1 = 40\) В, \(E_2 = 30\) В,
+    \(R_1 = 1\) Ом, \(R_4 = 3\) Ом (левая ветвь), \(R_2 = 2\) Ом, \(R_5 = 1\) Ом
+    (правая ветвь), \(R_3 = 4\) Ом (средняя ветвь). Внутренние сопротивления
+    источников учтены в \(R_1\) и \(R_2\).
+    <b>Найти:</b> токи всех ветвей \(I_1\), \(I_2\), \(I_3\).</div>
+
+    <p>Схема содержит \(N_в = 3\) ветви и \(N_у = 2\) узла, следовательно число
+    независимых контуров \(N_к = N_в - N_у + 1 = 2\). Метод контурных токов даёт
+    систему второго порядка вместо системы третьего порядка по законам
+    Кирхгофа.</p>
+
+    <p>Собственные сопротивления контуров — суммы всех сопротивлений контура;
+    взаимное сопротивление — сопротивление общей ветви со знаком «плюс», так как
+    оба контурных тока проходят по \(R_3\) сверху вниз:</p>
+    <div class="steps">
+      <div>\(R_{11} = R_1 + R_4 + R_3\) = <span style="color:#6b6b74">1 + 3 + 4</span> = <b>8 Ом</b></div>
+      <div>\(R_{22} = R_2 + R_5 + R_3\) = <span style="color:#6b6b74">2 + 1 + 4</span> = <b>7 Ом</b></div>
+      <div>\(R_{12} = R_{21} = +R_3\) = <span style="color:#6b6b74">+4</span> = <b>4 Ом</b></div>
+    </div>
+    <p>Контурные ЭДС равны ЭДС, действующим в каждом контуре, со знаком «плюс»,
+    поскольку направление обхода совпадает с направлением ЭДС:
+    \(E_{11} = E_1 = 40\) В, \(E_{22} = E_2 = 30\) В. Система принимает вид</p>
+    <p style="text-align:center">$$\begin{aligned}
+    &amp;8\,I_{\text{I}} + 4\,I_{\text{II}} = 40, \\
+    &amp;4\,I_{\text{I}} + 7\,I_{\text{II}} = 30 .
+    \end{aligned}$$</p>
+    <div class="steps">
+      <div>\(\Delta = R_{11}R_{22} - R_{12}R_{21}\) = <span style="color:#6b6b74">8 · 7 − 4 · 4</span> = <b>40 Ом²</b></div>
+      <div>\(I_{\text{I}} = \dfrac{E_{11}R_{22} - R_{12}E_{22}}{\Delta}\) = <span style="color:#6b6b74">(40 · 7 − 4 · 30) / 40</span> = <b>4 А</b></div>
+      <div>\(I_{\text{II}} = \dfrac{R_{11}E_{22} - E_{11}R_{21}}{\Delta}\) = <span style="color:#6b6b74">(8 · 30 − 40 · 4) / 40</span> = <b>2 А</b></div>
+    </div>
+    <p>Переход к токам ветвей: по левой ветви проходит только контурный ток
+    \(I_{\text{I}}\), по правой — только \(I_{\text{II}}\), по средней —
+    оба в одном направлении:</p>
+    <div class="steps">
+      <div>\(I_1 = I_{\text{I}}\) = <span style="color:#6b6b74">4</span> = <b>4 А</b></div>
+      <div>\(I_2 = I_{\text{II}}\) = <span style="color:#6b6b74">2</span> = <b>2 А</b></div>
+      <div>\(I_3 = I_{\text{I}} + I_{\text{II}}\) = <span style="color:#6b6b74">4 + 2</span> = <b>6 А</b></div>
+    </div>
+    <p>Проверка по первому закону Кирхгофа для узла a:
+    \(I_1 + I_2 - I_3 = 4 + 2 - 6 = 0\) — выполняется.</p>
+    <div class="ans"><b>Ответ.</b> \(I_1 = 4\) А, \(I_2 = 2\) А, \(I_3 = 6\) А;
+    все токи положительны, значит их действительные направления совпадают с
+    выбранными на рис. 1.</div>
+  </div>
+
+  <div class="task" id="task-2">
+    <h3>Задача 2. Метод двух узлов и баланс мощностей</h3>
+    <div class="given"><b>Дано.</b> Та же схема рис. 1.
+    <b>Найти:</b> токи ветвей методом узловых потенциалов и проверить решение
+    балансом мощностей.</div>
+
+    <p>В схеме всего два узла, поэтому метод узловых потенциалов сводится к
+    одному уравнению — методу двух узлов. Приняв \(\varphi_b = 0\), находим
+    напряжение между узлами:</p>
+    <p style="text-align:center">$$U_{ab} = \dfrac{\sum E_k G_k}{\sum G_k},
+    \qquad G_k = \dfrac{1}{R_k}.$$</p>
+    <p>Проводимости ветвей вычисляют по полному сопротивлению ветви:</p>
+    <div class="steps">
+      <div>\(G_1 = \dfrac{1}{R_1 + R_4}\) = <span style="color:#6b6b74">1 / (1 + 3)</span> = <b>0,25 См</b></div>
+      <div>\(G_2 = \dfrac{1}{R_2 + R_5}\) = <span style="color:#6b6b74">1 / (2 + 1)</span> = <b>0,3333 См</b></div>
+      <div>\(G_3 = \dfrac{1}{R_3}\) = <span style="color:#6b6b74">1 / 4</span> = <b>0,25 См</b></div>
+      <div>\(U_{ab} = \dfrac{E_1 G_1 + E_2 G_2}{G_1 + G_2 + G_3}\) = <span style="color:#6b6b74">(40 · 0,25 + 30 · 0,3333) / (0,25 + 0,3333 + 0,25)</span> = <b>24 В</b></div>
+    </div>
+    <p>Токи ветвей находят по закону Ома для участка цепи с ЭДС: разность между
+    ЭДС ветви и напряжением между узлами делится на сопротивление ветви.</p>
+    <div class="steps">
+      <div>\(I_1 = \dfrac{E_1 - U_{ab}}{R_1 + R_4}\) = <span style="color:#6b6b74">(40 − 24) / 4</span> = <b>4 А</b></div>
+      <div>\(I_2 = \dfrac{E_2 - U_{ab}}{R_2 + R_5}\) = <span style="color:#6b6b74">(30 − 24) / 3</span> = <b>2 А</b></div>
+      <div>\(I_3 = \dfrac{U_{ab}}{R_3}\) = <span style="color:#6b6b74">24 / 4</span> = <b>6 А</b></div>
+    </div>
+    <p>Результаты совпали с задачей 1 — расчёт выполнен двумя независимыми
+    методами. Окончательная энергетическая проверка — <b>баланс мощностей</b>:</p>
+    <p style="text-align:center">$$\sum E_k I_k = \sum I_k^2 R_k .$$</p>
+    <div class="steps">
+      <div>\(P_{\text{ист}} = E_1 I_1 + E_2 I_2\) = <span style="color:#6b6b74">40 · 4 + 30 · 2</span> = <b>220 Вт</b></div>
+      <div>\(P_1 = I_1^2 (R_1 + R_4)\) = <span style="color:#6b6b74">4² · 4</span> = <b>64 Вт</b></div>
+      <div>\(P_2 = I_2^2 (R_2 + R_5)\) = <span style="color:#6b6b74">2² · 3</span> = <b>12 Вт</b></div>
+      <div>\(P_3 = I_3^2 R_3\) = <span style="color:#6b6b74">6² · 4</span> = <b>144 Вт</b></div>
+      <div>\(P_{\text{пр}} = P_1 + P_2 + P_3\) = <span style="color:#6b6b74">64 + 12 + 144</span> = <b>220 Вт</b></div>
+      <div>\(\delta = \dfrac{|P_{\text{ист}} - P_{\text{пр}}|}{P_{\text{ист}}}\cdot 100\) = <span style="color:#6b6b74">|220 − 220| / 220 · 100</span> = <b>0 %</b></div>
+    </div>
+    <div class="note warn"><b>О чём говорит невязка.</b> В учебных задачах с
+    «круглыми» числами баланс сходится точно. В реальном расчёте с округлением
+    промежуточных величин допускают невязку до 1 %. Невязка в 5…10 % почти всегда
+    означает ошибку в знаке взаимного сопротивления или в направлении ЭДС, а не
+    накопление погрешностей округления.</div>
+    <div class="ans"><b>Ответ.</b> \(U_{ab} = 24\) В; \(I_1 = 4\) А,
+    \(I_2 = 2\) А, \(I_3 = 6\) А. Баланс мощностей сходится:
+    220 Вт отдано источниками и 220 Вт потреблено, невязка 0 %.</div>
+  </div>
+
+  <div class="task" id="task-3">
+    <h3>Задача 3. Мощность и КПД источника. Согласованный режим</h3>
+    <div class="given"><b>Дано.</b> Судовая стартерная аккумуляторная батарея:
+    ЭДС \(E = 24\) В, внутреннее сопротивление \(r = 0{,}05\) Ом. Сопротивление
+    стартерной цепи \(R = 0{,}15\) Ом.
+    <b>Найти:</b> ток, напряжение на выводах, отдаваемую мощность и КПД; ток и
+    мощность в согласованном режиме и при коротком замыкании; сравнить с цепью
+    освещения сопротивлением 4,75 Ом.</div>
+
+    <p>Реальный источник представляют идеальной ЭДС с последовательным внутренним
+    сопротивлением. Тогда</p>
+    <p style="text-align:center">$$I = \dfrac{E}{R + r}, \qquad U = E - I r, \qquad
+    P_1 = E I, \qquad P_2 = I^2 R, \qquad \eta = \dfrac{R}{R + r}.$$</p>
+
+    <p><b>Рабочий режим стартера.</b></p>
+    <div class="steps">
+      <div>\(I = \dfrac{E}{R + r}\) = <span style="color:#6b6b74">24 / (0,15 + 0,05)</span> = <b>120 А</b></div>
+      <div>\(U = E - I r\) = <span style="color:#6b6b74">24 − 120 · 0,05</span> = <b>18 В</b></div>
+      <div>\(P_1 = E I\) = <span style="color:#6b6b74">24 · 120</span> = <b>2880 Вт</b></div>
+      <div>\(P_2 = I^2 R\) = <span style="color:#6b6b74">120² · 0,15</span> = <b>2160 Вт</b></div>
+      <div>\(\Delta P = I^2 r\) = <span style="color:#6b6b74">120² · 0,05</span> = <b>720 Вт</b></div>
+      <div>\(\eta = \dfrac{R}{R + r}\) = <span style="color:#6b6b74">0,15 / 0,20</span> = <b>0,75</b></div>
+    </div>
+    <p>Просадка напряжения на выводах батареи с 24 до 18 В (на 25 %) — типичная
+    картина для стартерного режима. Именно поэтому судовое оборудование,
+    рассчитанное на 24 В, по Правилам Регистра должно сохранять работоспособность
+    при значительном отклонении напряжения аккумуляторной батареи в обе стороны —
+    и при глубоком разряде, и в режиме заряда.</p>
+
+    <p><b>Согласованный режим.</b> Отдаваемая мощность
+    \(P_2 = E^2 R / (R + r)^2\) максимальна при \(R = r\):</p>
+    <div class="steps">
+      <div>\(I_{\text{согл}} = \dfrac{E}{2r}\) = <span style="color:#6b6b74">24 / (2 · 0,05)</span> = <b>240 А</b></div>
+      <div>\(P_{2\max} = \dfrac{E^2}{4r}\) = <span style="color:#6b6b74">24² / (4 · 0,05)</span> = <b>2880 Вт</b></div>
+      <div>\(\eta_{\text{согл}} = \dfrac{r}{r + r}\) = <span style="color:#6b6b74">0,05 / 0,10</span> = <b>0,50</b></div>
+    </div>
+    <p>Мощность выросла всего на 33 % по сравнению с рабочим режимом, а потери
+    внутри батареи — с 720 до 2880 Вт, то есть вчетверо.</p>
+
+    <p><b>Короткое замыкание.</b></p>
+    <div class="steps">
+      <div>\(I_{\text{к}} = \dfrac{E}{r}\) = <span style="color:#6b6b74">24 / 0,05</span> = <b>480 А</b></div>
+      <div>\(P_2 = I_{\text{к}}^2 \cdot 0\) = <span style="color:#6b6b74">480² · 0</span> = <b>0 Вт</b></div>
+      <div>\(\Delta P = I_{\text{к}}^2 r\) = <span style="color:#6b6b74">480² · 0,05</span> = <b>11 520 Вт</b></div>
+    </div>
+    <p>Вся мощность выделяется внутри источника — режим аварийный, ток
+    ограничивается только внутренним сопротивлением.</p>
+
+    <p><b>Цепь освещения.</b></p>
+    <div class="steps">
+      <div>\(I = \dfrac{E}{R + r}\) = <span style="color:#6b6b74">24 / (4,75 + 0,05)</span> = <b>5 А</b></div>
+      <div>\(U = E - I r\) = <span style="color:#6b6b74">24 − 5 · 0,05</span> = <b>23,75 В</b></div>
+      <div>\(P_2 = I^2 R\) = <span style="color:#6b6b74">5² · 4,75</span> = <b>118,75 Вт</b></div>
+      <div>\(\eta = \dfrac{R}{R + r}\) = <span style="color:#6b6b74">4,75 / 4,80</span> = <b>0,990</b></div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 290" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Зависимости подводимой и отдаваемой мощности и КПД источника от тока нагрузки">
+        <g class="ln-axis">
+          <path d="M70,232 L618,232"/>
+          <path d="M70,232 L70,42"/>
+          <path d="M595,232 L595,42"/>
+        </g>
+        <path class="ln-thin ln-dash" d="M201.2,232 L201.2,94"/>
+        <path class="ln-thin ln-dash" d="M332.5,232 L332.5,140"/>
+        <polyline class="gray" fill="none" stroke-width="1.5" points="70.0,232.0 102.8,221.0 135.6,209.9 168.4,198.9 201.2,187.8 234.1,176.8 266.9,165.8 299.7,154.7 332.5,143.7 365.3,132.6 398.1,121.6 430.9,110.6 463.8,99.5 496.6,88.5 529.4,77.4 562.2,66.4 595.0,55.4"/>
+        <polyline class="pow" fill="none" points="70.0,232.0 86.4,226.7 102.8,221.7 119.2,217.0 135.6,212.7 152.0,208.7 168.4,205.1 184.8,201.8 201.2,198.9 217.7,196.3 234.1,194.1 250.5,192.2 266.9,190.6 283.3,189.4 299.7,188.5 316.1,188.0 332.5,187.8 348.9,188.0 365.3,188.5 381.7,189.4 398.1,190.6 414.5,192.2 430.9,194.1 447.3,196.3 463.8,198.9 480.2,201.8 496.6,205.1 513.0,208.7 529.4,212.7 545.8,217.0 562.2,221.7 578.6,226.7 595.0,232.0"/>
+        <polyline class="vol" fill="none" points="70.0,48.0 102.8,59.5 135.6,71.0 168.4,82.5 201.2,94.0 234.1,105.5 266.9,117.0 299.7,128.5 332.5,140.0 365.3,151.5 398.1,163.0 430.9,174.5 463.8,186.0 496.6,197.5 529.4,209.0 562.2,220.5 595.0,232.0"/>
+        <circle class="node" cx="201.2" cy="198.9" r="3.2"/>
+        <circle class="node" cx="332.5" cy="187.8" r="3.2"/>
+        <text class="lbl p" x="80" y="38" text-anchor="start">P, Вт</text>
+        <text class="lbl u" x="601" y="38" text-anchor="start">η</text>
+        <text class="lbl" x="614" y="252" text-anchor="end">I, А</text>
+        <text class="lbl" x="64" y="52" text-anchor="end">12000</text>
+        <text class="lbl" x="64" y="98" text-anchor="end">9000</text>
+        <text class="lbl" x="64" y="144" text-anchor="end">6000</text>
+        <text class="lbl" x="64" y="190" text-anchor="end">3000</text>
+        <text class="lbl" x="64" y="236" text-anchor="end">0</text>
+        <text class="lbl" x="601" y="144" text-anchor="start">0,5</text>
+        <text class="lbl" x="601" y="52" text-anchor="start">1,0</text>
+        <text class="lbl" x="201" y="246" text-anchor="middle">120</text>
+        <text class="lbl" x="332" y="246" text-anchor="middle">240</text>
+        <text class="lbl" x="463" y="246" text-anchor="middle">360</text>
+        <text class="lbl" x="590" y="246" text-anchor="middle">480</text>
+        <text class="lbl g" x="470" y="82" text-anchor="end">P₁ = E I</text>
+        <text class="lbl p" x="360" y="184" text-anchor="start">P₂ = E I − I²r</text>
+        <text class="lbl u" x="120" y="66" text-anchor="start">η</text>
+        <text class="lbl g" x="207" y="90" text-anchor="start">рабочая точка</text>
+        <text class="lbl g" x="338" y="136" text-anchor="start">согласованный режим</text>
+        <text class="lbl g" x="70" y="274" text-anchor="start">Отдаваемая мощность максимальна при I = E/2r, но КПД там равен 0,5</text>
+      </svg>
+      <div class="caption">Рис. 2. Подводимая мощность \(P_1\), отдаваемая
+      мощность \(P_2\) и КПД \(\eta\) батареи \(E = 24\) В, \(r = 0{,}05\) Ом в
+      зависимости от тока. Точками отмечены рабочий режим стартера (120 А) и
+      согласованный режим (240 А).</div>
+    </div>
+
+    <table class="el">
+      <thead><tr><th>Режим</th><th class="num">R, Ом</th><th class="num">I, А</th>
+      <th class="num">U, В</th><th class="num">P₂, Вт</th><th class="num">η</th></tr></thead>
+      <tbody>
+        <tr><td>Короткое замыкание</td><td class="num">0</td><td class="num">480</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+        <tr><td>Согласованный</td><td class="num">0,05</td><td class="num">240</td><td class="num">12</td><td class="num">2880</td><td class="num">0,50</td></tr>
+        <tr><td>Стартер</td><td class="num">0,15</td><td class="num">120</td><td class="num">18</td><td class="num">2160</td><td class="num">0,75</td></tr>
+        <tr><td>Освещение</td><td class="num">4,75</td><td class="num">5</td><td class="num">23,75</td><td class="num">118,75</td><td class="num">0,99</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ans"><b>Ответ.</b> В стартерном режиме \(I = 120\) А,
+    \(U = 18\) В, \(P_2 = 2160\) Вт, \(\eta = 0{,}75\). Согласованный режим
+    (\(R = r = 0{,}05\) Ом) даёт максимум отдаваемой мощности 2880 Вт при
+    КПД всего 0,50 и токе 240 А. Ток короткого замыкания 480 А. В цепи освещения
+    КПД достигает 0,99. Поэтому судовые источники работают при \(R \gg r\):
+    режим согласования применим только там, где важна передача сигнала, а не
+    экономичность.</div>
+  </div>
+
+  <h2>Что проверить в своей работе</h2>
+  <ul>
+    <li>Направления токов на схеме проставлены <b>до</b> расчёта и не менялись по
+    ходу решения.</li>
+    <li>Знак взаимного сопротивления определён по фактическому направлению
+    контурных токов в общей ветви, а не «по умолчанию» минус.</li>
+    <li>Ответ проверен вторым методом и балансом мощностей; невязка баланса
+    не превышает 1 %.</li>
+    <li>Все величины приведены с единицами измерения, десятичный разделитель —
+    запятая.</li>
+  </ul>
+
+  <p class="small">Теоретическая база разборов — <a href="t-dc">глава 1</a>;
+  физическая природа тока и ЭДС —
+  <a href="https://shadeswd.duckdns.org/physics/t-current">курс физики</a>;
+  применение постоянного тока на судне —
+  <a href="t-shipnet">глава 6</a>.</p>
+
+  <p><a href="tasks">← Все разборы</a> · <a href="p-ac">Цепи переменного тока →</a></p>
+</main>
+</body>
+</html>

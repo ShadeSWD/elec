@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Глава 4. Трансформаторы</title>
+<meta name="description" content="Трансформаторы: устройство и принцип действия, ЭДС обмотки E = 4,44 f w Ф, коэффициент трансформации, опыты холостого хода и короткого замыкания, напряжение короткого замыкания, Т-образная и Г-образная схемы замещения, приведение вторичной обмотки, внешняя характеристика, потери и КПД, группы соединения обмоток, автотрансформаторы, измерительные трансформаторы тока и напряжения, судовые трансформаторы 400/230 В и требования РМРС.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<script src="assets/site.js" data-root="./" data-page="theory"></script>
+<main class="wrap">
+  <h1>Глава 4. Трансформаторы</h1>
+  <p class="lead">Трансформатор — электротехническое устройство, предназначенное для
+  преобразования переменного тока одного напряжения в переменный ток другого напряжения
+  при той же частоте. На судне трансформаторы питают сети освещения и бытовых
+  потребителей, обеспечивают гальваническую развязку ответственных цепей, входят в состав
+  выпрямителей и преобразователей частоты, а измерительные трансформаторы тока и
+  напряжения обслуживают приборы и защиты главного распределительного щита. В главе
+  разобраны принцип действия, опыты холостого хода и короткого замыкания, схема
+  замещения, внешняя характеристика и КПД — со сквозным числовым примером судового
+  трансформатора 63 кВ·А, 400/230 В.</p>
+
+  <div class="tldr">
+    <h2>Коротко</h2>
+    <ul>
+      <li>Действующее значение ЭДС обмотки:
+        \(E=4{,}44\,f\,w\,\Phi_m\) (множитель 4,44 = \(2\pi/\sqrt2\)).</li>
+      <li>Коэффициент трансформации
+        \(k=\dfrac{w_1}{w_2}=\dfrac{E_1}{E_2}\approx\dfrac{U_{1\text{н}}}{U_{20}}\).</li>
+      <li>Опыт ХХ (\(U_{1\text{н}}\), \(I_0\), \(P_0\)) даёт \(k\) и ветвь
+        намагничивания; \(P_0\) — это практически потери в стали, они не зависят
+        от нагрузки.</li>
+      <li>Опыт КЗ (\(U_{\text{к}}\), \(I_{1\text{н}}\), \(P_{\text{к}}\)) даёт
+        \(Z_{\text{к}},R_{\text{к}},X_{\text{к}}\) и потери в меди;
+        \(u_{\text{к}}\%=U_{\text{к}}/U_{1\text{н}}\cdot100\) — паспортная величина,
+        у судовых трансформаторов 4…6 %.</li>
+      <li>Приведение: \(w_2'=w_1\), \(U_2'=kU_2\), \(I_2'=I_2/k\), \(R_2'=k^2R_2\),
+        \(X_2'=k^2X_2\).</li>
+      <li>Т-образная схема замещения: \(R_1,X_1\) — первичная обмотка,
+        \(R_{\text{м}},X_{\text{м}}\) — ветвь намагничивания, \(R_2',X_2'\) —
+        приведённая вторичная. Упрощённая Г-образная:
+        \(R_{\text{к}}=R_1+R_2'\), \(X_{\text{к}}=X_1+X_2'\).</li>
+      <li>Изменение напряжения
+        \(\Delta U\%=\beta\left(u_{\text{ка}}\cos\varphi_2+u_{\text{кр}}\sin\varphi_2\right)\);
+        при ёмкостной нагрузке \(\Delta U\) может стать отрицательным.</li>
+      <li>КПД \(\eta=\dfrac{\beta S_{\text{н}}\cos\varphi_2}
+        {\beta S_{\text{н}}\cos\varphi_2+P_0+\beta^2P_{\text{кн}}}\); максимум при
+        \(\beta=\sqrt{P_0/P_{\text{кн}}}\).</li>
+      <li>Сквозной пример: 63 кВ·А, 400/230 В; \(P_0=350\) Вт, \(P_{\text{к}}=1250\) Вт,
+        \(u_{\text{к}}=4{,}5\ \%\) → \(\eta=96{,}9\ \%\) при \(\beta=1\),
+        \(\eta_{\max}=97{,}4\ \%\) при \(\beta=0{,}53\).</li>
+      <li>Группы соединения: Y/Y₀ — для симметричной нагрузки, Δ/Y₀ — для осветительных
+        сетей с однофазными потребителями.</li>
+      <li>Судовые трансформаторы — сухие, с усиленной изоляцией и защитой от влаги,
+        вибрации и кренов; требования — часть XI Правил РМРС.</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">4.1. Назначение, устройство и принцип действия</h2>
+
+  <p>Трансформатор — <b>статический</b> электромагнитный аппарат: в нём нет вращающихся
+  частей, а передача энергии из одной обмотки в другую происходит через переменное
+  магнитное поле. Именно поэтому трансформатор — самая надёжная и самая экономичная
+  машина электротехники: КПД крупных единиц превышает 99 %, судовых — 96…98 %.</p>
+
+  <h3>Устройство</h3>
+
+  <p>Трансформатор состоит из двух основных частей:</p>
+
+  <ul>
+    <li><b>магнитопровод</b> (сердечник) — замкнутая магнитная цепь, набранная из
+      изолированных друг от друга листов электротехнической стали толщиной 0,35…0,5 мм;
+      шихтовка нужна для подавления вихревых токов. Вертикальные части, несущие обмотки,
+      называют <b>стержнями</b>, горизонтальные — <b>ярмами</b>;</li>
+    <li><b>обмотки</b> — первичная с числом витков \(w_1\), подключаемая к источнику, и
+      вторичная с числом витков \(w_2\), к которой подключается нагрузка. Обмотку
+      высшего напряжения (ВН) размещают снаружи, низшего (НН) — ближе к стержню, что
+      облегчает изоляцию.</li>
+  </ul>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Устройство однофазного трансформатора: замкнутый магнитопровод, первичная и вторичная обмотки, магнитный поток, источник и нагрузка">
+      <defs>
+        <marker id="f41b" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/>
+        </marker>
+        <marker id="f41g" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#6b6b74"/>
+        </marker>
+      </defs>
+      <path fill="#ecebe5" stroke="#16161a" stroke-width="1.6" fill-rule="evenodd"
+            d="M200,60 H440 V240 H200 Z M240,100 H400 V200 H240 Z"/>
+      <path class="ln-thin gray ln-dash" d="M220,150 L220,90 Q220,80 230,80 L410,80 Q420,80 420,90 L420,150"/>
+      <path class="ln-thin gray" marker-end="url(#f41g)" d="M320,80 L352,80"/>
+      <text class="lbl g" x="320" y="72" text-anchor="middle">Ф</text>
+      <rect x="188" y="108" width="64" height="84" fill="rgba(21,94,117,.10)" stroke="#155e75" stroke-width="1.4"/>
+      <rect x="388" y="108" width="64" height="84" fill="rgba(26,127,55,.12)" stroke="#1a7f37" stroke-width="1.4"/>
+      <text class="lbl u" x="220" y="102" text-anchor="middle">w<tspan font-size="8" dy="2">1</tspan></text>
+      <text class="lbl p" x="420" y="102" text-anchor="middle">w<tspan font-size="8" dy="2">2</tspan></text>
+      <path class="wire" d="M188,125 L120,125 M188,175 L120,175"/>
+      <path class="wire" d="M452,125 L560,125 M452,175 L560,175"/>
+      <path class="wire" d="M560,125 L560,130 M560,170 L560,175"/>
+      <rect class="dev" x="553" y="130" width="14" height="40"/>
+      <text class="lbl b" x="112" y="129" text-anchor="end">A</text>
+      <text class="lbl b" x="112" y="179" text-anchor="end">X</text>
+      <text class="lbl b" x="470" y="118" text-anchor="middle">a</text>
+      <text class="lbl b" x="470" y="192" text-anchor="middle">x</text>
+      <path class="vol" marker-end="url(#f41b)" d="M132,133 L132,167"/>
+      <text class="lbl u" x="126" y="154" text-anchor="end">U<tspan font-size="8" dy="2">1</tspan></text>
+      <path class="vol" marker-end="url(#f41b)" d="M510,133 L510,167"/>
+      <text class="lbl u" x="516" y="154">U<tspan font-size="8" dy="2">2</tspan></text>
+      <text class="lbl" x="575" y="154">Z<tspan font-size="8" dy="2">н</tspan></text>
+      <path class="ln-thin gray" d="M320,240 L320,250"/>
+      <text class="lbl g" x="320" y="264" text-anchor="middle">магнитопровод (шихтованная сталь)</text>
+      <text class="lbl u" x="40" y="286">w<tspan font-size="8" dy="2">1</tspan> — первичная обмотка</text>
+      <text class="lbl p" x="300" y="286">w<tspan font-size="8" dy="2">2</tspan> — вторичная обмотка</text>
+    </svg>
+    <div class="caption">Рис. 4.1. Устройство однофазного трансформатора. Обе обмотки
+      сцеплены с одним и тем же основным магнитным потоком Ф, замыкающимся
+      по магнитопроводу.</div>
+  </div>
+
+  <h3>Принцип действия</h3>
+
+  <p>При подключении первичной обмотки к источнику переменного напряжения \(u_1\) в ней
+  протекает ток, создающий в магнитопроводе переменный магнитный поток
+  \(\Phi=\Phi_m\sin\omega t\). Этот поток сцеплён с обеими обмотками и наводит в них ЭДС
+  (см. <a href="https://shadeswd.duckdns.org/physics/t-magnetism">закон электромагнитной
+  индукции</a>):</p>
+
+  <p style="text-align:center">$$ e=-w\frac{d\Phi}{dt}=-w\,\omega\Phi_m\cos\omega t $$</p>
+
+  <p>Амплитуда ЭДС равна \(E_m=w\,\omega\Phi_m=2\pi f w\Phi_m\), а действующее значение
+  меньше в \(\sqrt2\) раз:</p>
+
+  <p style="text-align:center">$$ E=\frac{2\pi}{\sqrt2}\,f\,w\,\Phi_m=4{,}44\,f\,w\,\Phi_m $$</p>
+
+  <p>Эта формула — основная в теории трансформатора. Из неё следуют два практических
+  вывода. Во-первых, при заданном напряжении сети амплитуда потока в сердечнике
+  <b>задана</b> и почти не зависит от нагрузки: \(\Phi_m\approx U_1/(4{,}44fw_1)\).
+  Во-вторых, отношение ЭДС обмоток равно отношению чисел витков — это и есть
+  <b>коэффициент трансформации</b>:</p>
+
+  <p style="text-align:center">$$ k=\frac{E_1}{E_2}=\frac{w_1}{w_2}
+  \approx\frac{U_{1\text{н}}}{U_{20}} $$</p>
+
+  <p>При \(k&gt;1\) трансформатор понижающий, при \(k&lt;1\) — повышающий. Приближённое
+  равенство \(k\approx U_{1\text{н}}/U_{20}\) справедливо потому, что падение напряжения
+  на первичной обмотке в режиме холостого хода мало (доли процента).</p>
+
+  <p>Поскольку потери в трансформаторе невелики, в первом приближении
+  \(U_1I_1\approx U_2I_2\), то есть <b>токи обмоток обратно пропорциональны
+  напряжениям</b>: \(I_1/I_2\approx 1/k\). Повышая напряжение, трансформатор во столько
+  же раз понижает ток — на этом основана вся передача электроэнергии.</p>
+
+  <div class="note">
+    <b>Сквозной пример. Паспорт судового трансформатора.</b><br>
+    \(S_{\text{н}}=63\) кВ·А; \(U_{1\text{н}}/U_{2\text{н}}=400/230\) В; \(f=50\) Гц;
+    трёхфазный, группа соединения Δ/Y₀−11; \(u_{\text{к}}=4{,}5\ \%\);
+    потери холостого хода \(P_0=350\) Вт; потери короткого замыкания
+    \(P_{\text{кн}}=1250\) Вт. Все расчёты ведём <b>на одну фазу эквивалентной звезды</b>,
+    то есть при \(U_{1\text{ф}}=U_{1\text{л}}/\sqrt3\).
+    <div class="steps">
+      <div>\(I_{1\text{н}}=\dfrac{S_{\text{н}}}{\sqrt3\,U_{1\text{н}}}\) =
+        <span style="color:#6b6b74">63 000 / (1,732 · 400)</span> = <b>90,9 А</b></div>
+      <div>\(I_{2\text{н}}=\dfrac{S_{\text{н}}}{\sqrt3\,U_{2\text{н}}}\) =
+        <span style="color:#6b6b74">63 000 / (1,732 · 230)</span> = <b>158,1 А</b></div>
+      <div>\(U_{1\text{ф}}\) = <span style="color:#6b6b74">400 / 1,732</span> = <b>231 В</b>;
+        \(U_{2\text{ф}}\) = <span style="color:#6b6b74">230 / 1,732</span> = <b>132,8 В</b></div>
+      <div>\(k=\dfrac{U_{1\text{ф}}}{U_{2\text{ф}}}\) =
+        <span style="color:#6b6b74">231 / 132,8</span> = <b>1,74</b></div>
+      <div>При сечении стержня \(S_{\text{ст}}=60\) см² и индукции \(B_m=1{,}5\) Тл поток
+        \(\Phi_m=B_mS_{\text{ст}}\) =
+        <span style="color:#6b6b74">1,5 · 60 · 10⁻⁴</span> = <b>9,0 мВб</b></div>
+      <div>\(w_1=\dfrac{U_{1\text{ф}}}{4{,}44f\Phi_m}\) =
+        <span style="color:#6b6b74">231 / (4,44 · 50 · 0,0090)</span> = <b>116 витков</b>;
+        \(w_2=w_1/k\) = <span style="color:#6b6b74">116 / 1,74</span> = <b>67 витков</b></div>
+    </div>
+  </div>
+
+  <h2 id="s2">4.2. Режим холостого хода</h2>
+
+  <p><b>Холостым ходом</b> называют режим, при котором первичная обмотка включена на
+  номинальное напряжение, а вторичная разомкнута (\(I_2=0\)). Ток первичной обмотки в
+  этом режиме — <b>ток холостого хода</b> \(I_0\) — расходуется на создание основного
+  магнитного потока и на покрытие потерь в стали. У силовых трансформаторов
+  \(I_0=(2\dots10)\ \%\) от \(I_{1\text{н}}\), у мелких — до 30 %.</p>
+
+  <p>Ток холостого хода имеет две составляющие: реактивную (намагничивающую)
+  \(I_{0\text{р}}\), создающую поток, и активную \(I_{0\text{а}}\), покрывающую потери
+  в стали. Угол \(\varphi_0\) близок к 90°, поэтому коэффициент мощности в режиме ХХ
+  очень низок (0,1…0,3).</p>
+
+  <p><b>Потери холостого хода</b> \(P_0\) — это практически <b>потери в стали</b>
+  (на гистерезис и вихревые токи), так как потери в меди первичной обмотки при малом
+  токе \(I_0\) пренебрежимо малы. Поскольку амплитуда потока определяется приложенным
+  напряжением и почти не зависит от нагрузки, потери в стали считают <b>постоянными</b>
+  во всех режимах.</p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 280" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Схема опыта холостого хода трансформатора: амперметр, ваттметр и вольтметр в первичной цепи, вольтметр на разомкнутой вторичной обмотке">
+      <defs>
+        <marker id="f42r" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/>
+        </marker>
+      </defs>
+      <circle class="dev" cx="60" cy="140" r="14"/>
+      <text class="lbl" x="60" y="145" text-anchor="middle">~</text>
+      <path class="wire" d="M60,126 L60,80 L166,80 M194,80 L236,80 M264,80 L312,80"/>
+      <path class="wire" d="M60,154 L60,200 L312,200"/>
+      <circle class="dev" cx="180" cy="80" r="14"/>
+      <circle class="dev" cx="250" cy="80" r="14"/>
+      <circle class="dev" cx="200" cy="140" r="14"/>
+      <text class="lbl b" x="180" y="84" text-anchor="middle">A</text>
+      <text class="lbl b" x="250" y="84" text-anchor="middle">W</text>
+      <text class="lbl b" x="200" y="145" text-anchor="middle">V</text>
+      <path class="ln-thin" d="M200,80 L200,126 M200,154 L200,200"/>
+      <circle class="node" cx="200" cy="80" r="3.2"/>
+      <circle class="node" cx="200" cy="200" r="3.2"/>
+      <text class="lbl i" x="180" y="60" text-anchor="middle">I<tspan font-size="8" dy="2">0</tspan></text>
+      <text class="lbl p" x="250" y="60" text-anchor="middle">P<tspan font-size="8" dy="2">0</tspan></text>
+      <text class="lbl u" x="218" y="145">U<tspan font-size="8" dy="2">1н</tspan></text>
+      <path class="wire" d="M312,80 L312,100 M312,180 L312,200"/>
+      <path class="ln" d="M312,100 a10,10 0 0 0 0,20 a10,10 0 0 0 0,20 a10,10 0 0 0 0,20 a10,10 0 0 0 0,20"/>
+      <path class="ln" d="M330,80 L330,200 M340,80 L340,200"/>
+      <path class="ln" d="M358,100 a10,10 0 0 1 0,20 a10,10 0 0 1 0,20 a10,10 0 0 1 0,20 a10,10 0 0 1 0,20"/>
+      <path class="wire" d="M358,80 L358,100 M358,180 L358,200"/>
+      <path class="wire" d="M358,80 L560,80 M358,200 L560,200"/>
+      <path class="wire" d="M560,80 L560,126 M560,154 L560,200"/>
+      <circle class="dev" cx="560" cy="140" r="14"/>
+      <text class="lbl b" x="560" y="145" text-anchor="middle">V</text>
+      <text class="lbl u" x="578" y="145">U<tspan font-size="8" dy="2">20</tspan></text>
+      <text class="lbl g" x="450" y="245" text-anchor="middle">вторичная обмотка разомкнута</text>
+      <text class="lbl g" x="335" y="222" text-anchor="middle">Тр</text>
+    </svg>
+    <div class="caption">Рис. 4.2. Схема опыта холостого хода. Измеряют \(U_{1\text{н}}\),
+      \(I_0\), \(P_0\) и напряжение \(U_{20}\) на разомкнутой вторичной обмотке.</div>
+  </div>
+
+  <p>По данным опыта ХХ определяют:</p>
+
+  <p style="text-align:center">$$ k=\frac{U_{1\text{ф}}}{U_{20\text{ф}}},\qquad
+  \cos\varphi_0=\frac{P_0}{3\,U_{1\text{ф}}I_0},\qquad
+  Z_{\text{м}}=\frac{U_{1\text{ф}}}{I_0},\qquad
+  R_{\text{м}}=\frac{P_0}{3I_0^{2}},\qquad
+  X_{\text{м}}=\sqrt{Z_{\text{м}}^{2}-R_{\text{м}}^{2}} $$</p>
+
+  <p>(для однофазного трансформатора множители 3 в знаменателях отсутствуют). Величины
+  \(R_{\text{м}}\) и \(X_{\text{м}}\) — параметры <b>ветви намагничивания</b>:
+  \(R_{\text{м}}\) отражает потери в стали, \(X_{\text{м}}\) — намагничивание
+  сердечника.</p>
+
+  <div class="note">
+    <b>Сквозной пример (продолжение). Опыт холостого хода.</b><br>
+    Измерено: \(U_{1\text{н}}=400\) В (линейное), \(I_0=4{,}5\) А,
+    \(P_0=350\) Вт, \(U_{20}=230\) В.
+    <div class="steps">
+      <div>\(i_0\%=\dfrac{I_0}{I_{1\text{н}}}\cdot100\) =
+        <span style="color:#6b6b74">4,5 / 90,9 · 100</span> = <b>4,95 %</b></div>
+      <div>\(\cos\varphi_0=\dfrac{P_0}{\sqrt3\,U_{1\text{н}}I_0}\) =
+        <span style="color:#6b6b74">350 / (1,732 · 400 · 4,5)</span> = <b>0,112</b></div>
+      <div>\(Z_{\text{м}}=\dfrac{U_{1\text{ф}}}{I_0}\) =
+        <span style="color:#6b6b74">231 / 4,5</span> = <b>51,3 Ом</b></div>
+      <div>\(R_{\text{м}}=\dfrac{P_0}{3I_0^{2}}\) =
+        <span style="color:#6b6b74">350 / (3 · 4,5²)</span> = <b>5,76 Ом</b></div>
+      <div>\(X_{\text{м}}=\sqrt{Z_{\text{м}}^{2}-R_{\text{м}}^{2}}\) =
+        <span style="color:#6b6b74">√(51,3² − 5,76²)</span> = <b>51,0 Ом</b></div>
+    </div>
+    Ветвь намагничивания почти чисто индуктивная, как и должно быть.
+  </div>
+
+  <h2 id="s3">4.3. Режим короткого замыкания</h2>
+
+  <p>Различают <b>аварийное</b> КЗ (вторичная обмотка замкнута накоротко при номинальном
+  первичном напряжении — ток превышает номинальный в 10…25 раз) и <b>опыт</b> КЗ, при
+  котором вторичная обмотка замкнута накоротко, а первичное напряжение плавно поднимают
+  от нуля до значения \(U_{\text{к}}\), при котором токи обмоток равны номинальным.</p>
+
+  <p>Напряжение \(U_{\text{к}}\) составляет всего 4…10 % от номинального, поэтому поток
+  в сердечнике мал, потери в стали пренебрежимы, а измеренная мощность \(P_{\text{к}}\)
+  представляет собой <b>потери в меди обеих обмоток</b> при номинальном токе.</p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 280" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Схема опыта короткого замыкания трансформатора: регулируемый источник, амперметр, ваттметр и вольтметр в первичной цепи, замкнутая накоротко вторичная обмотка с амперметром">
+      <defs>
+        <marker id="f43r" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/>
+        </marker>
+      </defs>
+      <circle class="dev" cx="60" cy="140" r="14"/>
+      <text class="lbl" x="60" y="145" text-anchor="middle">~</text>
+      <path class="ln-thin" marker-end="url(#f43r)" d="M46,156 L74,124"/>
+      <path class="wire" d="M60,126 L60,80 L166,80 M194,80 L236,80 M264,80 L312,80"/>
+      <path class="wire" d="M60,154 L60,200 L312,200"/>
+      <circle class="dev" cx="180" cy="80" r="14"/>
+      <circle class="dev" cx="250" cy="80" r="14"/>
+      <circle class="dev" cx="200" cy="140" r="14"/>
+      <text class="lbl b" x="180" y="84" text-anchor="middle">A</text>
+      <text class="lbl b" x="250" y="84" text-anchor="middle">W</text>
+      <text class="lbl b" x="200" y="145" text-anchor="middle">V</text>
+      <path class="ln-thin" d="M200,80 L200,126 M200,154 L200,200"/>
+      <circle class="node" cx="200" cy="80" r="3.2"/>
+      <circle class="node" cx="200" cy="200" r="3.2"/>
+      <text class="lbl i" x="180" y="60" text-anchor="middle">I<tspan font-size="8" dy="2">1н</tspan></text>
+      <text class="lbl p" x="250" y="60" text-anchor="middle">P<tspan font-size="8" dy="2">к</tspan></text>
+      <text class="lbl u" x="218" y="145">U<tspan font-size="8" dy="2">к</tspan></text>
+      <text class="lbl g" x="46" y="228">регулируемое напряжение</text>
+      <path class="wire" d="M312,80 L312,100 M312,180 L312,200"/>
+      <path class="ln" d="M312,100 a10,10 0 0 0 0,20 a10,10 0 0 0 0,20 a10,10 0 0 0 0,20 a10,10 0 0 0 0,20"/>
+      <path class="ln" d="M330,80 L330,200 M340,80 L340,200"/>
+      <path class="ln" d="M358,100 a10,10 0 0 1 0,20 a10,10 0 0 1 0,20 a10,10 0 0 1 0,20 a10,10 0 0 1 0,20"/>
+      <path class="wire" d="M358,80 L358,100 M358,180 L358,200"/>
+      <path class="wire" d="M358,80 L560,80 M358,200 L560,200"/>
+      <path class="wire" d="M560,80 L560,126 M560,154 L560,200"/>
+      <circle class="dev" cx="560" cy="140" r="14"/>
+      <text class="lbl b" x="560" y="145" text-anchor="middle">A</text>
+      <text class="lbl i" x="578" y="145">I<tspan font-size="8" dy="2">2н</tspan></text>
+      <text class="lbl g" x="450" y="245" text-anchor="middle">вторичная обмотка замкнута накоротко</text>
+      <text class="lbl g" x="335" y="222" text-anchor="middle">Тр</text>
+    </svg>
+    <div class="caption">Рис. 4.3. Схема опыта короткого замыкания. Напряжение поднимают
+      до \(U_{\text{к}}\), при котором ток равен номинальному.</div>
+  </div>
+
+  <p>Паспортная величина — <b>напряжение короткого замыкания</b> в процентах:</p>
+
+  <p style="text-align:center">$$ u_{\text{к}}\%=\frac{U_{\text{к}}}{U_{1\text{н}}}\cdot100 $$</p>
+
+  <p>Она характеризует полное сопротивление обмоток и определяет сразу три важные вещи:
+  установившийся ток аварийного КЗ
+  \(I_{\text{к}}\approx I_{\text{н}}\cdot100/u_{\text{к}}\%\), падение напряжения при
+  нагрузке и условия параллельной работы трансформаторов (параллельно включают только
+  трансформаторы с близкими \(u_{\text{к}}\) и одинаковой группой соединений).</p>
+
+  <p>Параметры схемы замещения по данным опыта КЗ:</p>
+
+  <p style="text-align:center">$$ Z_{\text{к}}=\frac{U_{\text{кф}}}{I_{1\text{н}}},\qquad
+  R_{\text{к}}=\frac{P_{\text{к}}}{3I_{1\text{н}}^{2}},\qquad
+  X_{\text{к}}=\sqrt{Z_{\text{к}}^{2}-R_{\text{к}}^{2}},\qquad
+  R_1\approx R_2'\approx\frac{R_{\text{к}}}{2},\quad
+  X_1\approx X_2'\approx\frac{X_{\text{к}}}{2} $$</p>
+
+  <p>Полезно разложить \(u_{\text{к}}\) на активную и реактивную составляющие —
+  они понадобятся для расчёта изменения напряжения:</p>
+
+  <p style="text-align:center">$$ u_{\text{ка}}\%=\frac{P_{\text{кн}}}{S_{\text{н}}}\cdot100,
+  \qquad u_{\text{кр}}\%=\sqrt{u_{\text{к}}^{2}-u_{\text{ка}}^{2}} $$</p>
+
+  <div class="note">
+    <b>Сквозной пример (продолжение). Опыт короткого замыкания.</b><br>
+    Измерено: \(U_{\text{к}}=18\) В (линейное), \(I_{1\text{н}}=90{,}9\) А,
+    \(P_{\text{кн}}=1250\) Вт.
+    <div class="steps">
+      <div>\(u_{\text{к}}\%=\dfrac{U_{\text{к}}}{U_{1\text{н}}}\cdot100\) =
+        <span style="color:#6b6b74">18 / 400 · 100</span> = <b>4,5 %</b></div>
+      <div>\(U_{\text{кф}}\) = <span style="color:#6b6b74">18 / 1,732</span> = <b>10,4 В</b></div>
+      <div>\(Z_{\text{к}}=\dfrac{U_{\text{кф}}}{I_{1\text{н}}}\) =
+        <span style="color:#6b6b74">10,4 / 90,9</span> = <b>0,1143 Ом</b></div>
+      <div>\(R_{\text{к}}=\dfrac{P_{\text{кн}}}{3I_{1\text{н}}^{2}}\) =
+        <span style="color:#6b6b74">1250 / (3 · 90,9²)</span> = <b>0,0504 Ом</b></div>
+      <div>\(X_{\text{к}}=\sqrt{Z_{\text{к}}^{2}-R_{\text{к}}^{2}}\) =
+        <span style="color:#6b6b74">√(0,1143² − 0,0504²)</span> = <b>0,1026 Ом</b></div>
+      <div>\(\cos\varphi_{\text{к}}=\dfrac{R_{\text{к}}}{Z_{\text{к}}}\) =
+        <span style="color:#6b6b74">0,0504 / 0,1143</span> = <b>0,441</b></div>
+      <div>\(R_1=R_2'=R_{\text{к}}/2\) = <b>0,0252 Ом</b>;
+        \(X_1=X_2'=X_{\text{к}}/2\) = <b>0,0513 Ом</b></div>
+      <div>\(u_{\text{ка}}\%\) = <span style="color:#6b6b74">1250 / 63 000 · 100</span> =
+        <b>1,98 %</b>; \(u_{\text{кр}}\%\) =
+        <span style="color:#6b6b74">√(4,5² − 1,98²)</span> = <b>4,04 %</b></div>
+      <div>Установившийся ток аварийного КЗ:
+        \(I_{\text{к}}=I_{1\text{н}}\dfrac{100}{u_{\text{к}}\%}\) =
+        <span style="color:#6b6b74">90,9 · 100 / 4,5</span> = <b>2020 А</b></div>
+    </div>
+  </div>
+
+  <h2 id="s4">4.4. Схема замещения и приведение обмоток</h2>
+
+  <p>Прямой расчёт трансформатора неудобен: обмотки связаны магнитно, а не электрически,
+  и имеют разные числа витков. Приём, снимающий обе трудности, — <b>приведение</b>
+  вторичной обмотки к числу витков первичной. Мысленно заменяем реальную вторичную
+  обмотку эквивалентной с \(w_2'=w_1\), сохраняя все энергетические соотношения:</p>
+
+  <p style="text-align:center">$$ U_2'=kU_2,\qquad E_2'=kE_2,\qquad I_2'=\frac{I_2}{k},
+  \qquad R_2'=k^{2}R_2,\qquad X_2'=k^{2}X_2 $$</p>
+
+  <p>Легко проверить, что при таком пересчёте не меняются ни полная мощность
+  (\(U_2'I_2'=U_2I_2\)), ни потери (\(I_2'^{2}R_2'=I_2^{2}R_2\)). После приведения
+  \(E_1=E_2'\), и обмотки можно соединить электрически. Получается <b>Т-образная схема
+  замещения</b>.</p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 260" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Т-образная схема замещения приведённого трансформатора: последовательные R1 X1, поперечная ветвь намагничивания Rм Xм и последовательные R2 штрих X2 штрих">
+      <defs>
+        <marker id="f44r" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/>
+        </marker>
+        <marker id="f44b" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/>
+        </marker>
+      </defs>
+      <path class="wire" d="M55,60 L110,60 M150,60 L200,60 M240,60 L380,60 M420,60 L470,60 M510,60 L585,60"/>
+      <path class="wire" d="M55,200 L585,200"/>
+      <rect class="dev" x="110" y="53" width="40" height="14"/>
+      <rect class="dev" x="200" y="53" width="40" height="14"/>
+      <rect class="dev" x="380" y="53" width="40" height="14"/>
+      <rect class="dev" x="470" y="53" width="40" height="14"/>
+      <path class="wire" d="M300,60 L300,80 M300,120 L300,140 M300,180 L300,200"/>
+      <rect class="dev" x="293" y="80" width="14" height="40"/>
+      <rect class="dev" x="293" y="140" width="14" height="40"/>
+      <circle class="node" cx="300" cy="60" r="3.2"/>
+      <circle class="node" cx="300" cy="200" r="3.2"/>
+      <circle class="node open" cx="55" cy="60" r="3.5"/>
+      <circle class="node open" cx="55" cy="200" r="3.5"/>
+      <circle class="node open" cx="585" cy="60" r="3.5"/>
+      <circle class="node open" cx="585" cy="200" r="3.5"/>
+      <text class="lbl" x="130" y="45" text-anchor="middle">R<tspan font-size="8" dy="2">1</tspan></text>
+      <text class="lbl" x="220" y="45" text-anchor="middle">X<tspan font-size="8" dy="2">1</tspan></text>
+      <text class="lbl" x="400" y="45" text-anchor="middle">R′<tspan font-size="8" dy="2">2</tspan></text>
+      <text class="lbl" x="490" y="45" text-anchor="middle">X′<tspan font-size="8" dy="2">2</tspan></text>
+      <text class="lbl" x="315" y="103">R<tspan font-size="8" dy="2">м</tspan></text>
+      <text class="lbl" x="315" y="163">X<tspan font-size="8" dy="2">м</tspan></text>
+      <path class="vol" marker-end="url(#f44b)" d="M44,72 L44,188"/>
+      <text class="lbl u" x="38" y="130" text-anchor="end">U<tspan font-size="8" dy="2">1</tspan></text>
+      <path class="vol" marker-end="url(#f44b)" d="M596,72 L596,188"/>
+      <text class="lbl u" x="604" y="130">U′<tspan font-size="8" dy="2">2</tspan></text>
+      <path class="cur" marker-end="url(#f44r)" d="M70,44 L100,44"/>
+      <text class="lbl i" x="85" y="36" text-anchor="middle">I<tspan font-size="8" dy="2">1</tspan></text>
+      <path class="cur" marker-end="url(#f44r)" d="M525,44 L560,44"/>
+      <text class="lbl i" x="542" y="36" text-anchor="middle">I′<tspan font-size="8" dy="2">2</tspan></text>
+      <path class="cur" marker-end="url(#f44r)" d="M282,78 L282,122"/>
+      <text class="lbl i" x="276" y="103" text-anchor="end">I<tspan font-size="8" dy="2">0</tspan></text>
+      <text class="lbl g" x="320" y="235" text-anchor="middle">Т-образная схема замещения приведённого трансформатора</text>
+    </svg>
+    <div class="caption">Рис. 4.4. Т-образная схема замещения. Уравнение токов:
+      \(\underline{I}_1=\underline{I}_0+(-\underline{I}_2')\).</div>
+  </div>
+
+  <p>Схеме соответствуют основные уравнения трансформатора:</p>
+
+  <p style="text-align:center">$$ \underline{U}_1=-\underline{E}_1+
+  \underline{I}_1\left(R_1+jX_1\right),\qquad
+  \underline{U}_2'=\underline{E}_1-\underline{I}_2'\left(R_2'+jX_2'\right),\qquad
+  \underline{I}_1=\underline{I}_0-\underline{I}_2' $$</p>
+
+  <p>Поскольку ток холостого хода мал (у нашего примера — 5 % номинального), в
+  инженерных расчётах ветвь намагничивания выносят на зажимы источника и получают
+  <b>упрощённую Г-образную схему</b>: последовательное соединение
+  \(R_{\text{к}}=R_1+R_2'\) и \(X_{\text{к}}=X_1+X_2'\). Именно эта схема используется
+  для расчёта токов КЗ и падения напряжения.</p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 220" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Упрощённая Г-образная схема замещения трансформатора: ветвь намагничивания на зажимах источника и последовательные Rк и Xк">
+      <defs>
+        <marker id="f45b" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/>
+        </marker>
+      </defs>
+      <path class="wire" d="M55,60 L230,60 M270,60 L360,60 M400,60 L585,60"/>
+      <path class="wire" d="M55,180 L585,180"/>
+      <rect class="dev" x="230" y="53" width="40" height="14"/>
+      <rect class="dev" x="360" y="53" width="40" height="14"/>
+      <path class="wire" d="M120,60 L120,70 M120,110 L120,130 M120,170 L120,180"/>
+      <rect class="dev" x="113" y="70" width="14" height="40"/>
+      <rect class="dev" x="113" y="130" width="14" height="40"/>
+      <circle class="node" cx="120" cy="60" r="3.2"/>
+      <circle class="node" cx="120" cy="180" r="3.2"/>
+      <circle class="node open" cx="55" cy="60" r="3.5"/>
+      <circle class="node open" cx="55" cy="180" r="3.5"/>
+      <circle class="node open" cx="585" cy="60" r="3.5"/>
+      <circle class="node open" cx="585" cy="180" r="3.5"/>
+      <text class="lbl" x="250" y="45" text-anchor="middle">R<tspan font-size="8" dy="2">к</tspan></text>
+      <text class="lbl" x="380" y="45" text-anchor="middle">X<tspan font-size="8" dy="2">к</tspan></text>
+      <text class="lbl" x="135" y="93">R<tspan font-size="8" dy="2">м</tspan></text>
+      <text class="lbl" x="135" y="153">X<tspan font-size="8" dy="2">м</tspan></text>
+      <path class="vol" marker-end="url(#f45b)" d="M44,72 L44,168"/>
+      <text class="lbl u" x="38" y="122" text-anchor="end">U<tspan font-size="8" dy="2">1</tspan></text>
+      <path class="vol" marker-end="url(#f45b)" d="M596,72 L596,168"/>
+      <text class="lbl u" x="604" y="122">U′<tspan font-size="8" dy="2">2</tspan></text>
+      <text class="lbl g" x="320" y="205" text-anchor="middle">упрощённая (Г-образная) схема замещения</text>
+    </svg>
+    <div class="caption">Рис. 4.5. Упрощённая Г-образная схема замещения:
+      \(R_{\text{к}}=R_1+R_2'\), \(X_{\text{к}}=X_1+X_2'\).</div>
+  </div>
+
+  <h2 id="s5">4.5. Внешняя характеристика</h2>
+
+  <p><b>Внешней характеристикой</b> называют зависимость напряжения на зажимах вторичной
+  обмотки от тока нагрузки \(U_2(I_2)\) при \(U_1=\mathrm{const}\), \(f=\mathrm{const}\)
+  и \(\cos\varphi_2=\mathrm{const}\). Удобно выражать её через коэффициент загрузки
+  \(\beta=I_2/I_{2\text{н}}\).</p>
+
+  <p>Из Г-образной схемы получается формула изменения напряжения:</p>
+
+  <p style="text-align:center">$$ \Delta U\%=\beta\left(u_{\text{ка}}\cos\varphi_2+
+  u_{\text{кр}}\sin\varphi_2\right),\qquad
+  U_2=U_{2\text{н}}\left(1-\frac{\Delta U\%}{100}\right) $$</p>
+
+  <p>Характер зависимости от \(\cos\varphi_2\):</p>
+
+  <ul>
+    <li><b>активная нагрузка</b> (\(\cos\varphi_2=1\), \(\sin\varphi_2=0\)) — падение
+      определяется только активной составляющей и невелико;</li>
+    <li><b>активно-индуктивная</b> (\(\sin\varphi_2&gt;0\)) — оба слагаемых положительны,
+      падение максимально; это обычный режим судовой сети с асинхронными двигателями;</li>
+    <li><b>активно-ёмкостная</b> (\(\sin\varphi_2&lt;0\)) — второе слагаемое отрицательно,
+      и напряжение на нагрузке может оказаться <b>выше</b> напряжения холостого хода.</li>
+  </ul>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Внешние характеристики трансформатора: зависимость вторичного напряжения от коэффициента загрузки для активной, активно-индуктивной и активно-ёмкостной нагрузки">
+      <defs>
+        <marker id="f46d" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#16161a"/>
+        </marker>
+      </defs>
+      <path class="ln-axis" marker-end="url(#f46d)" d="M80,270 L80,45"/>
+      <path class="ln-axis" marker-end="url(#f46d)" d="M60,250 L610,250"/>
+      <path class="ln-thin gray" d="M74,250 H80 M74,202.5 H80 M74,155 H80 M74,107.5 H80 M74,60 H80"/>
+      <path class="ln-thin gray" d="M180,250 V256 M280,250 V256 M380,250 V256 M480,250 V256"/>
+      <text class="lbl g" x="74" y="246" text-anchor="end">215</text>
+      <text class="lbl g" x="74" y="206" text-anchor="end">220</text>
+      <text class="lbl g" x="74" y="159" text-anchor="end">225</text>
+      <text class="lbl g" x="74" y="111" text-anchor="end">230</text>
+      <text class="lbl g" x="74" y="64" text-anchor="end">235</text>
+      <text class="lbl u" x="74" y="42" text-anchor="end">U₂, В</text>
+      <text class="lbl g" x="180" y="266" text-anchor="middle">0,25</text>
+      <text class="lbl g" x="280" y="266" text-anchor="middle">0,50</text>
+      <text class="lbl g" x="380" y="266" text-anchor="middle">0,75</text>
+      <text class="lbl g" x="480" y="266" text-anchor="middle">1,00</text>
+      <text class="lbl i" x="600" y="268" text-anchor="end">β = I₂ / I₂н</text>
+      <path class="ln" style="stroke:#155e75" d="M80,107.5 L560,159.5"/>
+      <path class="ln" style="stroke:#b3382e" d="M80,107.5 L560,212.7"/>
+      <path class="ln" style="stroke:#1a7f37" d="M80,107.5 L560,85.6"/>
+      <text class="lbl u" x="430" y="138" text-anchor="middle">cos φ₂ = 1</text>
+      <text class="lbl i" x="350" y="218" text-anchor="middle">cos φ₂ = 0,8 (инд.)</text>
+      <text class="lbl p" x="420" y="80" text-anchor="middle">cos φ₂ = 0,8 (ёмк.)</text>
+      <path class="ln-thin gray ln-dash" d="M480,195.2 L80,195.2 M480,195.2 L480,250"/>
+      <circle class="node" cx="480" cy="195.2" r="3.2"/>
+      <text class="lbl" x="492" y="190">220,8 В</text>
+      <text class="lbl g" x="95" y="290">начало оси ординат смещено; U₂₀ = 230 В</text>
+    </svg>
+    <div class="caption">Рис. 4.6. Внешние характеристики трансформатора 63 кВ·А,
+      400/230 В при трёх видах нагрузки. При номинальной активно-индуктивной нагрузке
+      напряжение снижается на 4,0 % — до 220,8 В.</div>
+  </div>
+
+  <div class="note">
+    <b>Сквозной пример (продолжение). Изменение напряжения.</b>
+    \(u_{\text{ка}}=1{,}98\ \%\), \(u_{\text{кр}}=4{,}04\ \%\), \(\beta=1\).
+    <div class="steps">
+      <div>\(\cos\varphi_2=0{,}8\) (инд.): \(\Delta U\%\) =
+        <span style="color:#6b6b74">1,98 · 0,8 + 4,04 · 0,6</span> = <b>4,01 %</b>,
+        \(U_2\) = <span style="color:#6b6b74">230 · (1 − 0,0401)</span> = <b>220,8 В</b></div>
+      <div>\(\cos\varphi_2=1\): \(\Delta U\%\) =
+        <span style="color:#6b6b74">1,98 · 1 + 4,04 · 0</span> = <b>1,98 %</b>,
+        \(U_2\) = <b>225,4 В</b></div>
+      <div>\(\cos\varphi_2=0{,}8\) (ёмк.): \(\Delta U\%\) =
+        <span style="color:#6b6b74">1,98 · 0,8 − 4,04 · 0,6</span> = <b>−0,84 %</b>,
+        \(U_2\) = <b>231,9 В</b></div>
+    </div>
+  </div>
+
+  <h2 id="s6">4.6. Потери и коэффициент полезного действия</h2>
+
+  <p>Потери в трансформаторе делятся на две группы:</p>
+
+  <ul>
+    <li><b>потери в стали</b> \(P_0\) (магнитные, на гистерезис и вихревые токи) —
+      практически постоянны, определяются опытом холостого хода;</li>
+    <li><b>потери в меди</b> \(P_{\text{м}}=\beta^{2}P_{\text{кн}}\) (электрические, на
+      нагрев обмоток) — пропорциональны квадрату тока, определяются опытом короткого
+      замыкания.</li>
+  </ul>
+
+  <p>Полезная мощность \(P_2=\beta S_{\text{н}}\cos\varphi_2\), поэтому</p>
+
+  <p style="text-align:center">$$ \eta=\frac{P_2}{P_2+P_0+\beta^{2}P_{\text{кн}}}=
+  \frac{\beta S_{\text{н}}\cos\varphi_2}
+  {\beta S_{\text{н}}\cos\varphi_2+P_0+\beta^{2}P_{\text{кн}}} $$</p>
+
+  <p>Исследуя эту функцию на экстремум (приравнивая нулю производную по \(\beta\)),
+  получаем условие максимума КПД — <b>равенство постоянных и переменных потерь</b>:</p>
+
+  <p style="text-align:center">$$ P_0=\beta^{2}P_{\text{кн}}\qquad\Longrightarrow\qquad
+  \beta_{\text{опт}}=\sqrt{\frac{P_0}{P_{\text{кн}}}} $$</p>
+
+  <p>У силовых трансформаторов \(\beta_{\text{опт}}=0{,}45\dots0{,}65\): их проектируют
+  так, чтобы максимум КПД приходился на наиболее вероятную (не полную) загрузку.
+  Характерно, что КПД слабо меняется в широком диапазоне нагрузок — кривая имеет пологую
+  вершину; заметное падение происходит только при \(\beta&lt;0{,}2\), когда постоянные
+  потери сравнимы с полезной мощностью. Отсюда практическое правило судовой эксплуатации:
+  <b>длительно недогруженный трансформатор невыгоден</b>, лучше отключить один из
+  параллельно работающих.</p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+         aria-label="График зависимости коэффициента полезного действия трансформатора от коэффициента загрузки с отмеченным максимумом">
+      <defs>
+        <marker id="f47d" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#16161a"/>
+        </marker>
+      </defs>
+      <path class="ln-axis" marker-end="url(#f47d)" d="M70,270 L70,45"/>
+      <path class="ln-axis" marker-end="url(#f47d)" d="M55,250 L620,250"/>
+      <path class="ln-thin gray" d="M64,250 H70 M64,186.7 H70 M64,123.3 H70 M64,60 H70"/>
+      <path class="ln-thin gray" d="M180.4,250 V256 M290.8,250 V256 M401.2,250 V256 M511.7,250 V256"/>
+      <text class="lbl g" x="64" y="246" text-anchor="end">0,85</text>
+      <text class="lbl g" x="64" y="190" text-anchor="end">0,90</text>
+      <text class="lbl g" x="64" y="127" text-anchor="end">0,95</text>
+      <text class="lbl g" x="64" y="64" text-anchor="end">1,00</text>
+      <text class="lbl p" x="64" y="42" text-anchor="end">η</text>
+      <text class="lbl g" x="180.4" y="266" text-anchor="middle">0,25</text>
+      <text class="lbl g" x="290.8" y="266" text-anchor="middle">0,50</text>
+      <text class="lbl g" x="401.2" y="266" text-anchor="middle">0,75</text>
+      <text class="lbl g" x="511.7" y="266" text-anchor="middle">1,00</text>
+      <text class="lbl i" x="614" y="266" text-anchor="end">β</text>
+      <path class="pow" d="M87.5,249.9 L92.8,211.5 L98.1,186.3 L103.4,168.6 L108.7,155.4 L114.0,145.3 L119.3,137.3 L124.6,130.9 L129.9,125.6 L135.2,121.1 L140.5,117.4 L145.8,114.2 L151.1,111.5 L156.4,109.1 L161.7,107.1 L167.0,105.3 L172.3,103.7 L177.6,102.3 L182.9,101.1 L188.2,100.0 L193.5,99.0 L198.8,98.1 L204.1,97.4 L209.4,96.7 L214.7,96.1 L220.0,95.5 L225.3,95.1 L230.6,94.6 L235.9,94.3 L241.2,93.9 L246.5,93.6 L251.8,93.4 L257.1,93.2 L262.4,93.0 L267.7,92.8 L273.0,92.7 L278.3,92.6 L283.6,92.5 L288.9,92.5 L294.2,92.4 L299.5,92.4 L304.8,92.4 L310.1,92.4 L315.4,92.4 L320.7,92.5 L326.0,92.5 L331.3,92.6 L336.6,92.7 L341.9,92.8 L347.2,92.9 L352.5,93.0 L357.8,93.1 L363.1,93.2 L368.4,93.3 L373.7,93.5 L379.0,93.6 L384.3,93.8 L389.6,94.0 L394.9,94.1 L400.2,94.3 L405.5,94.5 L410.8,94.7 L416.1,94.9 L421.4,95.1 L426.7,95.3 L432.0,95.5 L437.3,95.7 L442.6,95.9 L447.9,96.1 L453.2,96.3 L458.5,96.5 L463.8,96.8 L469.1,97.0 L474.4,97.2 L479.7,97.5 L485.0,97.7 L490.3,98.0 L495.6,98.2 L500.9,98.5 L506.2,98.7 L511.5,99.0 L516.8,99.2 L522.1,99.5 L527.4,99.7 L532.7,100.0 L538.0,100.3 L543.3,100.5 L548.6,100.8 L553.9,101.1 L559.2,101.3 L564.5,101.6 L569.8,101.9 L575.1,102.2 L580.4,102.4 L585.7,102.7 L591.0,103.0 L596.3,103.3 L600.0,103.5"/>
+      <path class="ln-thin gray ln-dash" d="M303.7,92.4 L303.7,250 M511.7,99.0 L511.7,250"/>
+      <circle class="node" cx="303.7" cy="92.4" r="3.2"/>
+      <circle class="node" cx="511.7" cy="99" r="3.2"/>
+      <text class="lbl p" x="312" y="80">η<tspan font-size="8" dy="2">max</tspan> = 97,4 %</text>
+      <text class="lbl" x="520" y="114">96,9 %</text>
+      <text class="lbl g" x="304" y="284" text-anchor="middle">β<tspan font-size="8" dy="2">опт</tspan><tspan dy="-2"> = 0,53</tspan></text>
+      <text class="lbl g" x="95" y="80">cos φ₂ = 0,8</text>
+    </svg>
+    <div class="caption">Рис. 4.7. Зависимость КПД от коэффициента загрузки для
+      трансформатора 63 кВ·А (\(P_0=350\) Вт, \(P_{\text{кн}}=1250\) Вт,
+      \(\cos\varphi_2=0{,}8\)).</div>
+  </div>
+
+  <div class="note">
+    <b>Сквозной пример (продолжение). КПД.</b>
+    <div class="steps">
+      <div>При \(\beta=1\), \(\cos\varphi_2=0{,}8\): \(P_2\) =
+        <span style="color:#6b6b74">63 000 · 0,8</span> = <b>50 400 Вт</b></div>
+      <div>\(\eta=\dfrac{P_2}{P_2+P_0+\beta^{2}P_{\text{кн}}}\) =
+        <span style="color:#6b6b74">50 400 / (50 400 + 350 + 1250)</span> = <b>96,9 %</b></div>
+      <div>\(\beta_{\text{опт}}=\sqrt{P_0/P_{\text{кн}}}\) =
+        <span style="color:#6b6b74">√(350 / 1250)</span> = <b>0,53</b></div>
+      <div>При \(\beta_{\text{опт}}\): \(P_2\) =
+        <span style="color:#6b6b74">0,53 · 63 000 · 0,8</span> = <b>26 660 Вт</b>,
+        суммарные потери =
+        <span style="color:#6b6b74">350 + 0,28 · 1250</span> = <b>700 Вт</b></div>
+      <div>\(\eta_{\max}\) =
+        <span style="color:#6b6b74">26 660 / (26 660 + 700)</span> = <b>97,4 %</b></div>
+    </div>
+  </div>
+
+  <h2 id="s7">4.7. Трёхфазные, авто- и измерительные трансформаторы</h2>
+
+  <h3>Трёхфазный трансформатор и группы соединения</h3>
+
+  <p>Трёхфазное напряжение можно преобразовать группой из трёх однофазных трансформаторов
+  или одним трёхстержневым трансформатором. Второй вариант компактнее, легче и дешевле,
+  поэтому именно он применяется на судах: три стержня с обмотками объединены общими
+  ярмами, а сумма трёх магнитных потоков в симметричном режиме равна нулю — отдельный
+  «обратный» магнитопровод не нужен (см. свойство симметричной системы,
+  <a href="t-three">глава 3</a>).</p>
+
+  <p>Обмотки каждой стороны соединяют звездой (Y), звездой с выведенной нейтралью (Y₀)
+  или треугольником (Δ). Обозначение <b>группы соединения</b> указывает схему соединения
+  ВН и НН и угловой сдвиг между линейными напряжениями сторон в единицах 30° («часах
+  циферблата»):</p>
+
+  <table class="el">
+    <tr><th>Группа</th><th>Сдвиг</th><th>Применение</th></tr>
+    <tr><td>Y/Y₀−0</td><td>0°</td>
+      <td>Симметричная нагрузка; при однофазной нагрузке возникает перекос
+        фазных напряжений, поэтому ток нейтрали ограничивают 25 % номинального.</td></tr>
+    <tr><td>Δ/Y₀−11</td><td>330°</td>
+      <td>Основная группа для осветительных и бытовых сетей: однофазная нагрузка не
+        искажает магнитную симметрию, так как её уравновешивают токи в контуре
+        треугольника.</td></tr>
+    <tr><td>Y/Δ−11</td><td>330°</td>
+      <td>Повышающие и согласующие трансформаторы, питание выпрямителей.</td></tr>
+  </table>
+
+  <p>Параллельно включают только трансформаторы с <b>одинаковой</b> группой соединения,
+  равными коэффициентами трансформации и близкими \(u_{\text{к}}\) — иначе в контуре
+  между ними возникает уравнительный ток.</p>
+
+  <h3>Автотрансформатор</h3>
+
+  <p>В <b>автотрансформаторе</b> обмотки имеют не только магнитную, но и электрическую
+  связь: вторичное напряжение снимается с части первичной обмотки. Через магнитное поле
+  передаётся лишь часть мощности,</p>
+
+  <p style="text-align:center">$$ S_{\text{расч}}=S_{\text{н}}\left(1-\frac1k\right) $$</p>
+
+  <p>поэтому при \(k\) близком к единице автотрансформатор существенно легче и дешевле
+  обычного. Расплата — отсутствие гальванической развязки: сеть низшего напряжения
+  электрически связана с сетью высшего. По этой причине <b>на судах автотрансформаторы
+  не применяют для питания бытовых потребителей</b>; их используют в пусковых устройствах
+  асинхронных двигателей (автотрансформаторный пуск) и в лабораторных регуляторах.</p>
+
+  <h3>Измерительные трансформаторы</h3>
+
+  <p>Измерительные трансформаторы — обязательный элемент судового ГРЩ. Они решают две
+  задачи: расширяют пределы измерения приборов и отделяют цепи приборов и защит
+  от силовой цепи.</p>
+
+  <ul>
+    <li><b>Трансформатор напряжения (ТН)</b> работает в режиме, близком к холостому ходу:
+      его вторичная обмотка нагружена высокоомными вольтметрами и обмотками напряжения
+      ваттметров. Стандартное вторичное напряжение — 100 В.
+      <b>Вторичную обмотку ТН нельзя замыкать накоротко.</b></li>
+    <li><b>Трансформатор тока (ТТ)</b> работает в режиме, близком к короткому замыканию:
+      первичная обмотка включена в силовую цепь последовательно, вторичная замкнута на
+      амперметр или токовую обмотку реле. Стандартный вторичный ток — 5 А (реже 1 А).
+      <b>Вторичную обмотку ТТ нельзя размыкать под нагрузкой</b>: исчезает
+      размагничивающее действие вторичного тока, сердечник насыщается, и на разомкнутых
+      зажимах наводится опасное для жизни напряжение в сотни и тысячи вольт. Поэтому
+      при замене прибора вторичную обмотку ТТ предварительно закорачивают специальной
+      перемычкой на испытательной колодке.</li>
+  </ul>
+
+  <h2 id="s8">4.8. Судовые трансформаторы</h2>
+
+  <p>Основное применение трансформаторов на судне — <b>питание сети освещения и бытовых
+  потребителей</b>. Силовая сеть выполнена на 380/400 В (или 440 В на судах зарубежной
+  постройки), а осветительная — на 230 В (или 220/127 В), поэтому от ГРЩ через
+  понижающий трансформатор питаются вторичные распределительные щиты освещения.</p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 340" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Однолинейная схема судового понижающего трансформатора 400 на 230 вольт между главным распределительным щитом и щитом освещения">
+      <defs>
+        <marker id="f48d" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#16161a"/>
+        </marker>
+      </defs>
+      <path class="ln-axis" d="M50,60 L590,60"/>
+      <text class="lbl b" x="50" y="46">ГРЩ  400 В,  3~50 Гц,  изолированная нейтраль</text>
+      <path class="wire" d="M180,60 L180,108"/>
+      <path class="ln-thin" d="M172,92 L188,80"/>
+      <text class="lbl g" x="193" y="88">3</text>
+      <rect class="dev" x="171" y="108" width="18" height="24"/>
+      <text class="lbl" x="196" y="126">QF1</text>
+      <path class="wire" d="M180,132 L180,152"/>
+      <circle class="dev" cx="180" cy="178" r="26"/>
+      <circle class="dev" cx="180" cy="214" r="26"/>
+      <path class="ln-thin" d="M180,168 L189,184 L171,184 Z"/>
+      <path class="ln-thin" d="M180,214 L180,203 M180,214 L189,222 M180,214 L171,222"/>
+      <text class="lbl" x="215" y="180">T1  63 кВ·А,  400/230 В</text>
+      <text class="lbl" x="215" y="196">группа Δ/Y₀−11,  сухой</text>
+      <path class="wire" d="M180,240 L180,252"/>
+      <rect class="dev" x="171" y="252" width="18" height="24"/>
+      <text class="lbl" x="196" y="270">QF2</text>
+      <path class="wire" d="M180,276 L180,290"/>
+      <path class="ln-axis" d="M50,290 L590,290"/>
+      <text class="lbl b" x="50" y="272">ВРЩ  230 В</text>
+      <path class="wire" d="M400,290 L400,300"/>
+      <circle class="dev" cx="400" cy="310" r="10"/>
+      <path class="ln-thin" d="M393,303 L407,317 M407,303 L393,317"/>
+      <text class="lbl" x="415" y="314">освещение</text>
+      <path class="wire" d="M500,290 L500,302"/>
+      <rect class="dev" x="488" y="302" width="24" height="16"/>
+      <text class="lbl" x="520" y="308">бытовые</text>
+      <text class="lbl" x="520" y="322">потребители</text>
+      <path class="wire" d="M480,60 L480,100"/>
+      <circle class="dev" cx="480" cy="116" r="16"/>
+      <text class="lbl b" x="480" y="121" text-anchor="middle">M</text>
+      <text class="lbl" x="502" y="120">АД 400 В</text>
+      <text class="lbl g" x="50" y="330">силовая сеть — 400 В,  освещение и быт — 230 В</text>
+    </svg>
+    <div class="caption">Рис. 4.8. Однолинейная схема включения судового понижающего
+      трансформатора 400/230 В между главным и вторичным распределительными щитами.</div>
+  </div>
+
+  <h3>Особенности исполнения</h3>
+
+  <ul>
+    <li><b>Сухое исполнение.</b> Масляные трансформаторы на судах практически не
+      применяются из-за пожарной опасности и невозможности работать при кренах и
+      качке. Судовые трансформаторы выполняют сухими, с воздушным охлаждением и
+      изоляцией классов нагревостойкости F или H.</li>
+    <li><b>Усиленная изоляция и влагозащита.</b> Обмотки пропитывают влагостойкими
+      лаками и компаундами, применяют изоляционные материалы, стойкие к морскому
+      соляному туману; степень защиты оболочки выбирают по месту установки.</li>
+    <li><b>Стойкость к вибрации, ударам и наклонам.</b> Обмотки и магнитопровод
+      механически расклинены; аппарат должен сохранять работоспособность при
+      длительном крене и дифференте и при качке, нормируемых Правилами.</li>
+    <li><b>Ограничение габаритов и массы</b> при заданной мощности; отсюда более
+      высокие удельные потери, чем у береговых аналогов.</li>
+  </ul>
+
+  <h3>Разделительные трансформаторы</h3>
+
+  <p><b>Разделительный трансформатор</b> имеет коэффициент трансформации, равный или
+  близкий к единице, и служит не для изменения напряжения, а для <b>гальванического
+  разделения</b> цепей. Область применения на судне:</p>
+
+  <ul>
+    <li>питание переносного электроинструмента и ремонтного освещения в особо опасных
+      помещениях (машинное отделение, танки, трюмы), где прикосновение к корпусу
+      неизбежно;</li>
+    <li>питание чувствительной радио- и навигационной аппаратуры — разделение подавляет
+      кондуктивные помехи от силовой сети (требования ЭМС);</li>
+    <li>приём питания с берега: береговая сеть, как правило, имеет глухозаземлённую
+      нейтраль, а судовая — изолированную, и соединять их напрямую нельзя.</li>
+  </ul>
+
+  <p>При питании от разделительного трансформатора вторичная сеть не имеет связи
+  с корпусом, поэтому однополюсное прикосновение не создаёт замкнутой цепи через тело
+  человека — это самостоятельная защитная мера (см. <a href="t-safety">главу 8</a>).</p>
+
+  <h3>Требования Правил РМРС</h3>
+
+  <p><a href="https://shadeswd.duckdns.org/ref/rmrs">Правила классификации и постройки
+  морских судов, часть XI «Электрическое оборудование»</a> регламентируют для судовых
+  трансформаторов:</p>
+
+  <ul>
+    <li>условия работы — нормируемые температуры окружающего воздуха и охлаждающей
+      воды, влажность, длительные и аварийные крен и дифферент;</li>
+    <li>допустимые отклонения напряжения и частоты, при которых оборудование должно
+      сохранять работоспособность;</li>
+    <li>требования электромагнитной совместимости и разнесения силовых и
+      коаксиальных кабелей;</li>
+    <li>запрет применения алюминия в токоведущих частях, выбор сечения жил
+      кабелей, группы судовых кабелей;</li>
+    <li>для трансформаторов ответственного назначения — резервирование и питание
+      от аварийного источника.</li>
+  </ul>
+
+  <p>Место трансформаторов в общей структуре судовой электроэнергетической системы —
+  генераторные агрегаты, ГРЩ, секционные и фидерные автоматы, вторичные щиты, аварийный
+  дизель-генератор — рассмотрено в <a href="t-shipnet">главе 6</a> и в обзоре
+  <a href="https://shadeswd.duckdns.org/shipeng/t-electro">судовой электроэнергетической
+  системы</a>. Электрические машины, для которых трансформатор служит и источником
+  питания, и элементом схемы пуска, разобраны в <a href="t-machines">главе 5</a>.</p>
+
+  <h2 id="q">Вопросы для самопроверки</h2>
+
+  <details class="q"><summary>Почему магнитопровод набирают из тонких изолированных
+    листов?</summary>
+    <p>Чтобы разорвать пути вихревых токов в плоскости, перпендикулярной потоку.
+    Потери на вихревые токи пропорциональны квадрату толщины листа, поэтому шихтовка
+    из листов 0,35…0,5 мм снижает их в десятки раз.</p></details>
+
+  <details class="q"><summary>Откуда берётся коэффициент 4,44 в формуле ЭДС?</summary>
+    <p>Амплитуда ЭДС \(E_m=\omega w\Phi_m=2\pi f w\Phi_m\); действующее значение меньше
+    амплитуды в \(\sqrt2\) раз, а \(2\pi/\sqrt2=4{,}44\).</p></details>
+
+  <details class="q"><summary>Почему потери в стали считают постоянными, а потери в меди —
+    переменными?</summary>
+    <p>Амплитуда магнитного потока определяется приложенным напряжением
+    (\(\Phi_m\approx U_1/4{,}44fw_1\)) и почти не зависит от нагрузки, поэтому магнитные
+    потери постоянны. Потери в меди \(I^2R\) пропорциональны квадрату тока, то есть
+    квадрату коэффициента загрузки.</p></details>
+
+  <details class="q"><summary>Что определяют по опыту холостого хода, а что —
+    по опыту короткого замыкания?</summary>
+    <p>Опыт ХХ: коэффициент трансформации, ток и потери холостого хода, параметры ветви
+    намагничивания \(R_{\text{м}}\), \(X_{\text{м}}\). Опыт КЗ: напряжение короткого
+    замыкания \(u_{\text{к}}\%\), потери в меди при номинальном токе, параметры
+    \(R_{\text{к}}\), \(X_{\text{к}}\), \(Z_{\text{к}}\).</p></details>
+
+  <details class="q"><summary>Что физически означает \(u_{\text{к}}=4{,}5\ \%\)?</summary>
+    <p>Что при подаче на первичную обмотку 4,5 % номинального напряжения и замкнутой
+    накоротко вторичной обмотке токи будут номинальными. Отсюда установившийся ток
+    аварийного КЗ примерно в \(100/4{,}5\approx22\) раза больше номинального.</p></details>
+
+  <details class="q"><summary>Зачем нужно приведение вторичной обмотки?</summary>
+    <p>Чтобы заменить магнитную связь обмоток электрической: после пересчёта
+    \(w_2'=w_1\) ЭДС обмоток равны, и обе ветви можно объединить в одну схему замещения,
+    рассчитываемую обычными методами теории цепей. Мощности и потери при пересчёте
+    сохраняются.</p></details>
+
+  <details class="q"><summary>При какой нагрузке вторичное напряжение может оказаться выше
+    напряжения холостого хода?</summary>
+    <p>При активно-ёмкостной: в формуле \(\Delta U\%=\beta(u_{\text{ка}}\cos\varphi_2+
+    u_{\text{кр}}\sin\varphi_2)\) величина \(\sin\varphi_2\) отрицательна, и при
+    достаточной ёмкостной составляющей \(\Delta U\) становится отрицательным.</p></details>
+
+  <details class="q"><summary>При каком условии КПД трансформатора максимален?</summary>
+    <p>Когда постоянные потери равны переменным: \(P_0=\beta^{2}P_{\text{кн}}\), то есть
+    при \(\beta_{\text{опт}}=\sqrt{P_0/P_{\text{кн}}}\). Для рассмотренного примера
+    \(\beta_{\text{опт}}=0{,}53\), \(\eta_{\max}=97{,}4\ \%\).</p></details>
+
+  <details class="q"><summary>Почему нельзя размыкать вторичную обмотку трансформатора
+    тока?</summary>
+    <p>Первичный ток задан силовой цепью и не зависит от состояния вторичной обмотки.
+    При размыкании исчезает размагничивающее действие вторичного тока, сердечник резко
+    насыщается, и на зажимах вторичной обмотки наводится напряжение в сотни и тысячи
+    вольт, опасное для человека и изоляции.</p></details>
+
+  <details class="q"><summary>Почему автотрансформатор нельзя применять для питания
+    бытовых потребителей на судне?</summary>
+    <p>В автотрансформаторе обмотки связаны электрически, гальванической развязки нет.
+    Повреждение изоляции или обрыв общей части обмотки выводит на цепь низшего
+    напряжения полное напряжение сети.</p></details>
+
+  <details class="q"><summary>Какую группу соединений выбирают для судового
+    осветительного трансформатора и почему?</summary>
+    <p>Δ/Y₀−11. Треугольник на стороне высшего напряжения замыкает токи нулевой
+    последовательности, поэтому однофазная (несимметричная) нагрузка со стороны
+    низшего напряжения не искажает магнитную симметрию и не вызывает перекоса
+    фазных напряжений.</p></details>
+
+  <p><a href="theory">← Оглавление курса</a> ·
+     <a href="t-three">Глава 3. Трёхфазные цепи</a> ·
+     <a href="t-machines">Глава 5. Электрические машины →</a> ·
+     <a href="p-machines">Разборы задач: трансформатор и двигатель</a></p>
+</main>
+</body>
+</html>

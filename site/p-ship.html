@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разборы: судовое электрооборудование</title>
+<meta name="description" content="Три инженерные задачи судового электрооборудования: выбор сечения медного кабеля по нагреву, потере напряжения и термической стойкости при коротком замыкании, табличный расчёт нагрузки судовой электростанции по четырём режимам с выбором числа и мощности дизель-генераторов, выбор двигателя грузовой лебёдки по нагрузочной диаграмме и эквивалентному моменту.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<script src="assets/site.js" data-root="./" data-page="tasks"></script>
+<main class="wrap">
+  <h1>Разборы: судовое электрооборудование</h1>
+  <p class="lead">Три задачи, которые судовой электрик решает не в учебнике, а в
+  проекте. Первая — выбор сечения кабеля: одно вычисление и три проверки, из
+  которых решающей всякий раз оказывается разная. Вторая — расчёт нагрузки
+  электростанции табличным методом и обоснование состава дизель-генераторов.
+  Третья — выбор двигателя электропривода по нагрузочной диаграмме с
+  приведением к стандартной продолжительности включения.</p>
+  <p><a class="theory-link" href="t-shipnet">Глава 6. Судовая электроэнергетическая система</a>
+  <a class="theory-link" href="t-drives">Глава 7. Судовые электроприводы</a></p>
+
+  <div class="task" id="task-13">
+    <h3>Задача 13. Выбор сечения кабеля по току и по потере напряжения</h3>
+    <div class="given"><b>Дано.</b> <b>(а)</b> Задание практикума по Правилам
+    Регистра: подключить электрооборудование активной мощностью 2 кВт к сети
+    переменного тока 220 В, 50 Гц; провод медный двухжильный, длина трассы от
+    вторичного распределительного щита 20 м, температура окружающего воздуха
+    45 °C, ток короткого замыкания в точке подключения 1,2 кА, полное время
+    отключения автомата 0,02 с.
+    <b>(б)</b> Трёхфазный судовой насос: \(P = 22\) кВт, \(U = 400\) В,
+    \(\cos\varphi = 0{,}85\), \(\eta = 0{,}9\); кабель трёхжильный медный,
+    длина трассы 65 м, температура окружающего воздуха 50 °C, ток короткого
+    замыкания 4,5 кА, время отключения 0,08 с. Допустимая потеря напряжения
+    для силовых потребителей 6 %; \(\rho = 0{,}0175\) Ом·мм²/м;
+    \(C = 141\) А·с<sup>0,5</sup>/мм² для меди.
+    <b>Найти:</b> сечение жилы в обоих случаях.</div>
+
+    <p>Сечение выбирают по <b>одному расчёту и трём проверкам</b>, а принимают
+    наибольшее из полученных значений стандартного ряда 1; 1,5; 2,5; 4; 6; 10;
+    16; 25; 35; 50; 70; 95; 120; 150; 185; 240 мм². Проверки независимы, и
+    заранее неизвестно, какая окажется решающей: на коротких силовых фидерах
+    обычно нагрев, на длинных линиях освещения — потеря напряжения, вблизи ГРЩ
+    и на тонких концевых участках — термическая стойкость при коротком
+    замыкании.</p>
+
+    <p style="text-align:center">$$I = \frac{P}{U\cos\varphi\,\eta}\ \
+    (\text{однофазная}),\qquad
+    I = \frac{P}{\sqrt3\,U\cos\varphi\,\eta}\ \ (\text{трёхфазная}),$$</p>
+    <p style="text-align:center">$$I_{\text{доп}} \ge \frac{I}{k_1k_2},\qquad
+    k_1 = \sqrt{\frac{85 - \vartheta_{\text{с}}}{40}},\qquad
+    S \ge \frac{2\rho L I\cos\varphi}{\Delta U_{\text{доп}}},\qquad
+    S \ge \frac{I_{\text{к}}\sqrt{t_{\text{к}}}}{C}.$$</p>
+
+    <p>Здесь \(k_1\) — поправка на температуру окружающего воздуха при
+    предельной температуре жилы 85 °C и табличной температуре среды 45 °C;
+    \(k_2\) — поправка на число токоведущих жил (одножильный 1,0; двухжильный
+    0,85; трёх- и четырёхжильный 0,70). Длительно допустимые токи медных
+    судовых кабелей:</p>
+
+    <table class="el">
+      <thead><tr><th class="num">S, мм²</th><th class="num">1</th><th class="num">1,5</th>
+      <th class="num">2,5</th><th class="num">4</th><th class="num">6</th>
+      <th class="num">10</th><th class="num">16</th><th class="num">25</th>
+      <th class="num">35</th><th class="num">50</th><th class="num">70</th></tr></thead>
+      <tbody><tr><td class="num">I<sub>доп</sub>, А</td><td class="num">17</td>
+      <td class="num">23</td><td class="num">30</td><td class="num">40</td>
+      <td class="num">52</td><td class="num">72</td><td class="num">96</td>
+      <td class="num">127</td><td class="num">157</td><td class="num">196</td>
+      <td class="num">242</td></tr></tbody>
+    </table>
+
+    <p><b>(а) Однофазный потребитель 2 кВт, 220 В.</b> Оборудование задано
+    активной мощностью, поэтому в основном варианте принимаем нагрузку чисто
+    активной (\(\cos\varphi = 1\), \(\eta = 1\)) — так считают для
+    нагревательных приборов, камбузного и бытового оборудования.</p>
+    <div class="steps">
+      <div>\(I = \dfrac{P}{U\cos\varphi}\) = <span style="color:#6b6b74">2000 / (220 · 1,0)</span> = <b>9,09 А</b></div>
+      <div>\(k_1 = \sqrt{\dfrac{85-45}{40}}\) = <span style="color:#6b6b74">√1,0</span> = <b>1,00</b>; \(k_2\) = <b>0,85</b> (две жилы)</div>
+      <div>\(I_{\text{доп}} \ge \dfrac{I}{k_1k_2}\) = <span style="color:#6b6b74">9,09 / (1,00 · 0,85)</span> = <b>10,7 А</b> → по таблице <b>1 мм²</b> (17 А)</div>
+      <div>\(\Delta U_{\text{доп}} = \dfrac{6\,U}{100}\) = <span style="color:#6b6b74">6 · 220 / 100</span> = <b>13,2 В</b></div>
+      <div>\(S \ge \dfrac{2\rho L I}{\Delta U_{\text{доп}}}\) = <span style="color:#6b6b74">2 · 0,0175 · 20 · 9,09 / 13,2</span> = <b>0,48 мм²</b> → 1 мм²</div>
+      <div>\(S \ge \dfrac{I_{\text{к}}\sqrt{t_{\text{к}}}}{C}\) = <span style="color:#6b6b74">1200 · √0,02 / 141</span> = <b>1,20 мм²</b> → <b>1,5 мм²</b></div>
+      <div>Принимаем наибольшее: \(S = \max(1{,}0;\ 1{,}0;\ 1{,}5)\) = <b>1,5 мм²</b></div>
+      <div>\(\Delta U = \dfrac{2\rho L I}{S}\) = <span style="color:#6b6b74">2 · 0,0175 · 20 · 9,09 / 1,5</span> = <b>4,24 В</b> = <b>1,93 %</b></div>
+    </div>
+    <p>Проверка по току с выбранным сечением: длительно допустимая нагрузка
+    жилы 1,5 мм² в судовых условиях составляет
+    <span style="color:#6b6b74">23 · 1,00 · 0,85</span> = <b>19,6 А</b>, поэтому
+    защитный автомат принимают на 16 А — он больше рабочего тока 9,1 А и меньше
+    допустимого тока кабеля.</p>
+    <p>Если то же оборудование имеет \(\cos\varphi = 0{,}8\) (двигатель, сварочный
+    пост, источник питания с некорректированным входом), ток вырастает:</p>
+    <div class="steps">
+      <div>\(I = \dfrac{P}{U\cos\varphi}\) = <span style="color:#6b6b74">2000 / (220 · 0,8)</span> = <b>11,4 А</b>; \(I_{\text{доп}} \ge\) <span style="color:#6b6b74">11,4 / 0,85</span> = <b>13,4 А</b> → 1 мм² (17 А)</div>
+    </div>
+    <p>Сечение не меняется: решающей и здесь остаётся термическая стойкость.
+    Отдельно нужно помнить два требования Правил Регистра: минимальное сечение
+    жилы силовых цепей — 1 мм², а токоведущие части и жилы <b>не выполняются из
+    алюминия</b>, поэтому «сэкономить» переходом на алюминиевый провод большего
+    сечения на судне нельзя.</p>
+
+    <p><b>(б) Трёхфазный насос 22 кВт.</b></p>
+    <div class="steps">
+      <div>\(I = \dfrac{P}{\sqrt3\,U\cos\varphi\,\eta}\) = <span style="color:#6b6b74">22 000 / (1,732 · 400 · 0,85 · 0,9)</span> = <b>41,5 А</b></div>
+      <div>\(k_1 = \sqrt{\dfrac{85-50}{40}}\) = <span style="color:#6b6b74">√0,875</span> = <b>0,935</b>; \(k_2\) = <b>0,70</b> (три жилы)</div>
+      <div>\(I_{\text{доп}} \ge \dfrac{I}{k_1k_2}\) = <span style="color:#6b6b74">41,5 / (0,935 · 0,70)</span> = <b>63,4 А</b> → по таблице <b>10 мм²</b> (72 А)</div>
+      <div>\(\Delta U_{\text{доп}} = \dfrac{6\,U}{100}\) = <span style="color:#6b6b74">6 · 400 / 100</span> = <b>24 В</b></div>
+      <div>\(S \ge \dfrac{\sqrt3\,\rho L I\cos\varphi}{\Delta U_{\text{доп}}}\) = <span style="color:#6b6b74">1,732 · 0,0175 · 65 · 41,5 · 0,85 / 24</span> = <b>2,90 мм²</b> → 4 мм²</div>
+      <div>\(S \ge \dfrac{I_{\text{к}}\sqrt{t_{\text{к}}}}{C}\) = <span style="color:#6b6b74">4500 · √0,08 / 141</span> = <b>9,03 мм²</b> → 10 мм²</div>
+      <div>Принимаем наибольшее: \(S = \max(10;\ 4;\ 10)\) = <b>10 мм²</b></div>
+      <div>\(\Delta U = \dfrac{\sqrt3\,\rho L I\cos\varphi}{S}\) = <span style="color:#6b6b74">1,732 · 0,0175 · 65 · 41,5 · 0,85 / 10</span> = <b>6,95 В</b> = <b>1,74 %</b></div>
+      <div>фактическая допустимая нагрузка: \(I_{\text{доп}}k_1k_2\) = <span style="color:#6b6b74">72 · 0,935 · 0,70</span> = <b>47,1 А</b> &gt; 41,5 А</div>
+    </div>
+    <p>Обратите внимание на цену поправок. Табличный ток жилы 10 мм² — 72 А, но
+    при 50 °C и трёх жилах в оболочке от него остаётся 47,1 А, то есть 65 %.
+    Без поправок расчётчик выбрал бы 6 мм² (52 А), и кабель работал бы с
+    перегревом: реальная допустимая нагрузка 6 мм² в этих условиях всего
+    <span style="color:#6b6b74">52 · 0,935 · 0,70</span> = <b>34,0 А</b> при
+    рабочем токе 41,5 А.</p>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 260" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Однолинейная схема питания потребителей от главного и вторичного распределительных щитов с указанием сечений кабелей, длин трасс и потерь напряжения">
+        <defs>
+          <marker id="ar-ps1" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+        </defs>
+        <rect x="70" y="54" width="300" height="8" fill="#16161a"/>
+        <text class="lbl" x="70" y="46" text-anchor="start">ГРЩ, 400 В, 50 Гц</text>
+        <path class="wire" d="M200,62 L200,86 M200,108 L200,140"/>
+        <rect class="dev" x="189" y="86" width="22" height="22"/>
+        <path class="ln-thin" d="M189,86 L211,108 M211,86 L189,108"/>
+        <text class="lbl g" x="218" y="102" text-anchor="start">фидер ВРЩ</text>
+        <rect x="120" y="140" width="380" height="8" fill="#16161a"/>
+        <text class="lbl" x="112" y="152" text-anchor="end">ВРЩ</text>
+
+        <path class="wire" d="M180,148 L180,170 M180,192 L180,208"/>
+        <rect class="dev" x="169" y="170" width="22" height="22"/>
+        <path class="ln-thin" d="M169,170 L191,192 M191,170 L169,192"/>
+        <path class="cur" d="M156,174 L156,200" marker-end="url(#ar-ps1)"/>
+        <text class="lbl i" x="150" y="190" text-anchor="end">I</text>
+        <circle class="dev" cx="180" cy="224" r="16"/>
+        <text class="lbl b" x="180" y="229" text-anchor="middle">M</text>
+        <text class="lbl" x="200" y="202" text-anchor="start">3 × 10 мм², L = 65 м</text>
+        <text class="lbl" x="204" y="226" text-anchor="start">насос 22 кВт, I = 41,5 А</text>
+        <text class="lbl p" x="204" y="242" text-anchor="start">ΔU = 1,74 %</text>
+
+        <path class="wire" d="M460,148 L460,170 M460,192 L460,212"/>
+        <rect class="dev" x="449" y="170" width="22" height="22"/>
+        <path class="ln-thin" d="M449,170 L471,192 M471,170 L449,192"/>
+        <path class="cur" d="M436,174 L436,200" marker-end="url(#ar-ps1)"/>
+        <text class="lbl i" x="430" y="190" text-anchor="end">I</text>
+        <rect class="dev" x="442" y="212" width="36" height="24"/>
+        <text class="lbl" x="460" y="228" text-anchor="middle">2 кВт</text>
+        <text class="lbl" x="628" y="202" text-anchor="end">2 × 1,5 мм², L = 20 м</text>
+        <text class="lbl" x="628" y="224" text-anchor="end">220 В, I = 9,1 А</text>
+        <text class="lbl p" x="628" y="242" text-anchor="end">ΔU = 1,93 %</text>
+      </svg>
+      <div class="caption">Рис. 1. Схема питания обоих потребителей задачи 13 от
+      вторичного распределительного щита. Потерю напряжения нормируют от шин
+      ГРЩ до зажимов потребителя, поэтому при длинных трассах падение на фидере
+      ВРЩ вычитают из располагаемых 6 %. Стрелки токов направлены от щита к
+      потребителю: для приёмника направления \(U\) и \(I\) согласованы.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> (а) Медный двухжильный провод
+    <b>2 × 1,5 мм²</b>, защитный автомат 16 А; решающей оказалась проверка на
+    термическую стойкость при коротком замыкании, по нагреву и по потере
+    напряжения хватило бы 1 мм². Фактическая потеря напряжения 1,93 %.
+    (б) Кабель <b>3 × 10 мм²</b>; решающими оказались одновременно нагрев (с
+    поправками 47,1 А против рабочих 41,5 А) и термическая стойкость;
+    фактическая потеря напряжения 1,74 % при допустимых 6 %.</div>
+  </div>
+
+  <div class="task" id="task-14">
+    <h3>Задача 14. Расчёт нагрузки судовой электростанции и выбор генераторов</h3>
+    <div class="given"><b>Дано.</b> Многоцелевой сухогруз. Перечень потребителей
+    с установленными мощностями, КПД и коэффициентами мощности приведён в
+    таблице 1; там же — произведения коэффициентов загрузки и одновременности
+    \(k_{\text{з}}k_{\text{о}}\) для четырёх режимов: «ходовой», «стоянка»,
+    «грузовые операции», «аварийный». Потери в кабельной сети 3 %. Самый мощный
+    двигатель, пускаемый прямым включением, — привод палубного крана 30 кВт
+    (\(I_{\text{п}} = 355{,}5\) А, см. <a href="p-machines#task-12">задачу 12</a>).
+    <b>Найти:</b> расчётные активную, реактивную и полную мощности и
+    средневзвешенный \(\cos\varphi\) по каждому режиму; выбрать число и
+    мощность генераторов основной электростанции и проверить аварийный
+    дизель-генератор.</div>
+
+    <p>Установленная мощность всех потребителей судна в несколько раз больше
+    фактически потребляемой: часть механизмов в данном режиме не работает,
+    часть работает не на полную мощность, часть — попеременно с резервным
+    агрегатом. Табличный метод учитывает это двумя коэффициентами:</p>
+    <p style="text-align:center">$$P = \frac{P_{\text{уст}}\,k_{\text{з}}k_{\text{о}}}{\eta},
+    \qquad Q = P\operatorname{tg}\varphi,\qquad
+    \operatorname{tg}\varphi = \frac{\sqrt{1-\cos^2\varphi}}{\cos\varphi}.$$</p>
+    <p>Коэффициент загрузки \(k_{\text{з}}\) показывает, какую долю номинальной
+    мощности механизм развивает в данном режиме; коэффициент одновременности
+    \(k_{\text{о}}\) — какая доля группы однотипных механизмов работает
+    одновременно (для двух насосов, из которых один в резерве,
+    \(k_{\text{о}} = 0{,}5\)). Деление на КПД обязательно: из сети берётся
+    мощность больше механической.</p>
+
+    <p><b>Таблица 1. Исходные данные и коэффициенты по режимам.</b></p>
+    <table class="el">
+<thead><tr><th>Потребитель</th><th class="num">P<sub>уст</sub>, кВт</th><th class="num">η</th><th class="num">cos φ</th><th class="num">tg φ</th><th class="num">k<sub>з</sub>k<sub>о</sub> ход</th><th class="num">k<sub>з</sub>k<sub>о</sub> стоянка</th><th class="num">k<sub>з</sub>k<sub>о</sub> груз.</th><th class="num">k<sub>з</sub>k<sub>о</sub> авар.</th></tr></thead>
+<tbody>
+<tr><td>Рулевой электрогидравлический привод (2 × 11)</td><td class="num">22</td><td class="num">0,84</td><td class="num">0,78</td><td class="num">0,80</td><td class="num">0,20</td><td class="num">—</td><td class="num">—</td><td class="num">0,20</td></tr>
+<tr><td>Брашпиль и швартовные лебёдки</td><td class="num">30</td><td class="num">0,85</td><td class="num">0,75</td><td class="num">0,88</td><td class="num">—</td><td class="num">0,60</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Грузовые лебёдки (4 × 22)</td><td class="num">88</td><td class="num">0,86</td><td class="num">0,80</td><td class="num">0,75</td><td class="num">—</td><td class="num">—</td><td class="num">0,56</td><td class="num">—</td></tr>
+<tr><td>Палубные краны (2 × 30)</td><td class="num">60</td><td class="num">0,86</td><td class="num">0,80</td><td class="num">0,75</td><td class="num">—</td><td class="num">—</td><td class="num">0,70</td><td class="num">—</td></tr>
+<tr><td>Механизмы люковых закрытий</td><td class="num">15</td><td class="num">0,85</td><td class="num">0,78</td><td class="num">0,80</td><td class="num">—</td><td class="num">—</td><td class="num">0,60</td><td class="num">—</td></tr>
+<tr><td>Пожарный насос</td><td class="num">18,5</td><td class="num">0,88</td><td class="num">0,85</td><td class="num">0,62</td><td class="num">0,15</td><td class="num">0,15</td><td class="num">0,15</td><td class="num">1,00</td></tr>
+<tr><td>Балластные насосы (2 × 22)</td><td class="num">44</td><td class="num">0,89</td><td class="num">0,85</td><td class="num">0,62</td><td class="num">—</td><td class="num">0,40</td><td class="num">0,80</td><td class="num">—</td></tr>
+<tr><td>Насосы охлаждения главного двигателя (2 × 15)</td><td class="num">30</td><td class="num">0,87</td><td class="num">0,84</td><td class="num">0,65</td><td class="num">0,42</td><td class="num">0,15</td><td class="num">0,15</td><td class="num">—</td></tr>
+<tr><td>Топливоперекачивающий насос и сепараторы</td><td class="num">7,5</td><td class="num">0,82</td><td class="num">0,80</td><td class="num">0,75</td><td class="num">0,70</td><td class="num">0,40</td><td class="num">0,40</td><td class="num">—</td></tr>
+<tr><td>Вентиляторы машинного отделения (2 × 11)</td><td class="num">22</td><td class="num">0,88</td><td class="num">0,83</td><td class="num">0,67</td><td class="num">0,80</td><td class="num">0,20</td><td class="num">0,60</td><td class="num">—</td></tr>
+<tr><td>Гидрофоры, опреснитель, санитарные насосы</td><td class="num">12</td><td class="num">0,85</td><td class="num">0,82</td><td class="num">0,70</td><td class="num">0,49</td><td class="num">0,35</td><td class="num">0,35</td><td class="num">—</td></tr>
+<tr><td>Камбуз и бытовое оборудование</td><td class="num">30</td><td class="num">1,00</td><td class="num">1,00</td><td class="num">0,00</td><td class="num">0,28</td><td class="num">0,28</td><td class="num">0,28</td><td class="num">—</td></tr>
+<tr><td>Освещение общесудовое</td><td class="num">20</td><td class="num">1,00</td><td class="num">0,95</td><td class="num">0,33</td><td class="num">0,81</td><td class="num">0,63</td><td class="num">0,90</td><td class="num">—</td></tr>
+<tr><td>Аварийное освещение</td><td class="num">6</td><td class="num">1,00</td><td class="num">0,95</td><td class="num">0,33</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">1,00</td></tr>
+<tr><td>Навигация, радиосвязь, автоматика</td><td class="num">8</td><td class="num">1,00</td><td class="num">0,90</td><td class="num">0,48</td><td class="num">0,80</td><td class="num">0,30</td><td class="num">0,40</td><td class="num">0,80</td></tr>
+<tr><td>Кондиционирование и вентиляция жилых помещений</td><td class="num">26</td><td class="num">0,87</td><td class="num">0,82</td><td class="num">0,70</td><td class="num">0,56</td><td class="num">0,48</td><td class="num">0,56</td><td class="num">—</td></tr>
+<tr><td>Компрессоры пускового воздуха (2 × 11)</td><td class="num">22</td><td class="num">0,87</td><td class="num">0,82</td><td class="num">0,70</td><td class="num">0,25</td><td class="num">0,25</td><td class="num">0,25</td><td class="num">—</td></tr>
+</tbody></table>
+
+    <p><b>Таблица 2. Активные и реактивные мощности по режимам, кВт и квар.</b></p>
+    <table class="el">
+<thead><tr><th>Потребитель</th><th class="num">P ход</th><th class="num">Q ход</th><th class="num">P стоянка</th><th class="num">Q стоянка</th><th class="num">P груз.</th><th class="num">Q груз.</th><th class="num">P авар.</th><th class="num">Q авар.</th></tr></thead>
+<tbody>
+<tr><td>Рулевой электрогидравлический привод (2 × 11)</td><td class="num">5,2</td><td class="num">4,2</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">5,2</td><td class="num">4,2</td></tr>
+<tr><td>Брашпиль и швартовные лебёдки</td><td class="num">—</td><td class="num">—</td><td class="num">21,2</td><td class="num">18,7</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Грузовые лебёдки (4 × 22)</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">57,6</td><td class="num">43,2</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Палубные краны (2 × 30)</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">48,8</td><td class="num">36,6</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Механизмы люковых закрытий</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">10,6</td><td class="num">8,5</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Пожарный насос</td><td class="num">3,2</td><td class="num">2,0</td><td class="num">3,2</td><td class="num">2,0</td><td class="num">3,2</td><td class="num">2,0</td><td class="num">21,0</td><td class="num">13,0</td></tr>
+<tr><td>Балластные насосы (2 × 22)</td><td class="num">—</td><td class="num">—</td><td class="num">19,8</td><td class="num">12,3</td><td class="num">39,6</td><td class="num">24,5</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Насосы охлаждения главного двигателя (2 × 15)</td><td class="num">14,7</td><td class="num">9,5</td><td class="num">5,2</td><td class="num">3,4</td><td class="num">5,2</td><td class="num">3,4</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Топливоперекачивающий насос и сепараторы</td><td class="num">6,4</td><td class="num">4,8</td><td class="num">3,7</td><td class="num">2,8</td><td class="num">3,7</td><td class="num">2,8</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Вентиляторы машинного отделения (2 × 11)</td><td class="num">20,0</td><td class="num">13,4</td><td class="num">5,0</td><td class="num">3,4</td><td class="num">15,0</td><td class="num">10,1</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Гидрофоры, опреснитель, санитарные насосы</td><td class="num">6,9</td><td class="num">4,8</td><td class="num">4,9</td><td class="num">3,4</td><td class="num">4,9</td><td class="num">3,4</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Камбуз и бытовое оборудование</td><td class="num">8,2</td><td class="num">—</td><td class="num">8,2</td><td class="num">—</td><td class="num">8,2</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Освещение общесудовое</td><td class="num">16,2</td><td class="num">5,3</td><td class="num">12,6</td><td class="num">4,1</td><td class="num">18,0</td><td class="num">5,9</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Аварийное освещение</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">6,0</td><td class="num">2,0</td></tr>
+<tr><td>Навигация, радиосвязь, автоматика</td><td class="num">6,4</td><td class="num">3,1</td><td class="num">2,4</td><td class="num">1,2</td><td class="num">3,2</td><td class="num">1,5</td><td class="num">6,4</td><td class="num">3,1</td></tr>
+<tr><td>Кондиционирование и вентиляция жилых помещений</td><td class="num">16,7</td><td class="num">11,7</td><td class="num">14,3</td><td class="num">10,0</td><td class="num">16,7</td><td class="num">11,7</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td>Компрессоры пускового воздуха (2 × 11)</td><td class="num">6,3</td><td class="num">4,4</td><td class="num">6,3</td><td class="num">4,4</td><td class="num">6,3</td><td class="num">4,4</td><td class="num">—</td><td class="num">—</td></tr>
+<tr><td><b>Σ по режиму</b></td><td class="num"><b>110,2</b></td><td class="num"><b>63,2</b></td><td class="num"><b>106,8</b></td><td class="num"><b>65,7</b></td><td class="num"><b>241,0</b></td><td class="num"><b>158,0</b></td><td class="num"><b>38,6</b></td><td class="num"><b>22,3</b></td></tr>
+<tr><td><b>С учётом потерь в сети (× 1,03)</b></td><td class="num"><b>113,5</b></td><td class="num"><b>65,1</b></td><td class="num"><b>110,0</b></td><td class="num"><b>67,7</b></td><td class="num"><b>248,2</b></td><td class="num"><b>162,7</b></td><td class="num"><b>39,8</b></td><td class="num"><b>23,0</b></td></tr>
+</tbody></table>
+
+    <p>Разберём одну строку целиком, чтобы был виден весь путь числа. Насосы
+    охлаждения главного двигателя, ходовой режим: \(P_{\text{уст}} = 30\) кВт,
+    \(\eta = 0{,}87\), \(\cos\varphi = 0{,}84\), \(k_{\text{з}} = 0{,}85\)
+    (насос работает почти на полную подачу), \(k_{\text{о}} = 0{,}5\) (второй
+    насос в резерве).</p>
+    <div class="steps">
+      <div>\(\operatorname{tg}\varphi = \dfrac{\sqrt{1-\cos^2\varphi}}{\cos\varphi}\) = <span style="color:#6b6b74">√(1 − 0,84²) / 0,84</span> = <b>0,646</b></div>
+      <div>\(P = \dfrac{P_{\text{уст}}k_{\text{з}}k_{\text{о}}}{\eta}\) = <span style="color:#6b6b74">30 · 0,85 · 0,50 / 0,87</span> = <b>14,7 кВт</b></div>
+      <div>\(Q = P\operatorname{tg}\varphi\) = <span style="color:#6b6b74">14,7 · 0,646</span> = <b>9,5 квар</b></div>
+    </div>
+
+    <p><b>Итоги по режимам.</b> Суммы столбцов умножают на 1,03 (потери в
+    кабельной сети 3 %), затем находят полную мощность и средневзвешенный
+    коэффициент мощности:</p>
+    <p style="text-align:center">$$P_{\text{р}} = 1{,}03\sum P_i,\qquad
+    Q_{\text{р}} = 1{,}03\sum Q_i,\qquad
+    S_{\text{р}} = \sqrt{P_{\text{р}}^2 + Q_{\text{р}}^2},\qquad
+    \cos\varphi_{\text{р}} = \frac{P_{\text{р}}}{S_{\text{р}}}.$$</p>
+    <div class="steps">
+      <div>Ходовой: \(P_{\text{р}}\) = <span style="color:#6b6b74">1,03 · 110,2</span> = <b>113,5 кВт</b>; \(Q_{\text{р}}\) = <span style="color:#6b6b74">1,03 · 63,2</span> = <b>65,1 квар</b></div>
+      <div>\(S_{\text{р}} = \sqrt{P_{\text{р}}^2 + Q_{\text{р}}^2}\) = <span style="color:#6b6b74">√(113,5² + 65,1²)</span> = <b>130,8 кВ·А</b></div>
+      <div>\(\cos\varphi_{\text{р}} = \dfrac{P_{\text{р}}}{S_{\text{р}}}\) = <span style="color:#6b6b74">113,5 / 130,8</span> = <b>0,868</b></div>
+      <div>Грузовые операции: \(S_{\text{р}}\) = <span style="color:#6b6b74">√(248,2² + 162,7²)</span> = <b>296,8 кВ·А</b>; \(\cos\varphi_{\text{р}}\) = <span style="color:#6b6b74">248,2 / 296,8</span> = <b>0,836</b></div>
+    </div>
+
+    <table class="el">
+      <thead><tr><th>Режим</th><th class="num">P<sub>р</sub>, кВт</th>
+      <th class="num">Q<sub>р</sub>, квар</th><th class="num">S<sub>р</sub>, кВ·А</th>
+      <th class="num">cos φ<sub>р</sub></th><th>Состав работающих агрегатов</th>
+      <th class="num">Загрузка, %</th></tr></thead>
+      <tbody>
+        <tr><td>Ходовой</td><td class="num">113,5</td><td class="num">65,1</td><td class="num">130,8</td><td class="num">0,868</td><td>1 ДГ × 150 кВт</td><td class="num">75,7</td></tr>
+        <tr><td>Стоянка</td><td class="num">110,0</td><td class="num">67,7</td><td class="num">129,2</td><td class="num">0,852</td><td>1 ДГ × 150 кВт</td><td class="num">73,3</td></tr>
+        <tr><td>Грузовые операции</td><td class="num">248,2</td><td class="num">162,7</td><td class="num">296,8</td><td class="num">0,836</td><td>2 ДГ × 150 кВт</td><td class="num">82,7</td></tr>
+        <tr><td>Аварийный</td><td class="num">39,8</td><td class="num">23,0</td><td class="num">46,0</td><td class="num">0,866</td><td>АДГ 50 кВт</td><td class="num">79,6</td></tr>
+      </tbody>
+    </table>
+
+    <p>Средневзвешенный коэффициент мощности во всех режимах лежит в диапазоне
+    0,84…0,87, то есть близок к номинальному \(\cos\varphi = 0{,}8\) судовых
+    синхронных генераторов. Это и есть проверка правдоподобия расчёта: если бы
+    получилось 0,95 или 0,65, следовало бы искать ошибку в
+    \(\operatorname{tg}\varphi\).</p>
+
+    <p><b>Выбор числа и мощности генераторов.</b> Состав электростанции
+    подбирают по четырём условиям: загрузка работающих агрегатов 70…90 %;
+    при отказе любого одного агрегата оставшиеся обеспечивают ходовой режим;
+    агрегаты унифицированы; работающий генератор выдерживает прямой пуск самого
+    мощного двигателя. Примем ряд мощностей 100, 150, 200, 250 кВт и проверим
+    вариант <b>три дизель-генератора по 150 кВт</b> (187,5 кВ·А, 400 В, 50 Гц,
+    \(\cos\varphi = 0{,}8\)).</p>
+    <div class="steps">
+      <div>Ходовой, один ДГ: \(k = \dfrac{P_{\text{р}}}{P_{\text{г}}}\) = <span style="color:#6b6b74">113,5 / 150</span> = <b>75,7 %</b> (по полной мощности <span style="color:#6b6b74">130,8 / 187,5</span> = <b>69,8 %</b>)</div>
+      <div>Стоянка, один ДГ: <span style="color:#6b6b74">110,0 / 150</span> = <b>73,3 %</b></div>
+      <div>Грузовые операции, один ДГ: <span style="color:#6b6b74">248,2 / 150</span> = <b>165,5 %</b> — перегрузка, нужен второй агрегат</div>
+      <div>Грузовые операции, два ДГ: <span style="color:#6b6b74">248,2 / 300</span> = <b>82,7 %</b></div>
+      <div>Резерв: при отказе одного агрегата остаются <span style="color:#6b6b74">2 · 150</span> = <b>300 кВт</b> &gt; 113,5 кВт ходового режима</div>
+    </div>
+
+    <p><b>Проверка по пуску наибольшего двигателя.</b> Номинальный ток одного
+    генератора и провал напряжения при прямом пуске крана
+    (\(I_{\text{п}} = 355{,}5\) А, \(x''_d = 0{,}15\) о. е.):</p>
+    <div class="steps">
+      <div>\(I_{\text{н г}} = \dfrac{S_{\text{г}}}{\sqrt3\,U}\) = <span style="color:#6b6b74">187 500 / (1,732 · 400)</span> = <b>270,6 А</b></div>
+      <div>один ДГ: \(i_* = \dfrac{I_{\text{п}}}{I_{\text{н г}}}\) = <span style="color:#6b6b74">355,5 / 270,6</span> = <b>1,31</b>; \(\dfrac{\Delta U}{U} = \dfrac{i_*x''_d}{1+i_*x''_d}\) = <span style="color:#6b6b74">1,31 · 0,15 / (1 + 1,31 · 0,15)</span> = <b>16,4 %</b></div>
+      <div>два ДГ: \(i_*\) = <span style="color:#6b6b74">355,5 / 541,3</span> = <b>0,657</b>; \(\dfrac{\Delta U}{U}\) = <span style="color:#6b6b74">0,657 · 0,15 / (1 + 0,657 · 0,15)</span> = <b>9,0 %</b></div>
+    </div>
+    <p>От одного генератора провал 16,4 % превышает допустимые 15 % — прямой
+    пуск крана недопустим. От двух генераторов провал 9,0 %, требование
+    выполняется. Значит, два агрегата на грузовых операциях нужны не только по
+    мощности, но и по условию пуска: это независимое подтверждение
+    выбранного состава.</p>
+
+    <p><b>Аварийный дизель-генератор.</b> Аварийный режим обслуживает не
+    основная электростанция, а АДГ, установленный выше палубы переборок и
+    запускающийся автоматически при обесточивании.</p>
+    <div class="steps">
+      <div>\(k_{\text{АДГ}}\) = <span style="color:#6b6b74">39,8 / 50</span> = <b>79,6 %</b> — в рекомендуемом диапазоне 70…90 %</div>
+      <div>по полной мощности: <span style="color:#6b6b74">46,0 / 62,5</span> = <b>73,6 %</b></div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Столбчатая диаграмма расчётных нагрузок судна по четырём режимам с полосами рекомендуемой загрузки одного и двух дизель-генераторов">
+        <defs>
+          <marker id="ar-ps2" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#16161a"/></marker>
+        </defs>
+        <rect class="fill-green" x="100" y="164.5" width="500" height="19"/>
+        <rect class="fill-green" x="100" y="79" width="500" height="38"/>
+        <path class="ln-thin ln-dash gray" d="M100,155 L600,155 M100,60 L600,60"/>
+        <path class="ln-axis" d="M90,265 L90,46" marker-end="url(#ar-ps2)"/>
+        <path class="ln-axis" d="M90,250 L615,250" marker-end="url(#ar-ps2)"/>
+        <rect class="fill-blue" x="110" y="178.1" width="70" height="71.9"/>
+        <rect class="vol" x="110" y="178.1" width="70" height="71.9" fill="none"/>
+        <rect class="fill-blue" x="230" y="180.3" width="70" height="69.7"/>
+        <rect class="vol" x="230" y="180.3" width="70" height="69.7" fill="none"/>
+        <rect class="fill-blue" x="350" y="92.8" width="70" height="157.2"/>
+        <rect class="vol" x="350" y="92.8" width="70" height="157.2" fill="none"/>
+        <rect class="fill-red" x="470" y="224.8" width="70" height="25.2"/>
+        <rect class="cur" x="470" y="224.8" width="70" height="25.2" fill="none"/>
+        <text class="lbl p" x="145" y="172" text-anchor="middle">113,5</text>
+        <text class="lbl p" x="265" y="174" text-anchor="middle">110,0</text>
+        <text class="lbl p" x="385" y="87" text-anchor="middle">248,2</text>
+        <text class="lbl i" x="505" y="219" text-anchor="middle">39,8</text>
+        <text class="lbl" x="145" y="266" text-anchor="middle">Ходовой</text>
+        <text class="lbl" x="265" y="266" text-anchor="middle">Стоянка</text>
+        <text class="lbl" x="385" y="266" text-anchor="middle">Грузовые</text>
+        <text class="lbl" x="505" y="266" text-anchor="middle">Аварийный</text>
+        <text class="lbl g" x="145" y="282" text-anchor="middle">1 ДГ · 76 %</text>
+        <text class="lbl g" x="265" y="282" text-anchor="middle">1 ДГ · 73 %</text>
+        <text class="lbl g" x="385" y="282" text-anchor="middle">2 ДГ · 83 %</text>
+        <text class="lbl g" x="505" y="282" text-anchor="middle">АДГ · 80 %</text>
+        <text class="lbl g" x="84" y="254" text-anchor="end">0</text>
+        <text class="lbl g" x="84" y="191" text-anchor="end">100</text>
+        <text class="lbl g" x="84" y="159" text-anchor="end">150</text>
+        <text class="lbl g" x="84" y="128" text-anchor="end">200</text>
+        <text class="lbl g" x="84" y="64" text-anchor="end">300</text>
+        <text class="lbl u" x="96" y="40" text-anchor="start">расчётная мощность, кВт</text>
+        <text class="lbl p" x="596" y="178" text-anchor="end">70…90 % одного ДГ</text>
+        <text class="lbl p" x="596" y="94" text-anchor="end">70…90 % двух ДГ</text>
+      </svg>
+      <div class="caption">Рис. 2. Расчётные нагрузки по режимам. Зелёные полосы
+      — рекомендуемый диапазон загрузки 70…90 % для одного и для двух
+      работающих дизель-генераторов по 150 кВт; штриховые линии — их полная
+      мощность 150 и 300 кВт. Красный столбец аварийного режима обслуживается
+      не основной станцией, а АДГ 50 кВт, поэтому с полосами не сопоставляется.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> Расчётные нагрузки: ходовой 113,5 кВт /
+    130,8 кВ·А при \(\cos\varphi = 0{,}868\); стоянка 110,0 кВт / 129,2 кВ·А
+    при 0,852; грузовые операции 248,2 кВт / 296,8 кВ·А при 0,836; аварийный
+    39,8 кВт / 46,0 кВ·А при 0,866. Принимаем <b>три дизель-генератора по
+    150 кВт (187,5 кВ·А, 400 В, 50 Гц)</b>: в море и на стоянке работает один
+    агрегат с загрузкой 76 и 73 %, на грузовых операциях — два с загрузкой
+    83 %, третий в резерве или в ремонте. Прямой пуск крана 30 кВт от одного
+    генератора даёт провал 16,4 % и недопустим, от двух — 9,0 % и допустим.
+    <b>Аварийный дизель-генератор 50 кВт</b> загружен на 79,6 %.</div>
+  </div>
+
+  <div class="task" id="task-15">
+    <h3>Задача 15. Выбор двигателя привода по нагрузочной диаграмме</h3>
+    <div class="given"><b>Дано.</b> Грузовая лебёдка работает циклами. Приведённая
+    к валу двигателя нагрузочная диаграмма цикла состоит из пяти участков:
+    пуск и подъём груза с грунта \(M_1 = 420\) Н·м в течение \(t_1 = 5\) с;
+    подъём груза \(M_2 = 300\) Н·м, \(t_2 = 22\) с; доводка и укладка
+    \(M_3 = 150\) Н·м, \(t_3 = 8\) с; спуск порожнего гака \(M_4 = 90\) Н·м,
+    \(t_4 = 18\) с; пауза на застропку \(M_5 = 0\), \(t_5 = 40\) с. Частота
+    вращения двигателя в цикле 950 об/мин. Стандартный ряд относительной
+    продолжительности включения 15, 25, 40, 60 %; ряд мощностей крановых
+    двигателей 11; 15; 18,5; 22; 30; 37 кВт. Перегрузочная способность
+    выбираемого двигателя \(\lambda = 2{,}5\), кратность пускового момента
+    \(k_{\text{п}} = 2{,}0\).
+    <b>Найти:</b> эквивалентный момент и эквивалентную мощность, привести их к
+    стандартной ПВ, выбрать двигатель и проверить его по перегрузочной
+    способности и по пусковому моменту.</div>
+
+    <p>Двигатель повторно-кратковременного режима нельзя выбирать ни по
+    максимальному моменту цикла (получится вдвое завышенная машина), ни по
+    среднему (машина перегреется на пиках). Нагрев определяется <b>средним
+    квадратом тока</b>, а при постоянном магнитном потоке ток пропорционален
+    моменту — отсюда метод эквивалентного момента:</p>
+    <p style="text-align:center">$$M_{\text{э}} = \sqrt{\frac{\sum M_i^2 t_i}
+    {\sum t_i}},\qquad
+    \text{ПВ} = \frac{\sum t_{\text{раб}}}{\sum t_{\text{раб}} + \sum t_{\text{п}}},
+    \qquad M_{\text{э.ст}} = M_{\text{э}}\sqrt{\frac{\text{ПВ}}{\text{ПВ}_{\text{ст}}}}.$$</p>
+    <p>Суммирование в числителе и знаменателе ведут <b>по времени работы</b>:
+    во время паузы двигатель отключён и момента не развивает, а его влияние на
+    нагрев учитывается отдельно — через продолжительность включения.</p>
+
+    <p><b>Шаг 1. Эквивалентный момент.</b></p>
+    <table class="el">
+      <thead><tr><th class="num">Участок</th><th>Содержание</th>
+      <th class="num">M<sub>i</sub>, Н·м</th><th class="num">t<sub>i</sub>, с</th>
+      <th class="num">M<sub>i</sub>²t<sub>i</sub>, Н²·м²·с</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Пуск и подъём груза с грунта</td><td class="num">420</td><td class="num">5</td><td class="num">882 000</td></tr>
+        <tr><td class="num">2</td><td>Подъём груза на высоту</td><td class="num">300</td><td class="num">22</td><td class="num">1 980 000</td></tr>
+        <tr><td class="num">3</td><td>Доводка и укладка груза</td><td class="num">150</td><td class="num">8</td><td class="num">180 000</td></tr>
+        <tr><td class="num">4</td><td>Спуск порожнего гака</td><td class="num">90</td><td class="num">18</td><td class="num">145 800</td></tr>
+        <tr><td class="num">5</td><td>Пауза (застропка)</td><td class="num">0</td><td class="num">40</td><td class="num">0</td></tr>
+        <tr><td class="num"><b>Σ</b></td><td><b>работа 53 с, пауза 40 с, цикл 93 с</b></td><td class="num">—</td><td class="num"><b>93</b></td><td class="num"><b>3 187 800</b></td></tr>
+      </tbody>
+    </table>
+    <div class="steps">
+      <div>\(\sum M_i^2 t_i\) = <span style="color:#6b6b74">882 000 + 1 980 000 + 180 000 + 145 800</span> = <b>3 187 800 Н²·м²·с</b></div>
+      <div>\(\sum t_{\text{раб}}\) = <span style="color:#6b6b74">5 + 22 + 8 + 18</span> = <b>53 с</b></div>
+      <div>\(M_{\text{э}} = \sqrt{\dfrac{\sum M_i^2 t_i}{\sum t_{\text{раб}}}}\) = <span style="color:#6b6b74">√(3 187 800 / 53)</span> = <b>245,2 Н·м</b></div>
+    </div>
+    <p>Для сравнения, среднеарифметический момент за время работы равен
+    <span style="color:#6b6b74">(420 · 5 + 300 · 22 + 150 · 8 + 90 · 18) / 53</span>
+    = <b>217,4 Н·м</b>. Эквивалентный момент больше: пики нагружают изоляцию
+    сильнее, чем следует из простого среднего.</p>
+
+    <p><b>Шаг 2. Приведение к стандартной ПВ.</b></p>
+    <div class="steps">
+      <div>\(\text{ПВ} = \dfrac{\sum t_{\text{раб}}}{T_{\text{ц}}}\) = <span style="color:#6b6b74">53 / 93</span> = <b>0,570</b> = <b>57 %</b></div>
+      <div>ближайшее стандартное значение: \(\text{ПВ}_{\text{ст}}\) = <b>60 %</b></div>
+      <div>\(M_{\text{э.ст}} = M_{\text{э}}\sqrt{\dfrac{\text{ПВ}}{\text{ПВ}_{\text{ст}}}}\) = <span style="color:#6b6b74">245,2 · √(0,570 / 0,60)</span> = <b>239,0 Н·м</b></div>
+    </div>
+    <p>Пересчёт на бо́льшую стандартную ПВ снижает требуемый момент: при
+    ПВ 60 % двигатель работает дольше и остывает меньше, значит при том же
+    нагреве он может развивать меньший момент. Ошибка в направлении этого
+    пересчёта — самая частая в задачах на выбор двигателя.</p>
+
+    <p><b>Шаг 3. Эквивалентная мощность и выбор двигателя.</b></p>
+    <div class="steps">
+      <div>\(\omega = \dfrac{2\pi n}{60}\) = <span style="color:#6b6b74">2 · 3,1416 · 950 / 60</span> = <b>99,5 рад/с</b></div>
+      <div>\(P_{\text{э}} = M_{\text{э.ст}}\,\omega\) = <span style="color:#6b6b74">239,0 · 99,5</span> = <b>23 780 Вт</b> = <b>23,8 кВт</b></div>
+      <div>по ряду мощностей: 22 кВт &lt; 23,8 кВт → принимаем <b>30 кВт</b> при ПВ 60 %, 950 об/мин</div>
+      <div>\(M_{\text{н}} = \dfrac{P_{\text{н}}}{\omega}\) = <span style="color:#6b6b74">30 000 / 99,5</span> = <b>301,6 Н·м</b></div>
+      <div>загрузка по нагреву: \(\dfrac{M_{\text{э.ст}}}{M_{\text{н}}}\) = <span style="color:#6b6b74">239,0 / 301,6</span> = <b>79,2 %</b></div>
+    </div>
+    <p>Двигатель 22 кВт отпадает: его номинальный момент
+    <span style="color:#6b6b74">22 000 / 99,5</span> = <b>221,1 Н·м</b> меньше
+    эквивалентного 239,0 Н·м, то есть машина работала бы с перегревом.</p>
+
+    <p><b>Шаг 4. Проверки.</b> Выбор по нагреву обязательно дополняют двумя
+    проверками — иначе двигатель, не перегревающийся в цикле, может просто не
+    справиться с пиком нагрузки.</p>
+    <div class="steps">
+      <div>\(M_{\max} = \lambda M_{\text{н}}\) = <span style="color:#6b6b74">2,5 · 301,6</span> = <b>753,9 Н·м</b> &gt; \(M_1\) = 420 Н·м</div>
+      <div>то же при просадке напряжения 10 %: \(M_{\max}\cdot 0{,}9^2\) = <span style="color:#6b6b74">753,9 · 0,81</span> = <b>610,7 Н·м</b> &gt; 420 Н·м</div>
+      <div>\(M_{\text{п}} = k_{\text{п}} M_{\text{н}}\) = <span style="color:#6b6b74">2,0 · 301,6</span> = <b>603,1 Н·м</b> &gt; 420 Н·м</div>
+      <div>то же при просадке 15 %: \(M_{\text{п}}\cdot 0{,}85^2\) = <span style="color:#6b6b74">603,1 · 0,7225</span> = <b>435,7 Н·м</b> &gt; 420 Н·м</div>
+    </div>
+    <p>Запас по пусковому моменту при худшей допустимой просадке напряжения
+    составляет всего 4 % — это тот случай, когда проверку нельзя пропускать.
+    Именно поэтому грузовые лебёдки и краны на судне пускают при двух
+    работающих генераторах (см. задачу 14).</p>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Нагрузочная диаграмма грузовой лебёдки: ступени момента по участкам цикла и горизонтальная линия эквивалентного момента">
+        <defs>
+          <marker id="ar-ps3" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#16161a"/></marker>
+        </defs>
+        <path class="ln-axis" d="M80,265 L80,46" marker-end="url(#ar-ps3)"/>
+        <path class="ln-axis" d="M80,250 L615,250" marker-end="url(#ar-ps3)"/>
+        <path class="fill-blue" stroke="none" d="M80,250 L80,72.7 L108,72.7 L108,123.3 L231,123.3 L231,186.7 L275.7,186.7 L275.7,212 L376.3,212 L376.3,250 z"/>
+        <path class="ln" d="M80,250 L80,72.7 L108,72.7 L108,123.3 L231,123.3 L231,186.7 L275.7,186.7 L275.7,212 L376.3,212 L376.3,250 L600,250"/>
+        <path class="pow ln-dash" d="M80,146.4 L400,146.4"/>
+        <text class="lbl" x="86" y="44" text-anchor="start">M, Н·м</text>
+        <text class="lbl" x="612" y="272" text-anchor="end">t, с</text>
+        <text class="lbl g" x="74" y="254" text-anchor="end">0</text>
+        <text class="lbl g" x="74" y="212" text-anchor="end">100</text>
+        <text class="lbl g" x="74" y="170" text-anchor="end">200</text>
+        <text class="lbl g" x="74" y="127" text-anchor="end">300</text>
+        <text class="lbl g" x="74" y="85" text-anchor="end">400</text>
+        <text class="lbl g" x="191.8" y="266" text-anchor="middle">20</text>
+        <text class="lbl g" x="303.7" y="266" text-anchor="middle">40</text>
+        <text class="lbl g" x="415.5" y="266" text-anchor="middle">60</text>
+        <text class="lbl g" x="527.3" y="266" text-anchor="middle">80</text>
+        <text class="lbl" x="114" y="84" text-anchor="start">420</text>
+        <text class="lbl g" x="114" y="70" text-anchor="start">5 с</text>
+        <text class="lbl" x="169" y="117" text-anchor="middle">300</text>
+        <text class="lbl g" x="169" y="105" text-anchor="middle">22 с</text>
+        <text class="lbl" x="253" y="181" text-anchor="middle">150</text>
+        <text class="lbl g" x="253" y="169" text-anchor="middle">8 с</text>
+        <text class="lbl" x="326" y="206" text-anchor="middle">90</text>
+        <text class="lbl g" x="326" y="194" text-anchor="middle">18 с</text>
+        <text class="lbl g" x="488" y="240" text-anchor="middle">пауза 40 с</text>
+        <text class="lbl p" x="406" y="150" text-anchor="start">M<tspan font-size="8" dy="3">э</tspan><tspan font-size="11" dy="-3"> = 245 Н·м</tspan></text>
+        <text class="lbl g" x="80" y="290" text-anchor="start">Цикл 93 с: работа 53 с, пауза 40 с; ПВ = 57 %</text>
+      </svg>
+      <div class="caption">Рис. 3. Нагрузочная диаграмма грузовой лебёдки.
+      Штриховая зелёная линия — эквивалентный момент 245,2 Н·м: по нагреву
+      ступенчатая нагрузка равносильна постоянной нагрузке этой величины в
+      течение времени работы. После приведения к ПВ 60 % расчётный момент
+      снижается до 239,0 Н·м.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> \(M_{\text{э}} = 245{,}2\) Н·м при
+    фактической ПВ 57 %; после приведения к стандартной ПВ 60 %
+    \(M_{\text{э.ст}} = 239{,}0\) Н·м, эквивалентная мощность 23,8 кВт.
+    Принимаем крановый двигатель <b>30 кВт, ПВ 60 %, 950 об/мин</b>
+    (\(M_{\text{н}} = 301{,}6\) Н·м, загрузка по нагреву 79 %). Проверки
+    пройдены: \(M_{\max} = 753{,}9\) Н·м и \(M_{\text{п}} = 603{,}1\) Н·м
+    превышают максимальный момент цикла 420 Н·м даже с учётом допустимой
+    просадки напряжения, хотя запас по пусковому моменту при просадке 15 %
+    составляет всего 4 %.</div>
+  </div>
+
+  <h2>Что проверить в своей работе</h2>
+  <ul>
+    <li>Сечение принято <b>наибольшим</b> из четырёх значений (нагрев, потеря
+    напряжения, термическая стойкость, минимум по Правилам) и округлено вверх
+    до стандартного ряда.</li>
+    <li>Поправки \(k_1\) и \(k_2\) применены обе: без них допустимый ток
+    завышается в полтора раза.</li>
+    <li>В расчёте нагрузки станции установленная мощность делится на КПД, а не
+    умножается: из сети берётся больше, чем отдаётся на валу.</li>
+    <li>Реактивные мощности сложены отдельно от активных; полная мощность —
+    геометрическая сумма, а не арифметическая.</li>
+    <li>Состав генераторов проверен не только по мощности, но и по пуску
+    наибольшего двигателя и по отказу одного агрегата.</li>
+    <li>Эквивалентный момент вычислен по времени <b>работы</b>, а пауза учтена
+    через ПВ; направление пересчёта на стандартную ПВ проверено по смыслу.</li>
+    <li>Все величины приведены с единицами измерения, десятичный разделитель —
+    запятая.</li>
+  </ul>
+
+  <p class="small">Теоретическая база разборов — <a href="t-shipnet">глава 6</a>
+  и <a href="t-drives">глава 7</a>; интерактивные версии этих расчётов —
+  <a href="t-shipnet#calc-cable">выбор сечения кабеля</a> и
+  <a href="t-shipnet#calc-station">нагрузка электростанции</a>; нормативная
+  база — <a href="https://shadeswd.duckdns.org/ref/rmrs">Правила РМРС</a>;
+  место электростанции в судовой энергетической установке —
+  <a href="https://shadeswd.duckdns.org/shipeng/">курс СЭУ</a>.</p>
+
+  <p><a href="tasks">← Все разборы</a> · <a href="p-machines">← Трансформатор и двигатель</a></p>
+</main>
+</body>
+</html>

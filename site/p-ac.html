@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разборы: цепи переменного тока</title>
+<meta name="description" content="Четыре разобранные задачи: параметры элемента по данным опыта и вольт-амперная характеристика, комплексный расчёт последовательной цепи R–L–C с векторной диаграммой, резонанс напряжений и резонанс токов, коэффициент мощности и компенсация конденсаторной батареей на судне.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<script src="assets/site.js" data-root="./" data-page="tasks"></script>
+<main class="wrap">
+  <h1>Разборы: цепи переменного тока</h1>
+  <p class="lead">Четыре задачи практикума кафедры. Первая восстанавливает
+  параметры элемента по трём показаниям приборов — это ровно то, что делают в
+  лабораторной работе 1. Вторая показывает символический метод в полном объёме,
+  третья — два вида резонанса, четвёртая переводит теорию коэффициента мощности
+  в киловары конденсаторной батареи судового потребителя.</p>
+  <p><a class="theory-link" href="t-ac">Глава 2. Однофазные цепи переменного тока</a></p>
+
+  <div class="task" id="task-4">
+    <h3>Задача 4. Параметры элемента по данным опыта</h3>
+    <div class="given"><b>Дано.</b> Опыт по схеме рис. 1 при частоте
+    \(f = 50\) Гц дал показания приборов: \(U = 10\) В, \(I = 1\) А,
+    \(P = 6\) Вт.
+    <b>Найти:</b> полную \(S\) и реактивную \(Q\) мощности, полное \(z\),
+    активное \(R\) и реактивное \(x\) сопротивления, \(\cos\varphi\), характер
+    нагрузки и эквивалентную индуктивность \(L\); построить вольт-амперную
+    характеристику.</div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 260" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Схема опыта: источник синусоидального напряжения, амперметр, ваттметр, вольтметр и исследуемый элемент">
+        <defs>
+          <marker id="ar-ac1" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+        </defs>
+        <g class="wire">
+          <path d="M120,80 L157,80 M183,80 L317,80 M343,80 L560,80"/>
+          <path d="M120,220 L560,220"/>
+          <path d="M120,80 L120,137 M120,163 L120,220"/>
+          <path d="M560,80 L560,130 M560,170 L560,220"/>
+          <path d="M470,80 L470,137 M470,163 L470,220"/>
+          <circle cx="120" cy="150" r="13" fill="#fff"/>
+          <circle cx="200" cy="80" r="13" fill="#fff"/>
+          <circle cx="330" cy="80" r="13" fill="#fff"/>
+          <circle cx="470" cy="150" r="13" fill="#fff"/>
+        </g>
+        <path class="ln-thin ln-dash" d="M330,93 L330,220"/>
+        <rect class="dev" x="553" y="130" width="14" height="40"/>
+        <circle class="node" cx="470" cy="80" r="3.2"/>
+        <circle class="node" cx="470" cy="220" r="3.2"/>
+        <circle class="node" cx="330" cy="220" r="3.2"/>
+
+        <path class="cur" d="M138,62 L172,62" marker-end="url(#ar-ac1)"/>
+
+        <text class="lbl" x="120" y="155" text-anchor="middle">~</text>
+        <text class="lbl" x="200" y="85" text-anchor="middle">A</text>
+        <text class="lbl" x="330" y="85" text-anchor="middle">W</text>
+        <text class="lbl" x="470" y="155" text-anchor="middle">V</text>
+        <text class="lbl g" x="104" y="154" text-anchor="end">50 Гц</text>
+        <text class="lbl i" x="200" y="56" text-anchor="middle">I = 1 А</text>
+        <text class="lbl" x="330" y="56" text-anchor="middle">P = 6 Вт</text>
+        <text class="lbl" x="486" y="154" text-anchor="start">U = 10 В</text>
+        <text class="lbl b" x="575" y="155" text-anchor="start">Z</text>
+        <text class="lbl g" x="624" y="196" text-anchor="end">исследуемый элемент</text>
+        <text class="lbl g" x="120" y="244" text-anchor="start">Опыт: измеряются U, I и P одного элемента при f = 50 Гц</text>
+      </svg>
+      <div class="caption">Рис. 1. Схема опыта лабораторной работы 1. Амперметр и
+      токовая обмотка ваттметра включены последовательно с элементом, вольтметр и
+      обмотка напряжения ваттметра — параллельно ему. Стрелка тока и стрелка
+      напряжения направлены согласованно: ток втекает в вывод с более высоким
+      потенциалом.</div>
+    </div>
+
+    <p>Три показания приборов однозначно определяют схему замещения элемента —
+    последовательное соединение \(R\) и \(x\). Расчёт ведут от треугольника
+    мощностей к треугольнику сопротивлений.</p>
+    <p style="text-align:center">$$S = UI, \qquad \cos\varphi = \dfrac{P}{S},
+    \qquad Q = \sqrt{S^2 - P^2}.$$</p>
+    <div class="steps">
+      <div>\(S = UI\) = <span style="color:#6b6b74">10 · 1</span> = <b>10 В·А</b></div>
+      <div>\(\cos\varphi = \dfrac{P}{S}\) = <span style="color:#6b6b74">6 / 10</span> = <b>0,6</b></div>
+      <div>\(\varphi = \arccos 0{,}6\) = <span style="color:#6b6b74">53,13°</span> = <b>53,1°</b></div>
+      <div>\(Q = \sqrt{S^2 - P^2}\) = <span style="color:#6b6b74">√(10² − 6²)</span> = <b>8 вар</b></div>
+    </div>
+    <p>Сопротивления находят по закону Ома в действующих значениях и по
+    определению активной мощности:</p>
+    <div class="steps">
+      <div>\(z = \dfrac{U}{I}\) = <span style="color:#6b6b74">10 / 1</span> = <b>10 Ом</b></div>
+      <div>\(R = \dfrac{P}{I^2}\) = <span style="color:#6b6b74">6 / 1²</span> = <b>6 Ом</b></div>
+      <div>\(x = \sqrt{z^2 - R^2}\) = <span style="color:#6b6b74">√(10² − 6²)</span> = <b>8 Ом</b></div>
+      <div>\(x = \dfrac{Q}{I^2}\) = <span style="color:#6b6b74">8 / 1²</span> = <b>8 Ом</b> — проверка сошлась</div>
+      <div>\(\cos\varphi = \dfrac{R}{z}\) = <span style="color:#6b6b74">6 / 10</span> = <b>0,6</b> — вторая проверка</div>
+    </div>
+
+    <div class="note warn"><b>Чего опыт не даёт.</b> Три показания приборов дают
+    только модуль реактивного сопротивления. Знак \(x\) (индуктивный или
+    ёмкостный характер) из \(U\), \(I\) и \(P\) не следует: катушка с
+    \(R = 6\) Ом, \(x_L = 8\) Ом и цепочка \(R = 6\) Ом, \(x_C = 8\) Ом дают
+    одинаковые показания. Характер нагрузки определяют дополнительно — по
+    известной конструкции элемента либо по опыту с изменением частоты: у катушки
+    \(x_L\) растёт с частотой, у конденсатора \(x_C\) падает.</div>
+
+    <p>На стенде исследуемым элементом служит катушка индуктивности, поэтому
+    \(x = x_L = 8\) Ом, нагрузка активно-индуктивная, ток отстаёт от напряжения
+    на 53,1°. При \(\omega = 2\pi f = 314\) рад/с:</p>
+    <div class="steps">
+      <div>\(L = \dfrac{x_L}{\omega}\) = <span style="color:#6b6b74">8 / 314</span> = <b>0,0255 Гн</b> (25,5 мГн)</div>
+      <div>\(C = \dfrac{1}{\omega x_C}\) = <span style="color:#6b6b74">1 / (314 · 8)</span> = <b>398 мкФ</b> — если бы элемент был ёмкостным</div>
+    </div>
+
+    <p><b>Вольт-амперная характеристика.</b> Элемент линеен, поэтому
+    \(U = zI\) — прямая через начало координат, а её наклон равен полному
+    сопротивлению. При удвоении частоты индуктивное сопротивление удваивается:</p>
+    <div class="steps">
+      <div>\(x_L' = \omega' L = 2\pi \cdot 100 \cdot L\) = <span style="color:#6b6b74">628 · 0,0255</span> = <b>16 Ом</b></div>
+      <div>\(z' = \sqrt{R^2 + x_L'^2}\) = <span style="color:#6b6b74">√(6² + 16²)</span> = <b>17,09 Ом</b></div>
+    </div>
+
+    <table class="el">
+      <thead><tr><th class="num">I, А</th><th class="num">0,2</th><th class="num">0,4</th>
+      <th class="num">0,6</th><th class="num">0,8</th><th class="num">1,0</th></tr></thead>
+      <tbody>
+        <tr><td>U при 50 Гц, В</td><td class="num">2,00</td><td class="num">4,00</td><td class="num">6,00</td><td class="num">8,00</td><td class="num">10,00</td></tr>
+        <tr><td>U при 100 Гц, В</td><td class="num">3,42</td><td class="num">6,84</td><td class="num">10,25</td><td class="num">13,67</td><td class="num">17,09</td></tr>
+      </tbody>
+    </table>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Вольт-амперные характеристики элемента при 50 и 100 герцах — две прямые через начало координат">
+        <g class="ln-axis">
+          <path d="M80,250 L610,250"/>
+          <path d="M80,250 L80,38"/>
+        </g>
+        <g class="ln-thin ln-dash" stroke="#6b6b74">
+          <path d="M496.7,250 L496.7,145 M80,145 L496.7,145"/>
+        </g>
+        <path class="vol" d="M80,250 L580,124"/>
+        <path class="pow" d="M80,250 L567.5,40"/>
+        <circle class="node" cx="496.7" cy="145" r="3.2"/>
+        <text class="lbl u" x="92" y="32" text-anchor="start">U, В</text>
+        <text class="lbl" x="624" y="242" text-anchor="end">I, А</text>
+        <text class="lbl" x="74" y="254" text-anchor="end">0</text>
+        <text class="lbl" x="74" y="201" text-anchor="end">5</text>
+        <text class="lbl" x="74" y="149" text-anchor="end">10</text>
+        <text class="lbl" x="74" y="96" text-anchor="end">15</text>
+        <text class="lbl" x="74" y="44" text-anchor="end">20</text>
+        <text class="lbl" x="163" y="266" text-anchor="middle">0,2</text>
+        <text class="lbl" x="247" y="266" text-anchor="middle">0,4</text>
+        <text class="lbl" x="330" y="266" text-anchor="middle">0,6</text>
+        <text class="lbl" x="413" y="266" text-anchor="middle">0,8</text>
+        <text class="lbl" x="497" y="266" text-anchor="middle">1,0</text>
+        <text class="lbl" x="580" y="266" text-anchor="middle">1,2</text>
+        <text class="lbl u" x="574" y="116" text-anchor="end">50 Гц: z = 10 Ом</text>
+        <text class="lbl p" x="420" y="70" text-anchor="end">100 Гц: z = 17,1 Ом</text>
+        <text class="lbl g" x="490" y="132" text-anchor="end">опыт: I = 1 А, U = 10 В</text>
+        <text class="lbl g" x="80" y="288" text-anchor="start">ВАХ линейного элемента — прямая; её наклон равен полному сопротивлению z</text>
+      </svg>
+      <div class="caption">Рис. 2. Вольт-амперные характеристики исследованной
+      катушки. Точка \(I = 1\) А, \(U = 10\) В — данные опыта. С ростом частоты
+      прямая идёт круче: полное сопротивление увеличивается с 10 до 17,09 Ом.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> \(S = 10\) В·А, \(P = 6\) Вт,
+    \(Q = 8\) вар, \(\cos\varphi = 0{,}6\) (\(\varphi = 53{,}1^\circ\));
+    \(z = 10\) Ом, \(R = 6\) Ом, \(x = 8\) Ом. Нагрузка активно-индуктивная,
+    эквивалентная индуктивность \(L = 0{,}0255\) Гн. Вольт-амперная
+    характеристика — прямая \(U = 10\,I\); на частоте 100 Гц её наклон
+    возрастает до 17,09 Ом.</div>
+  </div>
+
+  <div class="task" id="task-5">
+    <h3>Задача 5. Комплексный расчёт последовательной цепи R–L–C</h3>
+    <div class="given"><b>Дано.</b> Последовательная цепь рис. 3:
+    \(U = 10\) В, \(R = 3\) Ом, \(x_L = 4\) Ом, \(x_C = 2\) Ом,
+    \(f = 50\) Гц.
+    <b>Найти:</b> комплексное сопротивление \(\underline{Z}\) в алгебраической и
+    показательной формах, ток, напряжения на всех элементах, угол \(\varphi\),
+    мощности \(P\), \(Q\), \(S\); построить векторную диаграмму.</div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 240" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Последовательная цепь: источник синусоидального напряжения, резистор, катушка индуктивности и конденсатор">
+        <defs>
+          <marker id="ar-ac2" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+          <marker id="ar-ac3" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+        </defs>
+        <g class="wire">
+          <path d="M110,70 L170,70 M210,70 L285,70 M333,70 L427,70 M433,70 L570,70"/>
+          <path d="M110,200 L570,200"/>
+          <path d="M110,70 L110,122 M110,148 L110,200"/>
+          <path d="M570,70 L570,200"/>
+          <path d="M285,70 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0"/>
+          <path d="M427,61 L427,79 M433,61 L433,79"/>
+          <circle cx="110" cy="135" r="13" fill="#fff"/>
+        </g>
+        <rect class="dev" x="170" y="63" width="40" height="14"/>
+        <text class="lbl" x="110" y="140" text-anchor="middle">~</text>
+
+        <path class="cur" d="M122,58 L158,58" marker-end="url(#ar-ac2)"/>
+        <text class="lbl i" x="164" y="62" text-anchor="start">I</text>
+        <path class="vol" d="M80,74 L80,196" marker-end="url(#ar-ac3)"/>
+        <text class="lbl u" x="74" y="139" text-anchor="end">U = 10 В</text>
+
+        <path class="vol" d="M168,100 L212,100" marker-end="url(#ar-ac3)"/>
+        <path class="vol" d="M283,100 L335,100" marker-end="url(#ar-ac3)"/>
+        <path class="vol" d="M414,100 L446,100" marker-end="url(#ar-ac3)"/>
+        <text class="lbl u" x="190" y="116" text-anchor="middle">U<tspan font-size="8" dy="3">R</tspan><tspan dy="-3"> = 8,32 В</tspan></text>
+        <text class="lbl u" x="309" y="116" text-anchor="middle">U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 11,09 В</tspan></text>
+        <text class="lbl u" x="430" y="116" text-anchor="middle">U<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 5,55 В</tspan></text>
+
+        <text class="lbl" x="190" y="48" text-anchor="middle">R = 3 Ом</text>
+        <text class="lbl" x="309" y="48" text-anchor="middle">x<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 4 Ом</tspan></text>
+        <text class="lbl" x="430" y="48" text-anchor="middle">x<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 2 Ом</tspan></text>
+        <text class="lbl g" x="110" y="228" text-anchor="start">Последовательная цепь: ток общий, напряжения складываются векторно</text>
+      </svg>
+      <div class="caption">Рис. 3. Схема к задаче 5 по ГОСТ 2.728: резистор —
+      прямоугольник, катушка — четыре полуокружности, конденсатор — две
+      параллельные черты. Стрелки напряжений на элементах направлены так же, как
+      ток, — все три элемента являются приёмниками.</div>
+    </div>
+
+    <p>Символический метод заменяет построения на комплексную арифметику.
+    Начальную фазу входного напряжения принимаем нулевой, поэтому
+    \(\underline{U} = 10\) В.</p>
+    <div class="steps">
+      <div>\(x = x_L - x_C\) = <span style="color:#6b6b74">4 − 2</span> = <b>2 Ом</b></div>
+      <div>\(\underline{Z} = R + j(x_L - x_C)\) = <span style="color:#6b6b74">3 + j2</span> = <b>(3 + j2) Ом</b></div>
+      <div>\(z = \sqrt{R^2 + x^2}\) = <span style="color:#6b6b74">√(3² + 2²)</span> = <b>3,606 Ом</b></div>
+      <div>\(\varphi = \operatorname{arctg}\dfrac{x}{R}\) = <span style="color:#6b6b74">arctg (2 / 3)</span> = <b>33,7°</b></div>
+      <div>\(\underline{Z} = z\,e^{\,j\varphi}\) = <span style="color:#6b6b74">3,606 · e^(j33,7°)</span> = <b>3,606∠33,7° Ом</b></div>
+    </div>
+    <p>Реактивное сопротивление положительно, значит цепь имеет
+    активно-индуктивный характер: ток отстаёт от напряжения. Ток находим по
+    закону Ома в комплексной форме:</p>
+    <div class="steps">
+      <div>\(\underline{I} = \dfrac{\underline{U}}{\underline{Z}}\) = <span style="color:#6b6b74">10 / 3,606∠33,7°</span> = <b>2,773∠−33,7° А</b></div>
+      <div>\(\underline{I} = I(\cos\varphi - j\sin\varphi)\) = <span style="color:#6b6b74">2,773 · (0,832 − j0,555)</span> = <b>(2,31 − j1,54) А</b></div>
+    </div>
+    <p>Напряжения на элементах пропорциональны их сопротивлениям, так как ток у
+    всех трёх одинаков:</p>
+    <div class="steps">
+      <div>\(U_R = I R\) = <span style="color:#6b6b74">2,773 · 3</span> = <b>8,32 В</b></div>
+      <div>\(U_L = I x_L\) = <span style="color:#6b6b74">2,773 · 4</span> = <b>11,09 В</b></div>
+      <div>\(U_C = I x_C\) = <span style="color:#6b6b74">2,773 · 2</span> = <b>5,55 В</b></div>
+      <div>\(U = \sqrt{U_R^2 + (U_L - U_C)^2}\) = <span style="color:#6b6b74">√(8,32² + (11,09 − 5,55)²)</span> = <b>10,0 В</b> — второй закон Кирхгофа выполнен</div>
+    </div>
+    <div class="note tip"><b>Почему сумма напряжений больше входного.</b>
+    Арифметическая сумма \(8{,}32 + 11{,}09 + 5{,}55 = 24{,}96\) В в два с
+    половиной раза превышает 10 В на входе. Противоречия нет: складывать нужно
+    векторы, а \(\underline{U}_L\) и \(\underline{U}_C\) направлены в
+    противоположные стороны и частично гасят друг друга.</div>
+
+    <p>Мощности:</p>
+    <div class="steps">
+      <div>\(P = I^2 R\) = <span style="color:#6b6b74">2,773² · 3</span> = <b>23,07 Вт</b></div>
+      <div>\(Q = I^2 (x_L - x_C)\) = <span style="color:#6b6b74">2,773² · 2</span> = <b>15,38 вар</b></div>
+      <div>\(S = U I\) = <span style="color:#6b6b74">10 · 2,773</span> = <b>27,73 В·А</b></div>
+      <div>\(S = \sqrt{P^2 + Q^2}\) = <span style="color:#6b6b74">√(23,07² + 15,38²)</span> = <b>27,73 В·А</b> — проверка</div>
+      <div>\(\cos\varphi = \dfrac{P}{S}\) = <span style="color:#6b6b74">23,07 / 27,73</span> = <b>0,832</b></div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Векторная диаграмма последовательной цепи: ток, напряжения на резисторе, катушке и конденсаторе, результирующее напряжение">
+        <defs>
+          <marker id="ar-ac4" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+          <marker id="ar-ac5" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+        </defs>
+        <path class="ln-thin ln-dash" stroke="#6b6b74" d="M70,250 L300,250"/>
+        <path class="ln-thin ln-dash" stroke="#6b6b74" d="M223.1,72.5 L249,72.5 M249,161.3 L223.1,161.3"/>
+
+        <path class="cur" d="M90,250 L239.8,250" marker-end="url(#ar-ac5)"/>
+        <path class="vol" d="M90,250 L223.1,250" marker-end="url(#ar-ac4)"/>
+        <path class="vol" d="M223.1,250 L223.1,72.5" marker-end="url(#ar-ac4)"/>
+        <path class="vol" d="M249,72.5 L249,161.3" marker-end="url(#ar-ac4)"/>
+        <path class="vol" stroke-width="2.4" d="M90,250 L223.1,161.3" marker-end="url(#ar-ac4)"/>
+        <path class="ln-thin" stroke="#6b6b74" fill="none" d="M150,250 A60,60 0 0 0 139.9,216.7"/>
+        <circle class="node" cx="223.1" cy="161.3" r="3.2"/>
+
+        <text class="lbl u" x="110" y="266" text-anchor="start">U<tspan font-size="8" dy="3">R</tspan><tspan dy="-3"> = 8,32 В</tspan></text>
+        <text class="lbl i" x="248" y="268" text-anchor="start">I = 2,773 А</text>
+        <text class="lbl u" x="215" y="110" text-anchor="end">U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 11,09 В</tspan></text>
+        <text class="lbl u" x="257" y="120" text-anchor="start">U<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 5,55 В</tspan></text>
+        <text class="lbl u" x="168" y="186" text-anchor="end">U = 10 В</text>
+        <text class="lbl g" x="156" y="228" text-anchor="start">φ = 33,7°</text>
+
+        <text class="lbl u" x="400" y="90" text-anchor="start">U<tspan font-size="8" dy="3">R</tspan><tspan dy="-3"> = 8,32 В — по фазе с током</tspan></text>
+        <text class="lbl u" x="400" y="114" text-anchor="start">U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 11,09 В — опережает на 90°</tspan></text>
+        <text class="lbl u" x="400" y="138" text-anchor="start">U<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 5,55 В — отстаёт на 90°</tspan></text>
+        <text class="lbl u" x="400" y="162" text-anchor="start">U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> − U</tspan><tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 5,55 В</tspan></text>
+        <text class="lbl p" x="400" y="186" text-anchor="start">U = 10 В, φ = 33,7°</text>
+        <text class="lbl p" x="400" y="210" text-anchor="start">cos φ = 0,832 (индуктивный)</text>
+        <text class="lbl g" x="60" y="288" text-anchor="start">Масштаб: 16 мм на вольт; вектор U<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> сдвинут вправо для наглядности</tspan></text>
+      </svg>
+      <div class="caption">Рис. 4. Векторная диаграмма к задаче 5. За опорный
+      принят вектор тока \(\underline{I}\). Векторы напряжений строятся цепочкой:
+      \(\underline{U}_R\) по току, \(\underline{U}_L\) вверх на 90°,
+      \(\underline{U}_C\) вниз на 90°; замыкающий вектор от начала цепочки к её
+      концу и есть входное напряжение \(\underline{U} = 10\) В, опережающее ток
+      на 33,7°.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> \(\underline{Z} = (3 + j2)\) Ом
+    \(= 3{,}606\angle 33{,}7^\circ\) Ом; \(\underline{I} = 2{,}773\angle
+    -33{,}7^\circ\) А. Напряжения: \(U_R = 8{,}32\) В, \(U_L = 11{,}09\) В,
+    \(U_C = 5{,}55\) В. Мощности: \(P = 23{,}07\) Вт, \(Q = 15{,}38\) вар,
+    \(S = 27{,}73\) В·А, \(\cos\varphi = 0{,}832\). Цепь активно-индуктивная,
+    ток отстаёт от напряжения на 33,7°.</div>
+  </div>
+
+  <div class="task" id="task-6">
+    <h3>Задача 6. Резонанс напряжений и резонанс токов</h3>
+    <div class="given"><b>Дано.</b> <b>(а)</b> Последовательный контур:
+    \(U = 10\) В, \(x_L = 8\) Ом, \(R = 1\) Ом, \(f = 50\) Гц, цепь настроена
+    в резонанс. <b>(б)</b> Параллельный контур: \(U = 10\) В,
+    \(I_L = 20\) А, \(I_C = 20\) А, \(I_R = 1\) А, \(f = 50\) Гц.
+    <b>Найти:</b> в случае (а) — \(x_C\), ток, напряжения на всех элементах,
+    коэффициент перенапряжения и добротность; в случае (б) — сопротивления
+    ветвей, общий ток, \(Z\), мощности и характер цепи.</div>
+
+    <p><b>(а) Резонанс напряжений.</b> Условие резонанса в последовательном
+    контуре — равенство реактивных сопротивлений, при котором реактивная
+    составляющая полного сопротивления обращается в нуль:</p>
+    <p style="text-align:center">$$x_L = x_C, \qquad \underline{Z} = R,
+    \qquad \varphi = 0, \qquad \cos\varphi = 1.$$</p>
+    <div class="steps">
+      <div>\(x_C = x_L\) = <span style="color:#6b6b74">8</span> = <b>8 Ом</b></div>
+      <div>\(z = \sqrt{R^2 + (x_L - x_C)^2}\) = <span style="color:#6b6b74">√(1² + 0²)</span> = <b>1 Ом</b></div>
+      <div>\(I = \dfrac{U}{z}\) = <span style="color:#6b6b74">10 / 1</span> = <b>10 А</b></div>
+      <div>\(U_R = I R\) = <span style="color:#6b6b74">10 · 1</span> = <b>10 В</b> — всё входное напряжение приложено к резистору</div>
+      <div>\(U_L = I x_L\) = <span style="color:#6b6b74">10 · 8</span> = <b>80 В</b></div>
+      <div>\(U_C = I x_C\) = <span style="color:#6b6b74">10 · 8</span> = <b>80 В</b></div>
+      <div>\(k_{\text{п}} = \dfrac{U_L}{U}\) = <span style="color:#6b6b74">80 / 10</span> = <b>8</b> — коэффициент перенапряжения</div>
+      <div>\(Q_{\text{д}} = \dfrac{x_L}{R}\) = <span style="color:#6b6b74">8 / 1</span> = <b>8</b> — добротность контура</div>
+    </div>
+    <p>Параметры элементов при \(\omega = 314\) рад/с и проверка частоты
+    резонанса:</p>
+    <div class="steps">
+      <div>\(L = \dfrac{x_L}{\omega}\) = <span style="color:#6b6b74">8 / 314</span> = <b>0,0255 Гн</b></div>
+      <div>\(C = \dfrac{1}{\omega x_C}\) = <span style="color:#6b6b74">1 / (314 · 8)</span> = <b>398 мкФ</b></div>
+      <div>\(f_0 = \dfrac{1}{2\pi\sqrt{LC}}\) = <span style="color:#6b6b74">1 / (6,283 · √(0,0255 · 398·10⁻⁶))</span> = <b>50,0 Гц</b></div>
+    </div>
+    <p>Мощности при резонансе: реактивная мощность катушки полностью
+    компенсируется реактивной мощностью конденсатора.</p>
+    <div class="steps">
+      <div>\(P = I^2 R\) = <span style="color:#6b6b74">10² · 1</span> = <b>100 Вт</b></div>
+      <div>\(Q = I^2 (x_L - x_C)\) = <span style="color:#6b6b74">10² · (8 − 8)</span> = <b>0 вар</b></div>
+      <div>\(S = U I\) = <span style="color:#6b6b74">10 · 10</span> = <b>100 В·А</b></div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 280" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Векторная диаграмма при резонансе напряжений: напряжения на катушке и конденсаторе по 80 вольт гасят друг друга">
+        <defs>
+          <marker id="ar-ac6" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+          <marker id="ar-ac7" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+        </defs>
+        <path class="ln-thin ln-dash" stroke="#6b6b74" d="M60,210 L320,210 M90,50 L150,50"/>
+        <path class="vol" stroke-width="2.4" d="M70,210 L90,210" marker-end="url(#ar-ac6)"/>
+        <path class="vol" d="M90,210 L90,50" marker-end="url(#ar-ac6)"/>
+        <path class="vol" d="M150,50 L150,210" marker-end="url(#ar-ac6)"/>
+        <path class="cur" d="M70,232 L230,232" marker-end="url(#ar-ac7)"/>
+        <text class="lbl u" x="64" y="224" text-anchor="start">U = U<tspan font-size="8" dy="3">R</tspan><tspan dy="-3"> = 10 В</tspan></text>
+        <text class="lbl u" x="85" y="120" text-anchor="end">U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 80 В</tspan></text>
+        <text class="lbl u" x="158" y="120" text-anchor="start">U<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 80 В</tspan></text>
+        <text class="lbl i" x="238" y="236" text-anchor="start">I = 10 А</text>
+        <text class="lbl" x="360" y="70" text-anchor="start">x<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = x</tspan><tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 8 Ом</tspan></text>
+        <text class="lbl" x="360" y="98" text-anchor="start">z = R = 1 Ом</text>
+        <text class="lbl i" x="360" y="126" text-anchor="start">I = U / R = 10 А</text>
+        <text class="lbl u" x="360" y="154" text-anchor="start">U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = U</tspan><tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 8U = 80 В</tspan></text>
+        <text class="lbl p" x="360" y="182" text-anchor="start">добротность 8, cos φ = 1</text>
+        <text class="lbl p" x="360" y="210" text-anchor="start">P = 100 Вт, Q = 0</text>
+        <text class="lbl g" x="60" y="266" text-anchor="start">Масштаб: 2 мм на вольт; при резонансе U<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> и U</tspan><tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> в 8 раз больше входного напряжения</tspan></text>
+      </svg>
+      <div class="caption">Рис. 5. Векторная диаграмма при резонансе напряжений.
+      Векторы \(\underline{U}_L\) и \(\underline{U}_C\) лежат на одной прямой и
+      противоположны; на рисунке они разнесены по горизонтали для наглядности.
+      Входное напряжение совпадает с \(\underline{U}_R\) и по фазе с током.</div>
+    </div>
+
+    <div class="note warn"><b>Почему резонанс напряжений опасен.</b> При
+    добротности 8 на катушке и на конденсаторе действует 80 В — в восемь раз
+    больше напряжения источника. В судовых сетях такие перенапряжения возникают
+    при неудачном сочетании индуктивности кабельной линии и ёмкости
+    компенсирующей батареи и пробивают изоляцию, хотя напряжение сети остаётся
+    номинальным.</div>
+
+    <p><b>(б) Резонанс токов.</b> В параллельном контуре складываются токи
+    ветвей. Ток резистора совпадает по фазе с напряжением, ток катушки отстаёт
+    от него на 90°, ток конденсатора опережает на 90°, поэтому</p>
+    <p style="text-align:center">$$\underline{I} = \underline{I}_R +
+    \underline{I}_L + \underline{I}_C, \qquad
+    I = \sqrt{I_R^2 + (I_L - I_C)^2}.$$</p>
+    <div class="steps">
+      <div>\(x_L = \dfrac{U}{I_L}\) = <span style="color:#6b6b74">10 / 20</span> = <b>0,5 Ом</b></div>
+      <div>\(x_C = \dfrac{U}{I_C}\) = <span style="color:#6b6b74">10 / 20</span> = <b>0,5 Ом</b></div>
+      <div>\(R = \dfrac{U}{I_R}\) = <span style="color:#6b6b74">10 / 1</span> = <b>10 Ом</b></div>
+      <div>\(I = \sqrt{I_R^2 + (I_L - I_C)^2}\) = <span style="color:#6b6b74">√(1² + (20 − 20)²)</span> = <b>1 А</b></div>
+      <div>\(z = \dfrac{U}{I}\) = <span style="color:#6b6b74">10 / 1</span> = <b>10 Ом</b></div>
+      <div>\(P = U I\) = <span style="color:#6b6b74">10 · 1</span> = <b>10 Вт</b></div>
+      <div>\(Q = U(I_L - I_C)\) = <span style="color:#6b6b74">10 · (20 − 20)</span> = <b>0 вар</b></div>
+      <div>\(S = U I\) = <span style="color:#6b6b74">10 · 1</span> = <b>10 В·А</b></div>
+      <div>\(\cos\varphi = \dfrac{P}{S}\) = <span style="color:#6b6b74">10 / 10</span> = <b>1</b></div>
+      <div>\(k_{\text{т}} = \dfrac{I_L}{I}\) = <span style="color:#6b6b74">20 / 1</span> = <b>20</b> — во столько раз ток ветви больше общего</div>
+    </div>
+    <p>Условие \(x_L = x_C\) при 50 Гц отвечает параметрам</p>
+    <div class="steps">
+      <div>\(L = \dfrac{x_L}{\omega}\) = <span style="color:#6b6b74">0,5 / 314</span> = <b>0,00159 Гн</b> (1,59 мГн)</div>
+      <div>\(C = \dfrac{1}{\omega x_C}\) = <span style="color:#6b6b74">1 / (314 · 0,5)</span> = <b>6370 мкФ</b></div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 280" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Параллельный контур из резистора, катушки и конденсатора и векторная диаграмма его токов при резонансе">
+        <defs>
+          <marker id="ar-ac8" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+          <marker id="ar-ac9" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+        </defs>
+        <g class="wire">
+          <path d="M70,70 L310,70 M70,210 L310,210"/>
+          <path d="M70,70 L70,127 M70,153 L70,210"/>
+          <path d="M150,70 L150,120 M150,160 L150,210"/>
+          <path d="M230,70 L230,118 M230,166 L230,210"/>
+          <path d="M310,70 L310,131 M310,137 L310,210"/>
+          <path d="M230,118 a6,6 0 0 1 0,12 a6,6 0 0 1 0,12 a6,6 0 0 1 0,12 a6,6 0 0 1 0,12"/>
+          <path d="M301,131 L319,131 M301,137 L319,137"/>
+          <circle cx="70" cy="140" r="13" fill="#fff"/>
+        </g>
+        <rect class="dev" x="143" y="120" width="14" height="40"/>
+        <text class="lbl" x="70" y="145" text-anchor="middle">~</text>
+        <circle class="node" cx="150" cy="70" r="3.2"/>
+        <circle class="node" cx="150" cy="210" r="3.2"/>
+        <circle class="node" cx="230" cy="70" r="3.2"/>
+        <circle class="node" cx="230" cy="210" r="3.2"/>
+
+        <path class="cur" d="M85,58 L120,58" marker-end="url(#ar-ac8)"/>
+        <text class="lbl i" x="126" y="62" text-anchor="start">I</text>
+        <path class="cur" d="M138,82 L138,106" marker-end="url(#ar-ac8)"/>
+        <path class="cur" d="M218,82 L218,106" marker-end="url(#ar-ac8)"/>
+        <path class="cur" d="M298,82 L298,106" marker-end="url(#ar-ac8)"/>
+        <text class="lbl i" x="132" y="100" text-anchor="end">I<tspan font-size="8" dy="3">R</tspan></text>
+        <text class="lbl i" x="212" y="100" text-anchor="end">I<tspan font-size="8" dy="3">L</tspan></text>
+        <text class="lbl i" x="292" y="100" text-anchor="end">I<tspan font-size="8" dy="3">C</tspan></text>
+        <text class="lbl" x="70" y="234" text-anchor="middle">U = 10 В</text>
+        <text class="lbl" x="150" y="234" text-anchor="middle">R = 10 Ом</text>
+        <text class="lbl" x="230" y="234" text-anchor="middle">x<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 0,5 Ом</tspan></text>
+        <text class="lbl" x="310" y="234" text-anchor="middle">x<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 0,5 Ом</tspan></text>
+
+        <path class="vol" d="M470,140 L570,140" marker-end="url(#ar-ac9)"/>
+        <path class="cur" d="M470,140 L470,40" marker-end="url(#ar-ac8)"/>
+        <path class="cur" d="M470,140 L470,240" marker-end="url(#ar-ac8)"/>
+        <path class="cur" stroke-width="3.4" d="M470,140 L475,140"/>
+        <path class="ln-thin" stroke="#6b6b74" d="M476,143 L492,160"/>
+        <text class="lbl u" x="520" y="132" text-anchor="middle">U = 10 В</text>
+        <text class="lbl i" x="478" y="86" text-anchor="start">I<tspan font-size="8" dy="3">C</tspan><tspan dy="-3"> = 20 А</tspan></text>
+        <text class="lbl i" x="478" y="194" text-anchor="start">I<tspan font-size="8" dy="3">L</tspan><tspan dy="-3"> = 20 А</tspan></text>
+        <text class="lbl i" x="496" y="164" text-anchor="start">I = I<tspan font-size="8" dy="3">R</tspan><tspan dy="-3"> = 1 А</tspan></text>
+        <text class="lbl g" x="40" y="266" text-anchor="start">Токи ветвей в 20 раз больше тока в неразветвлённой части цепи</text>
+      </svg>
+      <div class="caption">Рис. 6. Параллельный контур и векторная диаграмма его
+      токов. Опорный вектор — напряжение \(\underline{U}\), общее для всех
+      ветвей. Токи \(\underline{I}_L\) и \(\underline{I}_C\) равны и
+      противоположны, их сумма равна нулю, и из источника потребляется только
+      активный ток \(\underline{I}_R\) = 1 А.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> <b>(а)</b> \(x_C = 8\) Ом, \(z = R = 1\) Ом,
+    \(I = 10\) А, \(U_R = U = 10\) В, \(U_L = U_C = 80\) В; перенапряжение и
+    добротность равны 8; \(P = 100\) Вт, \(Q = 0\), \(\cos\varphi = 1\).
+    <b>(б)</b> \(x_L = x_C = 0{,}5\) Ом, \(R = 10\) Ом, \(I = I_R = 1\) А,
+    \(z = 10\) Ом, \(P = S = 10\) В·А, \(Q = 0\), \(\cos\varphi = 1\); ток
+    ветвей в 20 раз больше общего. В обоих случаях цепь для источника ведёт
+    себя как чисто активная — этим и пользуются при компенсации реактивной
+    мощности (задача 7).</div>
+  </div>
+
+  <div class="task" id="task-7">
+    <h3>Задача 7. Коэффициент мощности и компенсация реактивной мощности</h3>
+    <div class="given"><b>Дано.</b> Группа судовых потребителей (грузовые лебёдки
+    и вентиляторы) потребляет активную мощность \(P = 45\) кВт при
+    \(\cos\varphi_1 = 0{,}72\). Сеть трёхфазная, \(U = 400\) В, \(f = 50\) Гц.
+    <b>Найти:</b> \(Q_1\), \(S_1\) и ток линии; мощность конденсаторной батареи
+    для повышения коэффициента мощности до \(\cos\varphi_2 = 0{,}95\); ёмкость
+    на фазу при соединении батареи треугольником и звездой; новый ток линии и
+    разгрузку генератора.</div>
+
+    <p>Активная мощность потребителей не меняется — конденсаторы её не
+    потребляют. Меняются реактивная и полная мощности, а вместе с ними ток
+    линии. Исходный режим:</p>
+    <div class="steps">
+      <div>\(\varphi_1 = \arccos 0{,}72\) = <span style="color:#6b6b74">43,95°</span> = <b>43,9°</b></div>
+      <div>\(\operatorname{tg}\varphi_1\) = <span style="color:#6b6b74">tg 43,95°</span> = <b>0,9638</b></div>
+      <div>\(S_1 = \dfrac{P}{\cos\varphi_1}\) = <span style="color:#6b6b74">45 / 0,72</span> = <b>62,5 кВ·А</b></div>
+      <div>\(Q_1 = \sqrt{S_1^2 - P^2}\) = <span style="color:#6b6b74">√(62,5² − 45²)</span> = <b>43,37 квар</b></div>
+      <div>\(I_1 = \dfrac{S_1}{\sqrt{3}\,U}\) = <span style="color:#6b6b74">62 500 / (1,732 · 400)</span> = <b>90,2 А</b></div>
+    </div>
+    <p>Требуемая мощность батареи — разность реактивных мощностей до и после
+    компенсации:</p>
+    <p style="text-align:center">$$Q_{\text{к}} = P\,(\operatorname{tg}\varphi_1
+    - \operatorname{tg}\varphi_2).$$</p>
+    <div class="steps">
+      <div>\(\varphi_2 = \arccos 0{,}95\) = <span style="color:#6b6b74">18,19°</span> = <b>18,2°</b></div>
+      <div>\(\operatorname{tg}\varphi_2\) = <span style="color:#6b6b74">tg 18,19°</span> = <b>0,3287</b></div>
+      <div>\(Q_{\text{к}} = P(\operatorname{tg}\varphi_1 - \operatorname{tg}\varphi_2)\) = <span style="color:#6b6b74">45 · (0,9638 − 0,3287)</span> = <b>28,58 квар</b></div>
+      <div>\(Q_2 = Q_1 - Q_{\text{к}}\) = <span style="color:#6b6b74">43,37 − 28,58</span> = <b>14,79 квар</b></div>
+      <div>\(S_2 = \dfrac{P}{\cos\varphi_2}\) = <span style="color:#6b6b74">45 / 0,95</span> = <b>47,37 кВ·А</b></div>
+      <div>\(S_2 = \sqrt{P^2 + Q_2^2}\) = <span style="color:#6b6b74">√(45² + 14,79²)</span> = <b>47,37 кВ·А</b> — проверка</div>
+      <div>\(I_2 = \dfrac{S_2}{\sqrt{3}\,U}\) = <span style="color:#6b6b74">47 370 / (1,732 · 400)</span> = <b>68,4 А</b></div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Треугольники мощностей до и после компенсации: активная мощность одинакова, полная мощность уменьшается">
+        <defs>
+          <marker id="ar-ac10" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#1a7f37"/></marker>
+        </defs>
+        <g class="ln">
+          <path d="M60,240 L240,240 L240,66.5 z"/>
+          <path d="M380,240 L560,240 L560,180.8 z"/>
+        </g>
+        <path class="ln-thin ln-dash" stroke="#6b6b74" d="M240,180.8 L258,180.8"/>
+        <path class="pow" d="M254,180.8 L254,70" marker-end="url(#ar-ac10)"/>
+        <path class="ln-thin" stroke="#6b6b74" fill="none" d="M106,240 A46,46 0 0 0 93.1,208.1"/>
+        <path class="ln-thin" stroke="#6b6b74" fill="none" d="M426,240 A46,46 0 0 0 423.7,225.6"/>
+        <text class="lbl b" x="150" y="32" text-anchor="middle">до компенсации</text>
+        <text class="lbl b" x="470" y="32" text-anchor="middle">после компенсации</text>
+        <text class="lbl p" x="150" y="258" text-anchor="middle">P = 45 кВт</text>
+        <text class="lbl p" x="470" y="258" text-anchor="middle">P = 45 кВт</text>
+        <text class="lbl u" x="240" y="56" text-anchor="middle">Q₁ = 43,4 квар</text>
+        <text class="lbl u" x="560" y="170" text-anchor="middle">Q₂ = 14,8 квар</text>
+        <text class="lbl" x="112" y="140" text-anchor="end">S₁ = 62,5 кВ·А</text>
+        <text class="lbl" x="448" y="190" text-anchor="middle">S₂ = 47,4 кВ·А</text>
+        <text class="lbl g" x="118" y="224" text-anchor="start">φ₁ = 43,9°</text>
+        <text class="lbl g" x="374" y="232" text-anchor="end">φ₂ = 18,2°</text>
+        <text class="lbl p" x="262" y="128" text-anchor="start">Q<tspan font-size="8" dy="3">к</tspan><tspan dy="-3"> = 28,6 квар</tspan></text>
+        <text class="lbl g" x="60" y="284" text-anchor="start">Активная мощность не меняется; полная мощность и ток линии уменьшаются</text>
+      </svg>
+      <div class="caption">Рис. 7. Треугольники мощностей до и после компенсации.
+      Горизонтальный катет \(P\) одинаков, вертикальный катет уменьшается на
+      мощность батареи \(Q_{\text{к}}\), гипотенуза \(S\) укорачивается с 62,5
+      до 47,4 кВ·А, а угол \(\varphi\) — с 43,9 до 18,2°.</div>
+    </div>
+
+    <p><b>Ёмкость батареи.</b> Реактивная мощность трёх конденсаторов равна
+    \(Q_{\text{к}} = 3\,U_{\text{к}}^2\,\omega C\), где \(U_{\text{к}}\) —
+    напряжение на одном конденсаторе. При соединении треугольником оно равно
+    линейному, при соединении звездой — фазному, в \(\sqrt{3}\) раза меньше:</p>
+    <p style="text-align:center">$$C_\triangle =
+    \dfrac{Q_{\text{к}}}{3\,\omega\,U_{\text{л}}^2}, \qquad
+    C_{Y} = \dfrac{Q_{\text{к}}}{3\,\omega\,U_{\text{ф}}^2} = 3\,C_\triangle.$$</p>
+    <div class="steps">
+      <div>\(C_\triangle = \dfrac{Q_{\text{к}}}{3\,\omega\,U_{\text{л}}^2}\) = <span style="color:#6b6b74">28 580 / (3 · 314 · 400²)</span> = <b>189,6 мкФ</b></div>
+      <div>\(U_{\text{ф}} = \dfrac{U_{\text{л}}}{\sqrt{3}}\) = <span style="color:#6b6b74">400 / 1,732</span> = <b>231 В</b></div>
+      <div>\(C_{Y} = 3\,C_\triangle\) = <span style="color:#6b6b74">3 · 189,6</span> = <b>568,8 мкФ</b></div>
+      <div>\(I_{\text{к}\triangle} = \dfrac{Q_{\text{к}}}{3\,U_{\text{л}}}\) = <span style="color:#6b6b74">28 580 / (3 · 400)</span> = <b>23,8 А</b> — ток одного конденсатора</div>
+    </div>
+    <p>Соединение треугольником втрое экономичнее по ёмкости, поэтому судовые
+    компенсирующие батареи собирают именно так; расплата — рабочее напряжение
+    конденсаторов должно быть линейным.</p>
+
+    <p><b>Разгрузка генератора.</b></p>
+    <div class="steps">
+      <div>\(\Delta I = I_1 - I_2\) = <span style="color:#6b6b74">90,2 − 68,4</span> = <b>21,8 А</b></div>
+      <div>\(\dfrac{I_2}{I_1}\) = <span style="color:#6b6b74">68,4 / 90,2</span> = <b>0,758</b> — ток снизился на 24,2 %</div>
+      <div>\(\dfrac{\Delta P_2}{\Delta P_1} = \left(\dfrac{I_2}{I_1}\right)^2\) = <span style="color:#6b6b74">0,758²</span> = <b>0,575</b> — потери в кабеле упали на 42,5 %</div>
+      <div>\(\Delta S = S_1 - S_2\) = <span style="color:#6b6b74">62,5 − 47,37</span> = <b>15,13 кВ·А</b> — освободившаяся мощность генератора</div>
+    </div>
+
+    <table class="el">
+      <thead><tr><th>Величина</th><th class="num">до компенсации</th>
+      <th class="num">после компенсации</th></tr></thead>
+      <tbody>
+        <tr><td>Активная мощность P, кВт</td><td class="num">45</td><td class="num">45</td></tr>
+        <tr><td>Реактивная мощность Q, квар</td><td class="num">43,37</td><td class="num">14,79</td></tr>
+        <tr><td>Полная мощность S, кВ·А</td><td class="num">62,50</td><td class="num">47,37</td></tr>
+        <tr><td>Ток линии I, А</td><td class="num">90,2</td><td class="num">68,4</td></tr>
+        <tr><td>cos φ</td><td class="num">0,72</td><td class="num">0,95</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note tip"><b>Почему не компенсируют до единицы.</b> Доводить
+    \(\cos\varphi\) точно до 1 невыгодно и опасно: последние доли требуют почти
+    такой же ёмкости, как весь предыдущий диапазон, а при сбросе нагрузки
+    батарея остаётся включённой, цепь становится ёмкостной и напряжение сети
+    растёт. Нормируемое значение для судовых сетей — 0,9…0,95.</div>
+
+    <div class="ans"><b>Ответ.</b> До компенсации \(Q_1 = 43{,}37\) квар,
+    \(S_1 = 62{,}5\) кВ·А, \(I_1 = 90{,}2\) А. Батарея мощностью
+    \(Q_{\text{к}} = 28{,}58\) квар поднимает коэффициент мощности до 0,95;
+    ёмкость на фазу 189,6 мкФ при соединении треугольником и 568,8 мкФ при
+    соединении звездой. После компенсации \(S_2 = 47{,}37\) кВ·А,
+    \(I_2 = 68{,}4\) А: ток линии снизился на 24,2 %, потери в кабельной трассе
+    — на 42,5 %, а генератор освободил 15,13 кВ·А полной мощности.</div>
+  </div>
+
+  <h2>Что проверить в своей работе</h2>
+  <ul>
+    <li>Все величины действующие: в формулах \(P = UI\cos\varphi\) и
+    \(U = zI\) нельзя смешивать амплитудные и действующие значения.</li>
+    <li>Треугольники сопротивлений, напряжений и мощностей подобны — при
+    правильном расчёте \(\cos\varphi = R/z = U_R/U = P/S\) даёт одно и то же
+    число.</li>
+    <li>Второй закон Кирхгофа проверен векторно:
+    \(U = \sqrt{U_R^2 + (U_L - U_C)^2}\), а не арифметической суммой
+    напряжений.</li>
+    <li>Знак реактивного сопротивления и характер нагрузки указаны явно; угол
+    \(\varphi\) положителен при индуктивном характере.</li>
+    <li>На векторной диаграмме указан масштаб, а длины векторов ему
+    соответствуют.</li>
+    <li>Единицы разделены: ватты для активной мощности, вары для реактивной,
+    вольт-амперы для полной.</li>
+  </ul>
+
+  <p class="small">Теоретическая база разборов — <a href="t-ac">глава 2</a>;
+  трёхфазное развитие этих формул — <a href="t-three">глава 3</a>;
+  физика переменного магнитного поля и ЭДС индукции —
+  <a href="https://shadeswd.duckdns.org/physics/t-magnetism">курс физики</a>;
+  где в судовой электростанции появляется реактивная мощность —
+  <a href="https://shadeswd.duckdns.org/shipeng/t-electro">судовая
+  электроэнергетическая система</a>.</p>
+
+  <p><a href="tasks">← Все разборы</a> ·
+  <a href="p-dc">Цепи постоянного тока</a> ·
+  <a href="p-three">Трёхфазные цепи →</a></p>
+</main>
+</body>
+</html>

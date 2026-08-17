@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разборы: трёхфазные цепи</title>
+<meta name="description" content="Две разобранные задачи по данным лабораторного стенда кафедры: симметричная звезда с нулевым проводом при линейном напряжении 36 В и несимметричная звезда без нулевого провода — смещение нейтрали в комплексной форме, перекос фазных напряжений, аварийные режимы обрыва и короткого замыкания фазы приёмника.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<script src="assets/site.js" data-root="./" data-page="tasks"></script>
+<main class="wrap">
+  <h1>Разборы: трёхфазные цепи</h1>
+  <p class="lead">Обе задачи считаются по данным лабораторного стенда кафедры:
+  линейное напряжение 36 В, реостат 50 Ом, катушка с отводами на 1200, 2400 и
+  3600 витков, конденсаторы C1…C3. Первая задача — эталонный симметричный
+  режим, в котором достаточно рассчитать одну фазу. Вторая показывает, что
+  происходит с приёмником, когда симметрия нарушена, а нулевого провода нет:
+  нейтраль смещается, фазные напряжения перестают быть равными, а обрыв и
+  короткое замыкание фазы приводят к перегрузке двух оставшихся.</p>
+  <p><a class="theory-link" href="t-three">Глава 3. Трёхфазные цепи</a></p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 340" class="geo-board" style="max-width:640px" role="img"
+         aria-label="Схема соединения звездой с нулевым проводом: генератор, три амперметра в линиях, вольтметр на фазе приёмника, амперметр в нулевом проводе">
+      <defs>
+        <marker id="ar-p3a" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+          <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+      </defs>
+      <g class="wire">
+        <path d="M45,70 L45,300"/>
+        <path d="M45,70 L67,70 M45,170 L67,170 M45,270 L67,270"/>
+        <path d="M93,70 L157,70 M183,70 L430,70 M470,70 L490,70 M538,70 L600,70"/>
+        <path d="M93,170 L157,170 M183,170 L430,170 M470,170 L490,170 M538,170 L600,170"/>
+        <path d="M93,270 L157,270 M183,270 L430,270 M470,270 L490,270 M538,270 L600,270"/>
+        <path d="M490,70 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0"/>
+        <path d="M490,170 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0"/>
+        <path d="M490,270 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0 a6,6 0 0 1 12,0"/>
+        <path d="M600,70 L600,300"/>
+        <path d="M45,300 L317,300 M343,300 L600,300"/>
+        <path d="M420,70 L420,32 M420,32 L497,32 M523,32 L600,32 M600,32 L600,70"/>
+        <circle cx="80" cy="70" r="13" fill="#fff"/>
+        <circle cx="80" cy="170" r="13" fill="#fff"/>
+        <circle cx="80" cy="270" r="13" fill="#fff"/>
+        <circle cx="170" cy="70" r="13" fill="#fff"/>
+        <circle cx="170" cy="170" r="13" fill="#fff"/>
+        <circle cx="170" cy="270" r="13" fill="#fff"/>
+        <circle cx="330" cy="300" r="13" fill="#fff"/>
+        <circle cx="510" cy="32" r="13" fill="#fff"/>
+      </g>
+      <rect class="dev" x="430" y="63" width="40" height="14"/>
+      <rect class="dev" x="430" y="163" width="40" height="14"/>
+      <rect class="dev" x="430" y="263" width="40" height="14"/>
+      <circle class="node" cx="45" cy="170" r="3.2"/>
+      <circle class="node" cx="45" cy="270" r="3.2"/>
+      <circle class="node" cx="600" cy="70" r="3.2"/>
+      <circle class="node" cx="600" cy="170" r="3.2"/>
+      <circle class="node" cx="600" cy="270" r="3.2"/>
+      <circle class="node" cx="420" cy="70" r="3.2"/>
+
+      <text class="lbl" x="80" y="75" text-anchor="middle">~</text>
+      <text class="lbl" x="80" y="175" text-anchor="middle">~</text>
+      <text class="lbl" x="80" y="275" text-anchor="middle">~</text>
+      <text class="lbl" x="170" y="75" text-anchor="middle">A</text>
+      <text class="lbl" x="170" y="175" text-anchor="middle">A</text>
+      <text class="lbl" x="170" y="275" text-anchor="middle">A</text>
+      <text class="lbl" x="330" y="305" text-anchor="middle">A</text>
+      <text class="lbl" x="510" y="37" text-anchor="middle">V</text>
+
+      <path class="cur" d="M280,58 L316,58" marker-end="url(#ar-p3a)"/>
+      <path class="cur" d="M280,158 L316,158" marker-end="url(#ar-p3a)"/>
+      <path class="cur" d="M280,258 L316,258" marker-end="url(#ar-p3a)"/>
+      <path class="cur" d="M190,288 L226,288" marker-end="url(#ar-p3a)"/>
+      <text class="lbl i" x="322" y="62" text-anchor="start">I<tspan font-size="8" dy="3">A</tspan></text>
+      <text class="lbl i" x="322" y="162" text-anchor="start">I<tspan font-size="8" dy="3">B</tspan></text>
+      <text class="lbl i" x="322" y="262" text-anchor="start">I<tspan font-size="8" dy="3">C</tspan></text>
+      <text class="lbl i" x="232" y="292" text-anchor="start">I₀ = 0</text>
+
+      <text class="lbl b" x="110" y="60" text-anchor="start">A</text>
+      <text class="lbl b" x="110" y="160" text-anchor="start">B</text>
+      <text class="lbl b" x="110" y="260" text-anchor="start">C</text>
+      <text class="lbl b" x="410" y="60" text-anchor="end">a</text>
+      <text class="lbl b" x="410" y="160" text-anchor="end">b</text>
+      <text class="lbl b" x="410" y="260" text-anchor="end">c</text>
+      <text class="lbl b" x="36" y="166" text-anchor="end">N</text>
+      <text class="lbl b" x="614" y="166" text-anchor="start">n</text>
+      <text class="lbl u" x="560" y="52" text-anchor="middle">U<tspan font-size="8" dy="3">ф</tspan><tspan dy="-3"> = 20,8 В</tspan></text>
+      <text class="lbl g" x="45" y="325" text-anchor="start">Фаза приёмника: реостат 50 Ом и катушка 2400 витков (R = 10 Ом, x = 80 Ом)</text>
+    </svg>
+    <div class="caption">Рис. 1. Схема соединения звездой с нулевым проводом
+    (\(Y_0\)) на лабораторном стенде. Амперметры в линиях измеряют линейные
+    токи, которые при соединении звездой равны фазным; отдельный амперметр
+    включён в нулевой провод; вольтметр показывает фазное напряжение приёмника
+    \(U_a\). Стрелки токов направлены от генератора к приёмнику, ток нулевого
+    провода — обратно к нейтрали генератора \(N\).</div>
+  </div>
+
+  <div class="task" id="task-8">
+    <h3>Задача 8. Симметричная звезда с нулевым проводом</h3>
+    <div class="given"><b>Дано.</b> Схема рис. 1, линейное напряжение стенда
+    \(U_{\text{л}} = 36\) В, \(f = 50\) Гц. В каждую фазу приёмника включены
+    последовательно реостат \(R = 50\) Ом и катушка 2400 витков, параметры
+    которой найдены в лабораторной работе 1: полное сопротивление
+    \(z_{\text{к}} = 80{,}6\) Ом, активное сопротивление
+    \(R_{\text{к}} = 10\) Ом.
+    <b>Найти:</b> фазное напряжение, комплексное сопротивление фазы, фазные и
+    линейные токи, ток нулевого провода, мощности \(P\), \(Q\), \(S\);
+    построить векторную диаграмму.</div>
+
+    <p>Нагрузка симметрична, поэтому достаточно рассчитать одну фазу, а
+    остальные две получить поворотом на ∓120°. Начнём с параметров катушки:</p>
+    <div class="steps">
+      <div>\(x_L = \sqrt{z_{\text{к}}^2 - R_{\text{к}}^2}\) = <span style="color:#6b6b74">√(80,6² − 10²)</span> = <b>80,0 Ом</b></div>
+      <div>\(L = \dfrac{x_L}{\omega}\) = <span style="color:#6b6b74">80 / 314</span> = <b>0,255 Гн</b></div>
+    </div>
+    <p>При соединении звездой фазное напряжение приёмника в \(\sqrt{3}\) раза
+    меньше линейного, а линейный ток равен фазному:</p>
+    <div class="steps">
+      <div>\(U_{\text{ф}} = \dfrac{U_{\text{л}}}{\sqrt{3}}\) = <span style="color:#6b6b74">36 / 1,732</span> = <b>20,78 В</b></div>
+      <div>\(\underline{Z}_{\text{ф}} = (R + R_{\text{к}}) + j x_L\) = <span style="color:#6b6b74">(50 + 10) + j80</span> = <b>(60 + j80) Ом</b></div>
+      <div>\(z_{\text{ф}} = \sqrt{60^2 + 80^2}\) = <span style="color:#6b6b74">√(3600 + 6400)</span> = <b>100 Ом</b></div>
+      <div>\(\varphi = \operatorname{arctg}\dfrac{x_L}{R + R_{\text{к}}}\) = <span style="color:#6b6b74">arctg (80 / 60)</span> = <b>53,1°</b></div>
+      <div>\(\cos\varphi = \dfrac{60}{100}\) = <span style="color:#6b6b74">0,6</span> = <b>0,6</b></div>
+      <div>\(I_{\text{ф}} = \dfrac{U_{\text{ф}}}{z_{\text{ф}}}\) = <span style="color:#6b6b74">20,78 / 100</span> = <b>0,2078 А</b></div>
+      <div>\(I_{\text{л}} = I_{\text{ф}}\) = <span style="color:#6b6b74">0,2078</span> = <b>0,2078 А</b></div>
+    </div>
+    <p>Комплексы токов отличаются только начальной фазой; принимая
+    \(\underline{U}_A = 20{,}78\) В (начальная фаза нуль), получаем</p>
+    <p style="text-align:center">$$\underline{I}_a = 0{,}2078\,e^{-j53{,}1^\circ},
+    \quad \underline{I}_b = 0{,}2078\,e^{-j173{,}1^\circ}, \quad
+    \underline{I}_c = 0{,}2078\,e^{\,j66{,}9^\circ} \ \text{А}.$$</p>
+    <p>Сумма трёх равных векторов, сдвинутых на 120°, равна нулю, поэтому ток
+    нулевого провода</p>
+    <div class="steps">
+      <div>\(\underline{I}_0 = \underline{I}_a + \underline{I}_b + \underline{I}_c\) = <span style="color:#6b6b74">0,2078 · (1 + e^(−j120°) + e^(j120°))</span> = <b>0 А</b></div>
+    </div>
+    <p>Нулевой провод при симметричной нагрузке не нужен: амперметр в нём
+    показывает нуль. Его ставят ради несимметричных режимов — см. задачу 9.</p>
+
+    <p>Напряжения на элементах фазы:</p>
+    <div class="steps">
+      <div>\(U_R = I_{\text{ф}} R\) = <span style="color:#6b6b74">0,2078 · 50</span> = <b>10,39 В</b></div>
+      <div>\(U_{R\text{к}} = I_{\text{ф}} R_{\text{к}}\) = <span style="color:#6b6b74">0,2078 · 10</span> = <b>2,08 В</b></div>
+      <div>\(U_L = I_{\text{ф}} x_L\) = <span style="color:#6b6b74">0,2078 · 80</span> = <b>16,62 В</b></div>
+      <div>\(U_{\text{ф}} = \sqrt{(U_R + U_{R\text{к}})^2 + U_L^2}\) = <span style="color:#6b6b74">√(12,47² + 16,62²)</span> = <b>20,78 В</b> — проверка</div>
+    </div>
+
+    <p>Мощности трёхфазной цепи считают по полной мощности всех трёх фаз:</p>
+    <p style="text-align:center">$$S = 3\,U_{\text{ф}} I_{\text{ф}} =
+    \sqrt{3}\,U_{\text{л}} I_{\text{л}}, \qquad P = S\cos\varphi, \qquad
+    Q = S\sin\varphi.$$</p>
+    <div class="steps">
+      <div>\(S = \sqrt{3}\,U_{\text{л}} I_{\text{л}}\) = <span style="color:#6b6b74">1,732 · 36 · 0,2078</span> = <b>12,96 В·А</b></div>
+      <div>\(P = S\cos\varphi\) = <span style="color:#6b6b74">12,96 · 0,6</span> = <b>7,78 Вт</b></div>
+      <div>\(Q = S\sin\varphi\) = <span style="color:#6b6b74">12,96 · 0,8</span> = <b>10,37 вар</b></div>
+      <div>\(S = \sqrt{P^2 + Q^2}\) = <span style="color:#6b6b74">√(7,78² + 10,37²)</span> = <b>12,96 В·А</b> — проверка</div>
+    </div>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 300" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Векторная диаграмма симметричной звезды: три фазных напряжения через 120 градусов и три тока, отстающих на 53 градуса">
+        <defs>
+          <marker id="ar-p3b" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+          <marker id="ar-p3c" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#b3382e"/></marker>
+        </defs>
+        <path class="ln-thin ln-dash" stroke="#6b6b74" d="M333,160 L208.5,231.9 L208.5,88.1 z"/>
+        <path class="vol" d="M250,160 L333,160" marker-end="url(#ar-p3b)"/>
+        <path class="vol" d="M250,160 L208.5,231.9" marker-end="url(#ar-p3b)"/>
+        <path class="vol" d="M250,160 L208.5,88.1" marker-end="url(#ar-p3b)"/>
+        <path class="cur" d="M250,160 L287.2,209.6" marker-end="url(#ar-p3c)"/>
+        <path class="cur" d="M250,160 L188.5,167.4" marker-end="url(#ar-p3c)"/>
+        <path class="cur" d="M250,160 L274.4,103" marker-end="url(#ar-p3c)"/>
+        <path class="ln-thin" stroke="#6b6b74" fill="none" d="M305,160 A55,55 0 0 1 283,204"/>
+        <circle class="node" cx="250" cy="160" r="3.2"/>
+
+        <text class="lbl u" x="340" y="164" text-anchor="start">U<tspan font-size="8" dy="3">A</tspan></text>
+        <text class="lbl u" x="203" y="248" text-anchor="middle">U<tspan font-size="8" dy="3">B</tspan></text>
+        <text class="lbl u" x="203" y="78" text-anchor="middle">U<tspan font-size="8" dy="3">C</tspan></text>
+        <text class="lbl i" x="293" y="220" text-anchor="start">I<tspan font-size="8" dy="3">a</tspan></text>
+        <text class="lbl i" x="182" y="178" text-anchor="end">I<tspan font-size="8" dy="3">b</tspan></text>
+        <text class="lbl i" x="280" y="96" text-anchor="start">I<tspan font-size="8" dy="3">c</tspan></text>
+        <text class="lbl g" x="200" y="140" text-anchor="end">U<tspan font-size="8" dy="3">BC</tspan><tspan dy="-3"> = 36 В</tspan></text>
+        <text class="lbl g" x="312" y="196" text-anchor="start">φ = 53,1°</text>
+        <text class="lbl b" x="243" y="152" text-anchor="end">0</text>
+
+        <text class="lbl u" x="420" y="80" text-anchor="start">U<tspan font-size="8" dy="3">ф</tspan><tspan dy="-3"> = 20,78 В</tspan></text>
+        <text class="lbl u" x="420" y="106" text-anchor="start">U<tspan font-size="8" dy="3">л</tspan><tspan dy="-3"> = 36 В</tspan></text>
+        <text class="lbl i" x="420" y="132" text-anchor="start">I<tspan font-size="8" dy="3">ф</tspan><tspan dy="-3"> = I</tspan><tspan font-size="8" dy="3">л</tspan><tspan dy="-3"> = 0,2078 А</tspan></text>
+        <text class="lbl i" x="420" y="158" text-anchor="start">I₀ = 0</text>
+        <text class="lbl p" x="420" y="184" text-anchor="start">cos φ = 0,6</text>
+        <text class="lbl p" x="420" y="210" text-anchor="start">S = 12,96 В·А</text>
+        <text class="lbl g" x="60" y="282" text-anchor="start">Токи отстают от своих фазных напряжений на 53,1°</text>
+      </svg>
+      <div class="caption">Рис. 2. Векторная диаграмма симметричной звезды.
+      Масштабы: 4 мм на вольт и 300 мм на ампер. Штриховой треугольник соединяет
+      концы векторов фазных напряжений — его стороны и есть линейные напряжения
+      по 36 В. Три вектора тока равны по длине и повёрнуты друг относительно
+      друга на 120°, поэтому их сумма — ток нулевого провода — равна нулю.</div>
+    </div>
+
+    <div class="ans"><b>Ответ.</b> \(U_{\text{ф}} = 20{,}78\) В,
+    \(\underline{Z}_{\text{ф}} = (60 + j80)\) Ом \(= 100\angle 53{,}1^\circ\) Ом,
+    \(I_{\text{ф}} = I_{\text{л}} = 0{,}2078\) А, \(I_0 = 0\).
+    Мощности: \(P = 7{,}78\) Вт, \(Q = 10{,}37\) вар, \(S = 12{,}96\) В·А при
+    \(\cos\varphi = 0{,}6\). Все три фазы работают в одинаковых условиях, и
+    нулевой провод не нагружен.</div>
+  </div>
+
+  <div class="task" id="task-9">
+    <h3>Задача 9. Несимметричная звезда без нулевого провода. Смещение нейтрали
+    и аварийные режимы</h3>
+    <div class="given"><b>Дано.</b> Тот же стенд, \(U_{\text{л}} = 36\) В,
+    \(f = 50\) Гц, но нулевой провод отключён, а фазы приёмника собраны
+    по-разному: в фазе <i>a</i> только реостат \(R_a = 50\) Ом; в фазе <i>b</i>
+    реостат 50 Ом и катушка 2400 витков (\(60 + j80\) Ом); в фазе <i>c</i>
+    только конденсатор C1 = 39,8 мкФ.
+    <b>Найти:</b> напряжение смещения нейтрали \(\underline{U}_0\), фазные
+    напряжения и токи приёмника, мощности; оценить перекос. Затем рассмотреть
+    аварийные режимы симметричной нагрузки задачи 8 — обрыв и короткое
+    замыкание фазы — и сравнить с работой при нулевом проводе.</div>
+
+    <p>Сопротивление конденсатора и комплексные проводимости фаз:</p>
+    <div class="steps">
+      <div>\(x_C = \dfrac{1}{\omega C}\) = <span style="color:#6b6b74">1 / (314 · 39,8·10⁻⁶)</span> = <b>80,0 Ом</b></div>
+      <div>\(\underline{Y}_a = \dfrac{1}{R_a}\) = <span style="color:#6b6b74">1 / 50</span> = <b>0,02 См</b></div>
+      <div>\(\underline{Y}_b = \dfrac{1}{60 + j80}\) = <span style="color:#6b6b74">(60 − j80) / 10 000</span> = <b>(0,006 − j0,008) См</b></div>
+      <div>\(\underline{Y}_c = \dfrac{1}{-j80}\) = <span style="color:#6b6b74">j / 80</span> = <b>j0,0125 См</b></div>
+      <div>\(\sum \underline{Y}\) = <span style="color:#6b6b74">0,02 + 0,006 − j0,008 + j0,0125</span> = <b>(0,026 + j0,0045) См</b></div>
+      <div>\(\left|\sum \underline{Y}\right|\) = <span style="color:#6b6b74">√(0,026² + 0,0045²)</span> = <b>0,02639 См</b> (угол 9,8°)</div>
+    </div>
+    <p>Фазные напряжения генератора при \(\underline{U}_A = 20{,}78\) В:</p>
+    <p style="text-align:center">$$\underline{U}_B = 20{,}78\,e^{-j120^\circ}
+    = -10{,}39 - j18{,}00\ \text{В}, \qquad
+    \underline{U}_C = -10{,}39 + j18{,}00\ \text{В}.$$</p>
+    <p>Напряжение между нейтралью приёмника <i>n</i> и нейтралью генератора
+    <i>N</i> находят по формуле двух узлов, записанной в комплексной форме:</p>
+    <p style="text-align:center">$$\underline{U}_0 =
+    \dfrac{\sum \underline{U}_k \underline{Y}_k}{\sum \underline{Y}_k}.$$</p>
+    <div class="steps">
+      <div>\(\underline{U}_A \underline{Y}_a\) = <span style="color:#6b6b74">20,78 · 0,02</span> = <b>0,4156</b></div>
+      <div>\(\underline{U}_B \underline{Y}_b\) = <span style="color:#6b6b74">(−10,39 − j18) · (0,006 − j0,008)</span> = <b>−0,2063 − j0,0249</b></div>
+      <div>\(\underline{U}_C \underline{Y}_c\) = <span style="color:#6b6b74">(−10,39 + j18) · j0,0125</span> = <b>−0,2250 − j0,1299</b></div>
+      <div>\(\sum \underline{U}_k \underline{Y}_k\) = <span style="color:#6b6b74">0,4156 − 0,2063 − 0,2250 − j(0,0249 + 0,1299)</span> = <b>−0,0157 − j0,1548</b></div>
+      <div>\(\left|\sum \underline{U}_k \underline{Y}_k\right|\) = <span style="color:#6b6b74">√(0,0157² + 0,1548²)</span> = <b>0,1556</b> (угол −95,8°)</div>
+      <div>\(U_0 = \dfrac{0{,}1556}{0{,}02639}\) = <span style="color:#6b6b74">0,1556 / 0,02639</span> = <b>5,90 В</b> (угол −95,8° − 9,8° = −105,6°)</div>
+      <div>\(\underline{U}_0 = U_0 e^{-j105{,}6^\circ}\) = <span style="color:#6b6b74">5,90 · (−0,269 − j0,963)</span> = <b>(−1,59 − j5,68) В</b></div>
+    </div>
+    <p>Нейтраль приёмника сместилась почти на 6 В — это 28 % фазного напряжения.
+    Напряжения на фазах приёмника равны разностям \(\underline{U}_k -
+    \underline{U}_0\):</p>
+    <div class="steps">
+      <div>\(\underline{U}_a = \underline{U}_A - \underline{U}_0\) = <span style="color:#6b6b74">20,78 + 1,59 + j5,68</span> = <b>(22,37 + j5,68) В</b> — модуль <b>23,08 В</b></div>
+      <div>\(\underline{U}_b = \underline{U}_B - \underline{U}_0\) = <span style="color:#6b6b74">−10,39 + 1,59 − j18 + j5,68</span> = <b>(−8,80 − j12,32) В</b> — модуль <b>15,14 В</b></div>
+      <div>\(\underline{U}_c = \underline{U}_C - \underline{U}_0\) = <span style="color:#6b6b74">−10,39 + 1,59 + j18 + j5,68</span> = <b>(−8,80 + j23,68) В</b> — модуль <b>25,26 В</b></div>
+    </div>
+    <div class="steps">
+      <div>\(I_a = \dfrac{U_a}{z_a}\) = <span style="color:#6b6b74">23,08 / 50</span> = <b>0,4616 А</b></div>
+      <div>\(I_b = \dfrac{U_b}{z_b}\) = <span style="color:#6b6b74">15,14 / 100</span> = <b>0,1514 А</b></div>
+      <div>\(I_c = \dfrac{U_c}{z_c}\) = <span style="color:#6b6b74">25,26 / 80</span> = <b>0,3158 А</b></div>
+      <div>\(\sum \underline{I}\) = <span style="color:#6b6b74">(0,4475 − 0,1514 − 0,2959) + j(0,113 − 0,004 − 0,110)</span> = <b>≈ 0</b> — первый закон Кирхгофа выполнен</div>
+    </div>
+    <p>Последняя строка — главная проверка расчёта: при отсутствии нулевого
+    провода сумма трёх фазных токов обязана быть нулевой, потому что току
+    некуда возвращаться, кроме как через две другие фазы. Мощности приёмника:</p>
+    <div class="steps">
+      <div>\(P = I_a^2 R_a + I_b^2 R_b\) = <span style="color:#6b6b74">0,4616² · 50 + 0,1514² · 60</span> = <b>12,03 Вт</b></div>
+      <div>\(Q = I_b^2 x_L - I_c^2 x_C\) = <span style="color:#6b6b74">0,1514² · 80 − 0,3158² · 80</span> = <b>−6,14 вар</b></div>
+      <div>\(S = \sqrt{P^2 + Q^2}\) = <span style="color:#6b6b74">√(12,03² + 6,14²)</span> = <b>13,51 В·А</b></div>
+    </div>
+    <p>Знак реактивной мощности отрицателен: ёмкостная фаза <i>c</i> перевешивает
+    индуктивную фазу <i>b</i>, и цепь в целом для генератора выглядит ёмкостной.</p>
+
+    <div class="panel">
+      <svg viewBox="0 0 640 320" class="geo-board" style="max-width:640px" role="img"
+           aria-label="Векторная диаграмма несимметричной звезды: нейтраль приёмника смещена, фазные напряжения приёмника разной длины">
+        <defs>
+          <marker id="ar-p3d" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+            <path d="M0,0 L9,3.5 L0,7 z" fill="#155e75"/></marker>
+          <marker id="ar-p3e" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 z" fill="#6b6b74"/></marker>
+          <marker id="ar-p3f" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 z" fill="#b3382e"/></marker>
+        </defs>
+        <path class="ln-thin ln-dash" stroke="#6b6b74" d="M313,165 L188.5,236.9 L188.5,93.1 z"/>
+        <path class="ln-thin gray" fill="none" d="M230,165 L313,165" marker-end="url(#ar-p3e)"/>
+        <path class="ln-thin gray" fill="none" d="M230,165 L188.5,236.9" marker-end="url(#ar-p3e)"/>
+        <path class="ln-thin gray" fill="none" d="M230,165 L188.5,93.1" marker-end="url(#ar-p3e)"/>
+        <path class="cur" d="M230,165 L223.7,187.7" marker-end="url(#ar-p3f)"/>
+        <path class="vol" d="M223.7,187.7 L313,165" marker-end="url(#ar-p3d)"/>
+        <path class="vol" d="M223.7,187.7 L188.5,236.9" marker-end="url(#ar-p3d)"/>
+        <path class="vol" d="M223.7,187.7 L188.5,93.1" marker-end="url(#ar-p3d)"/>
+        <circle class="node" cx="230" cy="165" r="3.2"/>
+        <circle class="node" cx="223.7" cy="187.7" r="3.2"/>
+
+        <text class="lbl b" x="224" y="158" text-anchor="end">N</text>
+        <text class="lbl b" x="234" y="200" text-anchor="start">n</text>
+        <text class="lbl i" x="240" y="222" text-anchor="start">U₀ = 5,90 В</text>
+        <text class="lbl g" x="320" y="152" text-anchor="start">U<tspan font-size="8" dy="3">A</tspan></text>
+        <text class="lbl u" x="320" y="178" text-anchor="start">U<tspan font-size="8" dy="3">a</tspan><tspan dy="-3"> = 23,08 В</tspan></text>
+        <text class="lbl g" x="182" y="268" text-anchor="end">U<tspan font-size="8" dy="3">B</tspan></text>
+        <text class="lbl u" x="182" y="252" text-anchor="end">U<tspan font-size="8" dy="3">b</tspan><tspan dy="-3"> = 15,14 В</tspan></text>
+        <text class="lbl g" x="182" y="68" text-anchor="end">U<tspan font-size="8" dy="3">C</tspan></text>
+        <text class="lbl u" x="182" y="84" text-anchor="end">U<tspan font-size="8" dy="3">c</tspan><tspan dy="-3"> = 25,26 В</tspan></text>
+
+        <text class="lbl" x="430" y="70" text-anchor="start">Z<tspan font-size="8" dy="3">a</tspan><tspan dy="-3"> = 50 Ом</tspan></text>
+        <text class="lbl" x="430" y="96" text-anchor="start">Z<tspan font-size="8" dy="3">b</tspan><tspan dy="-3"> = 60 + j80 Ом</tspan></text>
+        <text class="lbl" x="430" y="122" text-anchor="start">Z<tspan font-size="8" dy="3">c</tspan><tspan dy="-3"> = −j80 Ом</tspan></text>
+        <text class="lbl i" x="430" y="148" text-anchor="start">I<tspan font-size="8" dy="3">a</tspan><tspan dy="-3"> = 0,4616 А</tspan></text>
+        <text class="lbl i" x="430" y="174" text-anchor="start">I<tspan font-size="8" dy="3">b</tspan><tspan dy="-3"> = 0,1514 А</tspan></text>
+        <text class="lbl i" x="430" y="200" text-anchor="start">I<tspan font-size="8" dy="3">c</tspan><tspan dy="-3"> = 0,3158 А</tspan></text>
+        <text class="lbl p" x="430" y="226" text-anchor="start">S = 13,51 В·А</text>
+        <text class="lbl g" x="60" y="300" text-anchor="start">Штриховой треугольник — линейные напряжения, они остались по 36 В</text>
+      </svg>
+      <div class="caption">Рис. 3. Векторная диаграмма несимметричной звезды без
+      нулевого провода. Серые векторы — фазные напряжения генератора, они
+      симметричны; точка <i>n</i> смещена относительно <i>N</i> на
+      \(\underline{U}_0 = 5{,}90\) В. Синие векторы, проведённые из смещённой
+      нейтрали, — фазные напряжения приёмника: 23,08, 15,14 и 25,26 В вместо
+      одинаковых 20,78 В. Линейные напряжения (стороны штрихового треугольника)
+      при этом не меняются.</div>
+    </div>
+
+    <div class="note warn"><b>Вывод о перекосе.</b> Разброс фазных напряжений
+    составил от 15,14 до 25,26 В при номинальных 20,78 В, то есть от −27 до
+    +22 %. Лампы одной фазы горели бы вполнакала, другой — перекаливались и
+    быстро перегорали. Нулевой провод жёстко фиксирует \(\underline{U}_0 = 0\)
+    и устраняет перекос, поэтому в судовых сетях осветительная и бытовая
+    нагрузка подключается только по схеме звезды с нулевым проводом, а
+    предохранители в нулевой провод не ставят.</div>
+
+    <p><b>Аварийные режимы.</b> Возьмём симметричную нагрузку задачи 8
+    (\(z = 100\) Ом в каждой фазе) без нулевого провода.</p>
+
+    <p><b>1. Обрыв фазы <i>a</i>.</b> Фазы <i>b</i> и <i>c</i> оказываются
+    соединёнными последовательно и попадают под линейное напряжение
+    \(U_{BC} = 36\) В:</p>
+    <div class="steps">
+      <div>\(I_b = I_c = \dfrac{U_{BC}}{z_b + z_c}\) = <span style="color:#6b6b74">36 / (100 + 100)</span> = <b>0,18 А</b></div>
+      <div>\(U_b = U_c = I_b z\) = <span style="color:#6b6b74">0,18 · 100</span> = <b>18,0 В</b></div>
+      <div>\(\dfrac{I_b}{I_{\text{ном}}}\) = <span style="color:#6b6b74">0,18 / 0,2078</span> = <b>0,866</b> — это \(\sqrt{3}/2\)</div>
+      <div>\(P = 2 I_b^2 R_{\text{ф}}\) = <span style="color:#6b6b74">2 · 0,18² · 60</span> = <b>3,89 Вт</b> вместо 7,78 Вт</div>
+      <div>\(I_a\) = <span style="color:#6b6b74">обрыв</span> = <b>0 А</b></div>
+    </div>
+    <p>Режим не аварийный по току: он даже легче номинального. Но напряжение на
+    оставшихся фазах упало с 20,78 до 18,0 В, а мощность цепи — вдвое.</p>
+
+    <p><b>2. Короткое замыкание фазы <i>a</i>.</b> Нейтраль приёмника
+    насильно совмещается с точкой <i>A</i>: \(\underline{U}_0 =
+    \underline{U}_A\). Напряжения двух исправных фаз становятся равными
+    линейным:</p>
+    <div class="steps">
+      <div>\(U_b = |\underline{U}_B - \underline{U}_A| = U_{BA}\) = <span style="color:#6b6b74">36</span> = <b>36 В</b></div>
+      <div>\(U_c = |\underline{U}_C - \underline{U}_A| = U_{CA}\) = <span style="color:#6b6b74">36</span> = <b>36 В</b></div>
+      <div>\(I_b = I_c = \dfrac{U_{\text{л}}}{z}\) = <span style="color:#6b6b74">36 / 100</span> = <b>0,36 А</b></div>
+      <div>\(\dfrac{I_b}{I_{\text{ном}}}\) = <span style="color:#6b6b74">0,36 / 0,2078</span> = <b>1,732</b> — рост в \(\sqrt{3}\) раза</div>
+      <div>\(I_a = \sqrt{3}\,I_b\) = <span style="color:#6b6b74">1,732 · 0,36</span> = <b>0,623 А</b> — втрое больше номинального</div>
+      <div>\(P = 2 I_b^2 R_{\text{ф}}\) = <span style="color:#6b6b74">2 · 0,36² · 60</span> = <b>15,55 Вт</b> вместо 7,78 Вт</div>
+    </div>
+    <p>Угол между токами \(\underline{I}_b\) и \(\underline{I}_c\) равен 60°,
+    поэтому их геометрическая сумма — ток в закороченной линии <i>A</i> — в
+    \(\sqrt{3}\) раза больше каждого из них и втрое превышает номинальный.
+    Изоляция двух исправных фаз оказывается под линейным напряжением, на которое
+    она не рассчитана, а линия <i>A</i> перегружена — режим аварийный.</p>
+
+    <p><b>3. Те же аварии при наличии нулевого провода.</b> Нулевой провод
+    удерживает \(\underline{U}_0 = 0\), поэтому каждая фаза остаётся под своим
+    фазным напряжением 20,78 В независимо от остальных:</p>
+    <div class="steps">
+      <div>обрыв фазы <i>a</i>: \(I_b = I_c\) = <span style="color:#6b6b74">20,78 / 100</span> = <b>0,2078 А</b> — не изменились</div>
+      <div>ток нулевого провода \(I_0 = |{-}\underline{I}_b - \underline{I}_c|\) = <span style="color:#6b6b74">0,2078 (сумма двух векторов под 120°)</span> = <b>0,2078 А</b></div>
+      <div>КЗ фазы <i>a</i>: \(I_a = \dfrac{U_{\text{ф}}}{r_{\text{пров}}}\) = <span style="color:#6b6b74">20,78 / (сотые доли ома)</span> = <b>сотни ампер</b> — работает защита</div>
+    </div>
+    <p>Здесь и проявляется назначение нулевого провода: он превращает три фазы
+    в три независимые однофазные цепи. Короткое замыкание при этом становится
+    настоящим коротким замыканием на нейтраль и отключается защитой, а не
+    «расползается» перенапряжением по исправным фазам.</p>
+
+    <table class="el">
+      <thead><tr><th>Величина</th><th class="num">звезда с нулевым проводом</th>
+      <th class="num">звезда без нулевого провода</th></tr></thead>
+      <tbody>
+        <tr><td>U<sub>a</sub>, В</td><td class="num">20,78</td><td class="num">23,08</td></tr>
+        <tr><td>U<sub>b</sub>, В</td><td class="num">20,78</td><td class="num">15,14</td></tr>
+        <tr><td>U<sub>c</sub>, В</td><td class="num">20,78</td><td class="num">25,26</td></tr>
+        <tr><td>I<sub>a</sub>, А</td><td class="num">0,4157</td><td class="num">0,4616</td></tr>
+        <tr><td>I<sub>b</sub>, А</td><td class="num">0,2078</td><td class="num">0,1514</td></tr>
+        <tr><td>I<sub>c</sub>, А</td><td class="num">0,2598</td><td class="num">0,3158</td></tr>
+        <tr><td>U<sub>0</sub>, В</td><td class="num">0</td><td class="num">5,90</td></tr>
+        <tr><td>I<sub>0</sub>, А</td><td class="num">0,1556</td><td class="num">—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ans"><b>Ответ.</b> Смещение нейтрали
+    \(\underline{U}_0 = (-1{,}59 - j5{,}68)\) В, \(U_0 = 5{,}90\) В.
+    Фазные напряжения приёмника 23,08, 15,14 и 25,26 В (перекос от −27 до
+    +22 %), токи 0,4616, 0,1514 и 0,3158 А, их сумма равна нулю;
+    \(P = 12{,}03\) Вт, \(Q = -6{,}14\) вар, \(S = 13{,}51\) В·А. При обрыве
+    фазы напряжения двух исправных фаз падают до 18,0 В, а токи — до 0,18 А;
+    при коротком замыкании фазы напряжения двух исправных фаз становятся
+    линейными (36 В), их токи возрастают в \(\sqrt{3}\) раза до 0,36 А, а ток в
+    закороченной линии — втрое, до 0,623 А. Нулевой провод устраняет и перекос,
+    и оба этих последствия.</div>
+  </div>
+
+  <h2>Что проверить в своей работе</h2>
+  <ul>
+    <li>Соотношения \(U_{\text{л}} = \sqrt{3}\,U_{\text{ф}}\) и
+    \(I_{\text{л}} = I_{\text{ф}}\) применены именно к звезде, а не к
+    треугольнику (там наоборот).</li>
+    <li>При симметричной нагрузке рассчитана одна фаза, а не три; ток нулевого
+    провода получен равным нулю.</li>
+    <li>В несимметричном режиме сначала найдено \(\underline{U}_0\), и только
+    затем — фазные напряжения приёмника как разности
+    \(\underline{U}_k - \underline{U}_0\).</li>
+    <li>Сумма трёх фазных токов при отсутствии нулевого провода равна нулю —
+    это обязательная проверка.</li>
+    <li>Линейные напряжения в несимметричном режиме не изменились: смещается
+    только нейтраль приёмника.</li>
+    <li>Мощность трёхфазной цепи считается как сумма мощностей фаз; формула
+    \(P = \sqrt{3}\,U_{\text{л}} I_{\text{л}} \cos\varphi\) верна только при
+    симметрии.</li>
+  </ul>
+
+  <p class="small">Теоретическая база разборов — <a href="t-three">глава 3</a>;
+  однофазные соотношения, на которых всё построено, —
+  <a href="t-ac">глава 2</a>; трёхфазная сеть судна и её защита —
+  <a href="t-shipnet">глава 6</a> и
+  <a href="https://shadeswd.duckdns.org/shipeng/t-electro">судовая
+  электроэнергетическая система</a>; требования к судовым сетям —
+  <a href="https://shadeswd.duckdns.org/ref/rmrs">Правила РМРС</a>.</p>
+
+  <p><a href="tasks">← Все разборы</a> ·
+  <a href="p-ac">Цепи переменного тока</a> ·
+  <a href="p-machines">Трансформатор и двигатель →</a></p>
+</main>
+</body>
+</html>
