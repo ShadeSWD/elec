@@ -21,7 +21,3 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 
 /* Подстановка чисел в формулу — серым. */
 const gray = (s) => '<span style="color:#6b6b74">' + s + '</span>';
-
-/* Выполнить действие, когда разметка страницы полностью разобрана. */
-const onReady = (fn) => (document.readyState === 'loading'
-  ? document.addEventListener('DOMContentLoaded', fn) : fn());
