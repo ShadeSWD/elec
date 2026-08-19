@@ -555,7 +555,36 @@
         : 'Возьмите деталь из палитры.';
     });
 
+    /* Точка щелчка в координатах поля и ближайшее к ней место для детали.
+       Пока в руке деталь, щелчок ставит её в ближайшее ребро (или узел —
+       для корпуса и блочных деталей), даже если сверху лежит другая деталь:
+       иначе рядом с уже собранным участком некуда попасть. */
+    const boardPoint = (ev) => {
+      const svg = ui.board.querySelector('svg.board');
+      const pt = svg.createSVGPoint();
+      pt.x = ev.clientX; pt.y = ev.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    };
+    const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+    function nearestSlot(pt, byNode) {
+      const bx = clamp(Math.round(pt.x / PITCH), 0, S.w - 1);
+      const by = clamp(Math.round(pt.y / PITCH), 0, S.h - 1);
+      if (byNode) return { x: bx, y: by, d: 'h' };
+      const dx = pt.x - X(bx), dy = pt.y - Y(by);
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        return { x: clamp(dx >= 0 ? bx : bx - 1, 0, S.w - 2), y: by, d: 'h' };
+      }
+      return { x: bx, y: clamp(dy >= 0 ? by : by - 1, 0, S.h - 2), d: 'v' };
+    }
+
     ui.board.addEventListener('click', (ev) => {
+      if (S.tool) {
+        const d = P[S.tool];
+        const slot = nearestSlot(boardPoint(ev), !!(d.single || d.block));
+        S.cur = slot;
+        place(slot.x, slot.y, slot.d);
+        return;
+      }
       const g = ev.target.closest('.part');
       if (g) {
         const p = S.parts.find((q) => q.id === g.dataset.id);
@@ -573,9 +602,9 @@
       if (line) {
         const [x, y, d] = line.dataset.e.split(',');
         S.cur = { x: +x, y: +y, d };
-        if (S.tool) place(+x, +y, d);
-        else { S.sel = null; refresh(); }
       }
+      S.sel = null;
+      refresh();
     });
 
     // перетаскивание уже поставленной детали
@@ -719,6 +748,9 @@
 
     const enc = hash.get('s');
     let loaded = false;
+    // переход по ссылке вида #exp=12 внутри страницы: перечитываем задание
+    window.addEventListener('hashchange', () => location.reload());
+
     if (enc) loaded = load(decode(enc));
     if (!loaded) loaded = restore();
     if (!loaded && S.exp && S.exp.preset) loaded = load(S.exp.preset());
