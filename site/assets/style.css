@@ -120,3 +120,85 @@ main table { display: block; max-width: 100%; overflow-x: auto; }
 .katex-mathml { position: absolute; clip: rect(1px,1px,1px,1px); width: 1px; height: 1px; overflow: hidden; left: 0 !important; top: 0 !important; }
 main .readout, main .caption, main .small { overflow-wrap: anywhere; }
 main .note div, main .note span, main .steps div, main .out div { overflow-wrap: anywhere; }
+
+/* ══════════ электронный конструктор ══════════ */
+.builder { display: grid; grid-template-columns: 210px minmax(0, 1fr) 260px; gap: 14px; align-items: start; margin: 14px 0; }
+@media (max-width: 1100px) { .builder { grid-template-columns: 1fr; } }
+
+.pal { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px; max-height: 78vh; overflow: auto; position: sticky; top: 66px; }
+.pgname { font: 600 12.5px system-ui, sans-serif; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 8px 0 4px; }
+.pitems { display: flex; flex-direction: column; gap: 3px; }
+.pitem { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; background: none; border: 1px solid transparent; border-radius: 8px; padding: 3px 5px; cursor: pointer; font: 13px system-ui, sans-serif; color: var(--ink); }
+.pitem:hover { border-color: var(--line); background: #fdf6ea; }
+.pitem.on { border-color: var(--accent); background: #fdf3e6; }
+.pitem svg { width: 54px; height: 30px; flex: none; }
+.pitem span { overflow-wrap: anywhere; }
+
+svg.board { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 12px; touch-action: manipulation; }
+svg.board .grid circle { fill: #c9c6bd; }
+svg.board .hit line { stroke: transparent; stroke-width: 22; cursor: pointer; }
+svg.board .hit line:hover { stroke: rgba(180,83,9,.13); }
+svg.board .part { cursor: pointer; }
+svg.board .part.sel .dev, svg.board .part.sel .wire { stroke: var(--accent); }
+svg.board .part.dead .dev, svg.board .part.dead .wire { stroke: #b9b6ae; }
+svg.board .cursor { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; opacity: .5; fill: none; }
+svg.board .glow { fill: #f5b301; }
+svg.board .lbl.tag { font-weight: 700; }
+svg.board .lbl.val { fill: var(--muted); }
+svg.board .lbl.read { fill: var(--green); font-weight: 700; }
+svg.board .lbl.rpm, svg.board .lbl.ring { fill: var(--accent2); }
+svg.board .lbl.warn-x { fill: var(--red); font-weight: 700; }
+
+.side { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.side h3 { margin: 4px 0 6px; font-size: 16px; }
+.side .hint { font-size: 13.5px; color: #46464e; margin: 4px 0 10px; }
+.side label.row { display: flex; flex-direction: column; gap: 2px; margin: 7px 0; font: 13px system-ui, sans-serif; }
+.side label.row span { color: var(--muted); }
+.side label.row input[type=number], .side label.row select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; font: 14px system-ui, sans-serif; width: 100%; }
+.side label.row input[type=range] { width: 100%; accent-color: var(--accent); }
+.rowbtn { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+#bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+.btn { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 5px 12px; font: 14px system-ui, sans-serif; cursor: pointer; color: var(--ink); }
+#link { flex: 1 1 240px; min-width: 0; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; font: 12.5px ui-monospace, Consolas, monospace; }
+#msg { background: #fdf3e6; border: 1px solid #ecd9b6; border-radius: 8px; padding: 6px 12px; font: 14px system-ui, sans-serif; margin: 8px 0; }
+
+.mode { font: 600 14px system-ui, sans-serif; color: var(--accent2); margin: 12px 0 4px; }
+svg.scope, svg.phasor { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+svg.scope .plot { fill: #fcfbf8; stroke: var(--line); }
+svg.scope .gridline, svg.phasor .gridline { stroke: #e6e3da; stroke-width: 1; fill: none; }
+svg.scope .axis, svg.phasor .axis { stroke: #9a978e; stroke-width: 1.2; fill: none; }
+svg.scope .tr-u { fill: none; stroke: #155e75; stroke-width: 2; }
+svg.scope .tr-i { fill: none; stroke: #b3382e; stroke-width: 2; }
+svg.scope .phase { stroke: #1a7f37; stroke-width: 3; stroke-linecap: round; }
+svg.phasor .vec.vu { stroke: #155e75; fill: #155e75; stroke-width: 1.8; }
+svg.phasor .vec.vi { stroke: #b3382e; fill: #b3382e; stroke-width: 1.8; }
+
+.verdict { border-radius: 10px; padding: 8px 14px; margin: 10px 0; font: 15px system-ui, sans-serif; }
+.verdict.good { background: #eaf5ed; border: 1px solid #bcdcc6; }
+.verdict.bad { background: #fdeeee; border: 1px solid #eec6c2; }
+ul.checks { list-style: none; padding: 0; margin: 8px 0; font: 14.5px system-ui, sans-serif; }
+ul.checks li { padding: 4px 0 4px 26px; position: relative; }
+ul.checks li::before { position: absolute; left: 4px; font-weight: 700; }
+ul.checks li.ok::before { content: '✓'; color: var(--green); }
+ul.checks li.no::before { content: '✗'; color: var(--red); }
+
+.explist { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 12px 0; }
+.exp { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 5px; }
+.exp .no { font: 700 13px system-ui, sans-serif; color: var(--accent); }
+.exp h3 { margin: 0; font-size: 16px; }
+.exp p { margin: 0; font-size: 14px; color: #46464e; }
+.exp .go { margin-top: auto; padding-top: 6px; font: 14px system-ui, sans-serif; }
+svg.board .grab { fill: transparent; stroke: none; }
+svg.board .pal-preview { pointer-events: none; }
+
+/* ══════════ лабораторные работы ══════════ */
+.labtable { overflow-x: auto; }
+.labtable input.cell { width: 84px; padding: 3px 5px; border: 1px solid var(--line); border-radius: 6px; font: 14px system-ui, sans-serif; text-align: right; }
+.labtable input.cell.good { border-color: #7fbf94; background: #f2faf4; }
+.labtable input.cell.bad { border-color: #d99a92; background: #fdf3f2; }
+.labtable input.cell.calc { background: #fbfaf6; }
+.labtable input.cell.calc.good { background: #f2faf4; }
+.labtable input.cell.calc.bad { background: #fdf3f2; }
+.small-btn { padding: 2px 9px; font-size: 13px; text-decoration: none; display: inline-block; }
+.labres { margin: 8px 0 18px; }

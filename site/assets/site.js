@@ -14,6 +14,11 @@
   </svg>`,
     nav: [
       { h: '', k: 'index', t: 'Обзор' },
+      { t: 'Конструктор', h: 'builder', act: (p) => p === 'builder' || p === 'experiments' || p === 'labs', drop: [
+        { h: 'builder', k: 'builder', t: 'Электронный конструктор' },
+        { h: 'experiments', k: 'experiments', t: 'Книжка опытов' },
+        { h: 'labs', k: 'labs', t: 'Лабораторные работы' },
+      ] },
       { t: 'Теория', h: 'theory', drop: [
         { h: 'theory', k: 'theory', t: 'Оглавление курса' },
         { h: 't-dc', k: 'theory', t: '1. Цепи постоянного тока' },

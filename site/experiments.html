@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Книжка опытов</title>
+<meta name="description" content="Опыты для электронного конструктора по возрастанию сложности: постоянный ток, ёмкость и индуктивность, переменный ток, трансформатор и выпрямление, трёхфазные цепи, судовое приложение.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<script src="assets/common.js"></script>
+<script src="assets/shell.js"></script>
+<script src="assets/site.js" data-root="./" data-page="experiments"></script>
+<main class="wrap">
+  <h1>Книжка опытов</h1>
+
+  <div class="tldr">
+    <h2>Коротко</h2>
+    <ul>
+      <li>Опыты идут по возрастанию сложности: от замкнутой цепи до аварийных режимов судовой сети.</li>
+      <li>Каждый опыт открывается в конструкторе с заготовкой или пустым полем и заданием: что собрать, что измерить, что должно получиться.</li>
+      <li>Кнопка «проверить» сверяет собранную схему по деталям и по показаниям приборов и объясняет, что именно не сходится.</li>
+      <li>У каждого опыта есть вопрос на понимание с ответом и короткое объяснение «почему так».</li>
+    </ul>
+  </div>
+
+  <p class="lead">Так же устроена книжка опытов детского конструктора: страница —
+  один опыт, номер — адрес. Разница в том, что числа здесь не заготовлены заранее,
+  а получаются из расчёта той схемы, которую вы собрали. Если собрать иначе,
+  и числа будут другими — как на настоящем стенде.</p>
+
+  <p><a class="theory-link" href="builder">Открыть конструктор</a>
+     <a class="theory-link" href="labs">Лабораторные работы курса</a></p>
+
+  <div class="note warn">
+    <b>О безопасности.</b> Все опыты — модельные. Ни один из них не является
+    инструкцией к сборке реальной цепи. Там, где речь идёт о 220 или 380 В,
+    работа возможна только на лабораторном стенде под руководством преподавателя:
+    схема собирается при снятом напряжении, предъявляется преподавателю и
+    включается только с его разрешения.
+  </div>
+
+  <div id="list"></div>
+</main>
+
+<script src="assets/solver.js"></script>
+<script src="assets/parts.js"></script>
+<script src="assets/experiments-data.js"></script>
+<script>
+buildSiteShell.onReady(function () {
+  var esc = ElecParts.esc;
+  var list = window.ElecExperiments || [];
+  var secs = [];
+  list.forEach(function (e) { if (secs.indexOf(e.sec) < 0) secs.push(e.sec); });
+  var done = {};
+  try {
+    list.forEach(function (e) { done[e.id] = localStorage.getItem('elec.exp.done.' + e.id) === '1'; });
+  } catch (err) { /* без хранилища просто не отмечаем */ }
+  var html = '<p class="small">Всего опытов: ' + list.length + '. Отмеченные галочкой уже зачтены на этом компьютере.</p>';
+  secs.forEach(function (sec) {
+    var items = list.filter(function (e) { return e.sec === sec; });
+    html += '<h2>' + esc(sec) + '</h2><div class="explist">';
+    items.forEach(function (e) {
+      var short = String(e.task).replace(/<[^>]+>/g, '');
+      if (short.length > 150) short = short.slice(0, 150).replace(/\s+\S*$/, '') + '…';
+      html += '<a class="exp card" href="builder#exp=' + e.id + '">'
+        + '<span class="no">Опыт ' + e.id + (done[e.id] ? ' · зачтён ✓' : '') + '</span>'
+        + '<h3>' + esc(e.title) + '</h3>'
+        + '<p>' + esc(short) + '</p>'
+        + '<span class="go">собрать в конструкторе →</span></a>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('list').innerHTML = html;
+});
+</script>
+</body>
+</html>
