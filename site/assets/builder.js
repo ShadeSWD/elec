@@ -154,11 +154,13 @@
     let cx = 0, cy = 0;
     cells.forEach((c) => { cx += X(c[0]); cy += Y(c[1]); });
     cx /= cells.length; cy /= cells.length;
-    // вертикальные детали подписываем слева, горизонтальные — сверху:
-    // так подписи не сталкиваются с показаниями приборов (они уходят вправо/вниз)
+    // вертикальные детали подписываем слева, горизонтальные — сверху, блочные —
+    // над левым верхним углом: так подписи не сталкиваются ни с самой деталью,
+    // ни с показаниями приборов (те уходят вправо и вниз)
     const vert = !d.block && !d.single && p.d === 'v';
-    const anchor = vert ? 'end' : 'middle';
-    const lx = cx + (vert ? -24 : 0), ly = cy + (vert ? 8 : -26);
+    const anchor = d.block ? 'start' : (vert ? 'end' : 'middle');
+    const lx = d.block ? X(p.x) : cx + (vert ? -24 : 0);
+    const ly = d.block ? Y(p.y) - 28 : cy + (vert ? 8 : -26);
     const val = d.val ? d.val(values(p)) : '';
     let s = `<text class="lbl b tag" x="${lx}" y="${ly}" text-anchor="${anchor}">${esc(map[p.id])}</text>`;
     if (val) s += `<text class="lbl val" x="${lx}" y="${ly + 12}" text-anchor="${anchor}">${esc(val)}</text>`;
@@ -234,7 +236,7 @@
         cells.forEach((c) => { cx += X(c[0]); cy += Y(c[1]); });
         cx /= cells.length; cy /= cells.length;
         const vert = !P[p.k].block && !P[p.k].single && p.d === 'v';
-        s += `<text class="lbl read" x="${cx + (vert ? 24 : 0)}" y="${cy + (vert ? -6 : 30)}" `
+        s += `<text class="lbl read" x="${cx + (vert ? 24 : 0)}" y="${cy + (vert ? 18 : 30)}" `
           + `text-anchor="${vert ? 'start' : 'middle'}">${esc(si(r.v, r.u))}</text>`;
       });
       s += '</g>';

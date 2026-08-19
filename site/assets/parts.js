@@ -33,9 +33,16 @@
     const a = Math.abs(x);
     let p = PREF[PREF.length - 1];
     for (let i = 0; i < PREF.length; i++) if (a >= PREF[i][0] * 0.999) { p = PREF[i]; break; }
+    // от 0,1 до 1 приставку «милли» не берём: «0,5 Ом» читается лучше, чем
+    // «500 мОм», и совпадает с тем, как пишут в учебнике
+    if (p[0] === 1e-3 && a >= 0.1) p = [1, ''];
     const v = x / p[0];
     const d = digits === undefined ? (Math.abs(v) >= 100 ? 0 : Math.abs(v) >= 10 ? 1 : 2) : digits;
-    return v.toFixed(d).replace(/\.?0+$/, '').replace('.', ',') + ' ' + p[1] + (unit || '');
+    let str = v.toFixed(d);
+    // хвостовые нули убираем только в дробной части: иначе «380» превращается
+    // в «38», а «100 Ом» — в «1 Ом»
+    if (str.indexOf('.') >= 0) str = str.replace(/0+$/, '').replace(/\.$/, '');
+    return str.replace('.', ',') + ' ' + p[1] + (unit || '');
   }
   /* Число «как в отчёте»: запятая, разумное число знаков. */
   function fm(x, d) {
