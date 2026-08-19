@@ -312,14 +312,19 @@
       if (d.ground || p.k === 'WIRE') return;
       const e = res.elem && res.elem[p.id];
       const rms = res.rms && res.rms[p.id];
+      // у источника показываем то, что он ОТДАЁТ: иначе по потребительской
+      // системе знаков ток и мощность выходят отрицательными, и cos φ тоже
+      const sg = d.source ? -1 : 1;
       let cols;
       if (kind === 'ac' && e) {
         cols = `<td class="num">${fm(e.U, 2)}</td><td class="num">${fm(e.I, 3)}</td>`
-          + `<td class="num">${fm(e.P, 2)}</td><td class="num">${fm(e.Q, 2)}</td><td class="num">${fm(e.pf, 3)}</td>`;
+          + `<td class="num">${fm(sg * e.P, 2)}</td><td class="num">${fm(sg * e.Q, 2)}</td>`
+          + `<td class="num">${fm(sg * e.pf, 3)}</td>`;
       } else if (kind === 'tran' && rms) {
-        cols = `<td class="num">${fm(rms.U, 2)}</td><td class="num">${fm(rms.I, 3)}</td><td class="num">${fm(rms.P, 2)}</td>`;
+        cols = `<td class="num">${fm(rms.U, 2)}</td><td class="num">${fm(rms.I, 3)}</td><td class="num">${fm(sg * rms.P, 2)}</td>`;
       } else if (e) {
-        cols = `<td class="num">${fm(e.u, 3)}</td><td class="num">${fm(e.i, 4)}</td><td class="num">${fm(e.u * e.i, 3)}</td>`;
+        cols = `<td class="num">${fm(e.u, 3)}</td><td class="num">${fm(sg * e.i, 4)}</td>`
+          + `<td class="num">${fm(sg * e.u * e.i, 3)}</td>`;
       } else {
         cols = kind === 'ac' ? '<td class="num">—</td>'.repeat(5) : '<td class="num">—</td>'.repeat(3);
       }
@@ -337,11 +342,15 @@
   }
 
   /* ══════════════ осциллограф ══════════════ */
+  /* Что показывать на осциллографе. Выбранная деталь — если выбрана; иначе
+     источник (по нему видна работа всей цепи целиком); иначе первый элемент,
+     на котором есть и напряжение, и ток. Приборы в кандидаты не годятся: у
+     амперметра напряжение нулевое, у вольтметра — ток. */
   function scopePick() {
-    // что показываем: выбранная деталь, иначе первый прибор, иначе первый источник
     const byId = (id) => S.parts.find((p) => p.id === id);
-    return byId(S.sel) || S.parts.find((p) => P[p.k].meter)
-      || S.parts.find((p) => p.k === 'VAC' || p.k === 'VDC' || p.k === 'BAT') || S.parts[0];
+    const src = (p) => p.k === 'VAC' || p.k === 'VDC' || p.k === 'BAT';
+    const useful = (p) => !P[p.k].meter && !P[p.k].ground && p.k !== 'WIRE' && p.k !== 'SW' && p.k !== 'BTN';
+    return byId(S.sel) || S.parts.find(src) || S.parts.find(useful) || S.parts[0];
   }
 
   function scopeSvg() {
@@ -349,9 +358,12 @@
     const { kind, res } = last;
     const p = scopePick();
     const map = designators();
-    const W = 640, H = 260, L = 52, R = 16, T = 16, B = 34;
+    const W = 640, H = 274, L = 52, R = 16, T = 40, B = 34;
     const pw = W - L - R, ph = H - T - B;
     let tArr = null, uArr = null, iArr = null, Tper = 0;
+    // у источника ток показываем тот, что он отдаёт, — иначе сдвиг фаз выходит
+    // отсчитанным от «потребительского» направления и читается как 135° вместо 45°
+    const sg = p && P[p.k].source ? -1 : 1;
     if (kind === 'ac' && p && res.elem[p.id]) {
       // из комплексов строим точные синусоиды
       const e = res.elem[p.id];
@@ -363,13 +375,15 @@
         const wt = 2 * Math.PI * res.f * t;
         tArr.push(t);
         uArr.push(Math.SQRT2 * (e.u.re * Math.cos(wt) - e.u.im * Math.sin(wt)));
-        iArr.push(Math.SQRT2 * (e.i.re * Math.cos(wt) - e.i.im * Math.sin(wt)));
+        iArr.push(sg * Math.SQRT2 * (e.i.re * Math.cos(wt) - e.i.im * Math.sin(wt)));
       }
     } else if (res.tran && res.tran.elem && p && res.tran.elem[p.id]) {
-      tArr = res.tran.t; uArr = res.tran.elem[p.id].u; iArr = res.tran.elem[p.id].i;
+      tArr = res.tran.t; uArr = res.tran.elem[p.id].u;
+      iArr = sg === 1 ? res.tran.elem[p.id].i : res.tran.elem[p.id].i.map((v) => -v);
       Tper = res.f ? 1 / res.f : 0;
     } else if (kind === 'tran' && res.elem && p && res.elem[p.id]) {
-      tArr = res.t; uArr = res.elem[p.id].u; iArr = res.elem[p.id].i;
+      tArr = res.t; uArr = res.elem[p.id].u;
+      iArr = sg === 1 ? res.elem[p.id].i : res.elem[p.id].i.map((v) => -v);
       Tper = res.f ? 1 / res.f : 0;
     }
     if (!tArr || !tArr.length) {
@@ -398,20 +412,27 @@
     s += `<text class="lbl" x="${L + pw / 2}" y="${H - 6}" text-anchor="middle">t, мс</text>`;
     s += `<polyline class="tr-u" points="${poly(uArr, umax)}"/>`;
     s += `<polyline class="tr-i" points="${poly(iArr, imax)}"/>`;
-    s += `<text class="lbl u" x="6" y="${T + 12}">u, макс ${esc(si(umax, 'В'))}</text>`;
-    s += `<text class="lbl i" x="6" y="${T + 26}">i, макс ${esc(si(imax, 'А'))}</text>`;
-    if (p) s += `<text class="lbl" x="${L + pw}" y="${T - 4}" text-anchor="end">${esc(map[p.id] || P[p.k].name)}</text>`;
+    // легенда — над полем графика, чтобы не ложиться на кривые
+    s += `<text class="lbl u" x="${L}" y="14">u, макс ${esc(si(umax, 'В'))}</text>`;
+    s += `<text class="lbl i" x="${L}" y="28">i, макс ${esc(si(imax, 'А'))}</text>`;
+    if (p) s += `<text class="lbl b" x="${L + pw}" y="14" text-anchor="end">${esc(map[p.id] || P[p.k].name)}</text>`;
     // подсветка сдвига фаз: расстояние между ближайшими нулями «вверх»
     if (kind === 'ac' && Tper && p && res.elem[p.id]) {
       const e = res.elem[p.id];
-      const dphi = ((Math.atan2(e.u.im, e.u.re) - Math.atan2(e.i.im, e.i.re)) * 180 / Math.PI + 540) % 360 - 180;
+      const dphi = ((Math.atan2(e.u.im, e.u.re) - Math.atan2(sg * e.i.im, sg * e.i.re)) * 180 / Math.PI + 540) % 360 - 180;
       if (Math.abs(dphi) > 0.5 && e.I > 1e-9) {
-        const tu = t0 + (-Math.atan2(e.u.im, e.u.re) / (2 * Math.PI)) * Tper;
-        const ti = t0 + (-Math.atan2(e.i.im, e.i.re) / (2 * Math.PI)) * Tper;
-        const xa = px(((tu % Tper) + Tper) % Tper), xb = px(((ti % Tper) + Tper) % Tper);
+        // момент перехода напряжения через ноль вверх; фазу округляем — иначе
+        // «почти ноль» со знаком минус уезжает на целый период вправо
+        const phU = Math.round(Math.atan2(e.u.im, e.u.re) * 1800 / Math.PI) / 10;
+        let tu = t0 + (-phU / 360) * Tper;
+        tu = ((tu % Tper) + Tper) % Tper;
+        const dt = (dphi / 360) * Tper;                 // ток отстаёт — dt > 0
+        if (tu + dt < 0) tu += Tper;
+        const xa = px(tu), xb = px(tu + dt);
         const y = T + ph / 2;
         s += `<path class="phase" d="M${xa.toFixed(1)},${y} H${xb.toFixed(1)}"/>`;
-        s += `<text class="lbl p" x="${((xa + xb) / 2).toFixed(1)}" y="${y - 8}" text-anchor="middle">φ = ${fm(dphi, 1)}°</text>`;
+        const lx = Math.min(Math.max((xa + xb) / 2, L + 34), L + pw - 34);
+        s += `<text class="lbl p" x="${lx.toFixed(1)}" y="${y - 9}" text-anchor="middle">φ = ${fm(dphi, 1)}°</text>`;
       }
     }
     s += '</svg>';
@@ -426,36 +447,54 @@
     }
     const res = last.res, map = designators();
     const items = [];
+    const seen = {};
+    /* Дубли ни к чему: вольтметр показывает то же напряжение, что и деталь, к
+       которой он подключён, а амперметр — тот же ток, что и его ветвь. Векторы
+       с совпадающими модулем и фазой сливаем в один, перечислив обозначения. */
+    const push = (kind, name, re, im, m) => {
+      const key = kind + '|' + m.toPrecision(4) + '|' + (Math.atan2(im, re) * 180 / Math.PI).toFixed(1);
+      if (seen[key]) { if (seen[key].names.length < 3) seen[key].names.push(name); return; }
+      const it = { kind, names: [name], re, im, m };
+      seen[key] = it;
+      items.push(it);
+    };
     S.parts.forEach((p) => {
       const d = P[p.k], e = res.elem[p.id];
-      if (!e || d.ground || p.k === 'WIRE' || !e.u) return;
-      if (e.U > 1e-9) items.push({ kind: 'U', name: 'U(' + (map[p.id] || d.name) + ')', re: e.u.re, im: e.u.im, m: e.U });
-      if (e.I > 1e-12 && (d.meter || p.k === 'R' || p.k === 'L' || p.k === 'C')) {
-        items.push({ kind: 'I', name: 'I(' + (map[p.id] || d.name) + ')', re: e.i.re, im: e.i.im, m: e.I });
-      }
+      if (!e || d.ground || p.k === 'WIRE' || p.k === 'SW' || p.k === 'BTN' || !e.u) return;
+      const nm = map[p.id] || d.name;
+      if (p.k !== 'AM' && e.U > 1e-6) push('U', 'U(' + nm + ')', e.u.re, e.u.im, e.U);
+      const sg = d.source ? -1 : 1;      // источник показываем отдающим
+      if (p.k !== 'VM' && e.I > 1e-9) push('I', 'I(' + nm + ')', sg * e.i.re, sg * e.i.im, e.I);
     });
     if (!items.length) return '<p class="muted">Нет величин для диаграммы.</p>';
-    const W = 460, H = 340, cx = W / 2, cy = H / 2, Rmax = 128;
+    const W = 520, H = 380, cx = W / 2, cy = H / 2, Rmax = 118;
     const umax = Math.max(1e-9, ...items.filter((i) => i.kind === 'U').map((i) => i.m));
     const imax = Math.max(1e-12, ...items.filter((i) => i.kind === 'I').map((i) => i.m));
     let s = `<svg class="phasor" viewBox="0 0 ${W} ${H}" role="img" aria-label="Векторная диаграмма токов и напряжений">`;
     s += `<circle class="gridline" cx="${cx}" cy="${cy}" r="${Rmax}" fill="none"/>`;
-    s += `<path class="axis" d="M${cx - Rmax - 14},${cy} H${cx + Rmax + 14} M${cx},${cy - Rmax - 14} V${cy + Rmax + 14}"/>`;
+    s += `<path class="axis" d="M${cx - Rmax - 12},${cy} H${cx + Rmax + 12} M${cx},${cy - Rmax - 12} V${cy + Rmax + 12}"/>`;
     const placed = [];
-    items.slice(0, 10).forEach((it) => {
+    items.slice(0, 8).forEach((it) => {
       const sc = Rmax / (it.kind === 'U' ? umax : imax);
       const x = cx + it.re * sc, y = cy - it.im * sc;
-      s += `<path class="vec ${it.kind === 'U' ? 'vu' : 'vi'}" d="M${cx},${cy} L${x.toFixed(1)},${y.toFixed(1)}"/>`;
-      s += `<path class="vec ${it.kind === 'U' ? 'vu' : 'vi'}" d="${arrow(cx, cy, x, y)}"/>`;
-      // подпись — отодвигаем, если рядом уже есть
-      let lx = x + (x >= cx ? 8 : -8), ly = y + (y >= cy ? 14 : -6);
+      const cls = it.kind === 'U' ? 'vu' : 'vi';
+      s += `<path class="vec ${cls}" d="M${cx},${cy} L${x.toFixed(1)},${y.toFixed(1)}"/>`;
+      s += `<path class="vec ${cls}" d="${arrow(cx, cy, x, y)}"/>`;
+      // подпись — за остриём, вдоль вектора; если место занято, отодвигаем вниз
+      const L = Math.hypot(x - cx, y - cy) || 1;
+      let lx = x + (x - cx) / L * 14, ly = y + (y - cy) / L * 12 + 4;
+      const anchor = x >= cx ? 'start' : 'end';
       let guard = 0;
-      while (placed.some((q) => Math.abs(q.x - lx) < 60 && Math.abs(q.y - ly) < 13) && guard < 8) { ly += 14; guard++; }
+      while (placed.some((q) => Math.abs(q.x - lx) < 70 && Math.abs(q.y - ly) < 12) && guard < 10) {
+        ly += 13; guard++;
+      }
       placed.push({ x: lx, y: ly });
+      lx = Math.min(Math.max(lx, 6), W - 6);
+      ly = Math.min(Math.max(ly, 30), H - 6);
       s += `<text class="lbl ${it.kind === 'U' ? 'u' : 'i'}" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" `
-        + `text-anchor="${x >= cx ? 'start' : 'end'}">${esc(it.name)}</text>`;
+        + `text-anchor="${anchor}">${esc(it.names.join(' = '))}</text>`;
     });
-    s += `<text class="lbl" x="8" y="16">масштаб: U — ${esc(si(umax, 'В'))}, I — ${esc(si(imax, 'А'))} на полный радиус</text>`;
+    s += `<text class="lbl" x="8" y="16">на полный радиус: напряжение ${esc(si(umax, 'В'))}, ток ${esc(si(imax, 'А'))}</text>`;
     s += '</svg>';
     return s;
   }

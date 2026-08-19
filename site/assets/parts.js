@@ -81,6 +81,7 @@
 
   /* ─── источники ─── */
   def('VDC', {
+    source: true,
     name: 'Источник постоянного напряжения', group: 'источники', tag: 'G', gost: 'ГОСТ 2.721',
     props: [
       { k: 'E', label: 'ЭДС', unit: 'В', def: 12, min: 0, max: 500, step: 0.5 },
@@ -103,6 +104,7 @@
   });
 
   def('BAT', {
+    source: true,
     name: 'Аккумулятор', group: 'источники', tag: 'GB', gost: 'ГОСТ 2.721',
     props: [
       { k: 'E', label: 'ЭДС', unit: 'В', def: 24, min: 0, max: 500, step: 0.5 },
@@ -123,6 +125,7 @@
   });
 
   def('VAC', {
+    source: true,
     name: 'Источник переменного напряжения', group: 'источники', tag: 'G', gost: 'ГОСТ 2.721',
     props: [
       { k: 'U', label: 'напряжение', unit: 'В', def: 36, min: 0, max: 400, step: 1 },

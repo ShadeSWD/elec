@@ -164,7 +164,8 @@ svg.board .lbl.warn-x { fill: var(--red); font-weight: 700; }
 #msg { background: #fdf3e6; border: 1px solid #ecd9b6; border-radius: 8px; padding: 6px 12px; font: 14px system-ui, sans-serif; margin: 8px 0; }
 
 .mode { font: 600 14px system-ui, sans-serif; color: var(--accent2); margin: 12px 0 4px; }
-svg.scope, svg.phasor { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+svg.scope { width: 100%; max-width: 780px; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+svg.phasor { width: 100%; max-width: 540px; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
 svg.scope .plot { fill: #fcfbf8; stroke: var(--line); }
 svg.scope .gridline, svg.phasor .gridline { stroke: #e6e3da; stroke-width: 1; fill: none; }
 svg.scope .axis, svg.phasor .axis { stroke: #9a978e; stroke-width: 1.2; fill: none; }
